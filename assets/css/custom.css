@@ -1,0 +1,118 @@
+/* === Layout width overrides === */
+.wrapper {
+    width: 1200px; /* default: 800px */
+    margin: 0 auto;
+    padding: 0 24px;
+}
+section {
+    width: 700px;
+    float: right;
+    padding-bottom: 50px;
+}
+
+header {
+    width: 250px;
+    float: left;
+    position: fixed;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+footer {
+    width: 250px;
+    float: left;
+    position: fixed;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+
+
+/* Fluid scaling on ultra-wide monitors */
+ 
+@media (min-width: 1600px) {
+    .wrapper {
+      max-width: 90%;
+    }
+}
+  
+/* === Typography tweaks for readability === */
+/* === MathJax adjustments === */
+mjx-container {
+    font-size: 1.05em; /* make math slightly larger */
+}
+  
+
+  /* === Optional: full-width sections === */
+.full-width {
+    width: 100%;
+    max-width: none;
+    margin-left: calc(-1 * (100vw - 100%) / 2);
+}
+
+
+/* Base body text */
+header h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Segoe UI';
+    font-weight: 600;
+    /* letter-spacing: -0.5px; */
+    /* margin-top: 1.4em;
+    margin-bottom: 0.6em; */
+  }
+  
+  /* Paragraph spacing */
+  p {
+    margin-bottom: 1em;
+  }
+  
+  /* Code blocks */
+  code, pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.95em;
+    background: #f8f8f8;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+  }
+  
+  /* Links */
+  a {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .minimal-nav {
+    margin: 2em 0;
+    text-align: center;
+    font-size: 15px;
+    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  
+  .minimal-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .minimal-nav li a {
+    text-decoration: none;
+    color: #0366d6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .minimal-nav li a:hover {
+    background-color: #f0f0f0;
+  }
+  
