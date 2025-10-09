@@ -29,7 +29,7 @@
   },"4": {
     "doc": "AutoSGM: Unifying Momentum Methods for Better Learning",
     "title": "🧩 Unifying PHB, NAG, and Adam",
-    "content": "By choosing \\(\\beta, \\gamma, \\alpha(t,i)\\) appropriately, AutoSGM recovers . | Algorithm | \\(\\gamma\\) | \\(\\eta\\) | \\(\\alpha(t,i)\\) | . | PHB | \\(0\\) | \\(1\\) | \\(\\mu\\) | . | NAG | \\({\\beta}/{(1+\\beta)}\\) | \\((1+\\beta)\\) | \\(\\mu\\) | . | Adam | \\(0\\) | \\(1-\\beta\\) | \\({\\mu}\\cdot{\\mathbf{d}(t,i)}^{-1}\\) | . ",
+    "content": "By choosing \\(\\beta, \\gamma, \\alpha(t,i)\\) appropriately, AutoSGM recovers . | Algorithm | \\(\\beta\\) | \\(\\gamma\\) | \\(\\eta\\) | \\(\\alpha(t,i)\\) | . | Basic | \\(0\\) | \\(0\\) | \\(0\\) | \\(\\mu\\) | . | PHB | \\(✓\\) | \\(0\\) | \\(1\\) | \\(\\mu\\) | . | NAG | \\(✓\\) | \\({\\beta}/{(1+\\beta)}\\) | \\((1+\\beta)\\) | \\(\\mu\\) | . | Adam | \\(✓\\) | \\(0\\) | \\(1-\\beta\\) | \\({\\mu}\\cdot{\\mathbf{d}(t,i)}^{-1}\\) | . ",
     "url": "/asgm.html#-unifying-phb-nag-and-adam",
     
     "relUrl": "/asgm.html#-unifying-phb-nag-and-adam"
