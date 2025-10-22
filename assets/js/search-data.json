@@ -71,7 +71,7 @@
   },"10": {
     "doc": "Learning Dynamics",
     "title": "Iteration-dependent Learning-rate Oracle",
-    "content": "The iteration-dependent denominator part of an optimal choice of learning rate is an adaptive moment estimator . \\(\\gain{\\mathbf{d}[(t,i)]} = \\sqrt{\\mathbb{E}[\\statez{\\mathbf{g}[t,i]}^2]}\\). The iteration-dependent numerator part of an optimal choice of learning rate is a partial correlation estimator . \\(\\gain{\\mathbf{a}[(t,i)]} = {\\mathbb{E}[\\statex{\\mathbf{w}[t,i]}\\statez{\\bar{\\mathbf{g}}[t,i]}]}\\), . where \\(\\statez{\\bar{\\mathbf{g}}[t,i]} = \\statez{\\mathbf{g}[t,i]}/\\gain{\\mathbf{d}[(t,i)]}\\) . ",
+    "content": "The iteration-dependent denominator part of an optimal choice of learning rate is an adaptive moment estimator . \\(\\gain{\\mathbf{d}[(t,i)]} = \\sqrt{\\mathbb{E}[\\statez{\\mathbf{g}[t,i]}^2]}\\). The iteration-dependent numerator part of an optimal choice of learning rate is a partial correlation estimator . \\(\\gain{\\mathbf{a}[(t,i)]} = {\\mathbb{E}[\\statex{\\mathbf{w}[t,i]}\\statez{\\bar{\\mathbf{g}}[t,i]}]}\\), . where \\(\\statez{\\bar{\\mathbf{g}}[t,i]} = \\statez{\\mathbf{g}[t,i]}/\\gain{\\mathbf{d}[(t,i)]}\\). ",
     "url": "/learning_dynamics#iteration-dependent-learning-rate-oracle",
     
     "relUrl": "/learning_dynamics#iteration-dependent-learning-rate-oracle"
