@@ -1,0 +1,151 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SGM Quadratic Function Sim.</title>
+
+    
+  <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
+
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/three@0.137.0/examples/js/controls/OrbitControls.js"
+  ></script>
+  <!--
+    - a minified version mathbox.min.js is also available;
+    - recommend using a specific version (not @latest) in public sites
+  -->
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/mathbox@latest/build/bundle/mathbox.js"
+  ></script>
+  <!-- <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/mathbox@latest/build/mathbox.css"
+  /> -->
+  <!-- <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script> -->
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      chtml: {
+        scale: 1.0
+      },
+      svg: {
+          fontCache: 'global'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
+  <!-- CSS file in the same folder -->
+  <link rel="stylesheet" href="quad_sim.css">
+  
+</head>
+<body>
+   
+<div class="container">
+    <div class="item-head">
+      <p class="small">First Panel: Iteration-domain: Error $ε[t]$ and its change-level $\Delta\varepsilon[t]$ response.</p>
+      <p class="small">Second and Third Panels: Pole-zero maps for selected $α$ with stability color cues</p>
+    </div>
+
+    <div class="item-lsidebar">
+      <aside id="infoPanel">
+        <h3>SGM: System Info</h3>
+        <dl class="sys-info">
+          <dt>Pole (change-level)</dt>
+          <dd class="cgreen">$ z_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
+
+          <dt>Gain (change-level)</dt>
+          <dd >$ -\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
+
+          <dt>Lowpass stable $z_p$-range</dt>
+          <dd class="cgreen">$(0, {z_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
+      
+          <dt>Lowpass stable $\alpha$-range</dt>
+          <dd class="cgreen">$(\alpha_{\min}, \alpha_{\max})$ = <span class="value" id="alphaLimits"></span></dd>
+        </dl>
+
+        <div id="controls">
+            <div class="slider-group">
+              <label>$\beta$ <span id="betaVal">0.90</span></label>
+              <input id="beta" type="range" min="0.001" max="0.99" step="0.005" value="0.9">
+            </div>
+
+            <div class="slider-group">
+              <label>$\gamma$ <span id="gammaVal">0.00</span></label>
+              <input id="gamma" type="range" min="-1.0" max="1.0" step="0.001" value="0.0">
+            </div>
+
+            <div class="slider-group">
+              <label>$\lambda$ <span id="lamVal">1.00</span></label>
+              <input id="eigval" type="range" min="0.01" max="10.0" step="0.01" value="1.0">
+            </div>
+
+            <div class="slider-group">
+              <label>$\alpha$ <span id="alphaVal">0.50</span></label>
+              <input id="alpha" type="range" min="0.0" max="2.0" step="0.001" value="0.5">
+            </div>
+
+            <div class="slider-group">
+                <label>Input</label>
+                <select id="inputType">
+                  <option value="step">Step (unit)</option>
+                  <option value="impulse">Impulse</option>
+                </select>
+            </div>    
+
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button id="play" class="btn">Play</button>
+              <button id="pause" class="btn" disabled>Pause</button>
+              <button id="reset" class="btn">Reset</button>
+              <span class="status" id="stability">Stable</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button id="PHB" class="btn">PHB</button>
+              <button id="NAG" class="btn">NAG</button>
+              <button id="OPT" class="btn">OPT</button>
+              <button id="free" class="btn">Free</button>
+            </div>      
+        </div>  
+      </aside>
+    </div>
+
+    <div class="item-lplt" id="leftPlotc">      
+    </div>
+
+    <div class="item-rplt" id="rightPlot">
+        <div class="rplt-top" id="rightPlotctop"> 
+        </div> 
+       
+        <div class="rplt-btm" id="rightPlotcbottom">
+        </div> 
+        
+    </div>     
+
+    <div class="item-foot">
+      <p>
+        First-order LTI change-level dynamics under a step input target. The pole-zero plot shows pole position and stability ranges.
+      </p>
+    </div>
+
+</div>
+
+<!-- page content  -->
+<script src="quad_sim.js"></script>
+
+</body>
+</html>
