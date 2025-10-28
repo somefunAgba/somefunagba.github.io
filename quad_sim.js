@@ -12,23 +12,23 @@ function nagfcn(beta){
     return beta/(1+beta); 
 }
 
-function optfcn(beta){ 
+function sfunfcn(beta){ 
     return 1 - Math.sqrt(2*(1-beta)); 
 }
 function sysPole(alpha, beta, gamma, eigval){ 
     return beta - etafcn(beta,gamma) * alpha * eigval; 
 }
+
 function lrstablerng(beta, gamma, eigval, nonnegative=true){
   const eta = etafcn(beta,gamma);
   let aMin = 1e-10;
   let aMaxlp = beta / (eta * eigval);
   let aMax = (1+beta)/(eta*eigval);
   const aMaxhpSafe = 0.99*aMax;
-//   let aMax = 2*(1+beta)/(eta*eigval*(1+gamma));
-//   if(nonnegative) aMin = Math.max(0.0, aMin);
   if(Math.abs(aMax - aMin) < 1e-8) aMax = aMin + 1.0;
   return {aMin,aMax,eta, aMaxlp, aMaxhpSafe};
 }
+
 /* Discrete-time simulation of change-level model:
    s_{t+1} = a*s_t - b * x_{t-1}
    x_t = x_{t-1} + s_t
@@ -48,7 +48,7 @@ function addGaussianNoise(mean = 0, std = 0.01) {
     return randn_bm() * std + mean;
 }
   
-function simulateResponse(beta,gamma,lam,alpha, input='step', T=1000){
+function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
   const eta = etafcn(beta,gamma);
   const eal = eta*alpha*lam;
   const a = beta - eal
@@ -82,23 +82,38 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=1000){
 
 
 /* DOM refs */
-const betaEl = document.getElementById('beta'), gammaEl = document.getElementById('gamma'),
-      lamEl = document.getElementById('eigval'), alphaEl = document.getElementById('alpha'), inputEl = document.getElementById('inputType');;
-const betaVal = document.getElementById('betaVal'), gammaVal = document.getElementById('gammaVal'),
-      lamVal = document.getElementById('lamVal'), alphaVal = document.getElementById('alphaVal');
+const betaEl = document.getElementById('beta'), 
+gammaEl = document.getElementById('gamma'),
+lamEl = document.getElementById('eigval'), 
+alphaEl = document.getElementById('alpha'), 
+inputEl = document.getElementById('inputType');
+
+const betaVal = document.getElementById('betaVal'), 
+gammaVal = document.getElementById('gammaVal'),
+lamVal = document.getElementById('lamVal'), 
+alphaVal = document.getElementById('alphaVal');
+
 const stabilityEl = document.getElementById('stability');
-const playBtn = document.getElementById('play'), pauseBtn = document.getElementById('pause'), resetBtn = document.getElementById('reset');
+const playBtn = document.getElementById('play'), 
+pauseBtn = document.getElementById('pause'), 
+resetBtn = document.getElementById('reset');
 
 const freeBtn = document.getElementById('free');
-const phbBtn = document.getElementById('PHB'), nagBtn = document.getElementById('NAG'), optBtn = document.getElementById('OPT');
+const phbBtn = document.getElementById('PHB'), 
+nagBtn = document.getElementById('NAG'), 
+sfunBtn = document.getElementById('SFUN'),
+optBtn = document.getElementById('OPT');
 // Flag: is gamma locked to beta?
 let gammafree= true;
-freeBtn.disabled = true
+freeBtn.disabled = true;
 
 const poleValEl = document.getElementById('poleVal');
 const gainValEl = document.getElementById('ingainVal');
 const alphaLimitsEl = document.getElementById('alphaLimits');
 const poleLimitsEl = document.getElementById('poleLimits');
+
+const traceAValEl = document.getElementById('traceAVal');
+const detAValEl = document.getElementById('detAVal');
 
 let params = {beta:parseFloat(betaEl.value), 
     gamma:parseFloat(gammaEl.value), 
@@ -126,7 +141,7 @@ function overlayDataOneState(beta,gamma,eigval){
 /* ===== Error plot (time-domain) ===== */
 function drawSys(){
   // simulate
-  const T = 520;
+  const T = 120;
   const sim = simulateResponse(params.beta, params.gamma, params.eigval, params.alpha, params.input, T);
   const gain = sim.b;
   gainValEl.textContent = `${gain.toFixed(3)}`;
@@ -140,9 +155,12 @@ function drawSys(){
   const traceX = {x:t, y:xs, mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } ε[t]$'};
   const traceS = {x:t, y:ss, mode:'lines', line:{color:'coral', dash:'dot', width: 1}, name:'$\\hbox{change, } \\Delta ε[t]$'};
   const layout = {
-    title: { text: `Iteration-domain response (${params.input})` },
+    title: { 
+      text: `$\\text{iteration-domain (${params.input})}$`,
+      font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+    },
     xaxis: { title: { text: '$t$' }, range: [0, t.length - 1] },
-    yaxis: { title: { text: 'amplitude' }, range: [-ylim, ylim] },
+    yaxis: { title: { text: '$\\hbox{signals}$' }, range: [-ylim, ylim] },
     // width: 300,
     // height: 300,
     showlegend: true,
@@ -211,15 +229,16 @@ function drawRight(){
   lamVal.textContent = params.eigval.toFixed(2);
   alphaVal.textContent = params.alpha.toFixed(3);
 
+  // recompute limits
   const {alphas,poles,z,aMin,aMax,eta,aMaxlp,aMaxhpSafe, alphashp, poleshp} = overlayDataOneState(params.beta, params.gamma, params.eigval);
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
   const nlenp = poles.length;
   const nlenph = poleshp.length;
   const polemax = sysPole(aMin, params.beta, params.gamma, params.eigval);
   const polemin = sysPole(aMaxhpSafe, params.beta, params.gamma, params.eigval);
-  const eal = parseFloat(lamEl.value)*parseFloat(alphaEl.value)*parseFloat(lamEl.value);
-  gammaEl.max = parseFloat(betaEl.value);
-  gammaEl.min = (-1+parseFloat(betaEl.value))/(eal);
+  const eal = eta*params.alpha*params.eigval;
+  gammaEl.min = 0.9*(params.beta-1)/(eal);
+  gammaEl.max = params.beta;
 
   // Update info panel
   // recompute α bounds and clamp alpha slider range/position
@@ -235,7 +254,7 @@ function drawRight(){
 
 //   const ingain = -eta*params.alpha*params.eigval*(1-params.gamma);
   a1 = 1 + pole 
-//   a0 = pole - ingain
+//  a0 = pole - ingain
   a0 = params.beta - eta*params.alpha*params.eigval*params.gamma;
   const jury1 = (1+a1+a0)>0
   const jury2 = (1-a1+a0)>0
@@ -247,8 +266,12 @@ function drawRight(){
   const hproots = getroots(params.gamma, eta, params.eigval, alphashp, poleshp);
   root1ptshp = hproots.root1pts; 
   root2ptshp = hproots.root2pts;
-//   console.log(root1pts)
+//   console.log(root1pts)  
 //   console.log(root2pts)
+
+  // traceAValEl.textContent = `${a1.toFixed(3)}`;
+  // detAValEl.textContent = `${a0.toFixed(3)}`;
+
 
 /* subplot 1*/
 
@@ -261,7 +284,7 @@ const chareqpolesTrace = {
     name: 'Poles',
     marker: { color: jstable? 'green':'red', size: 6, symbol: 'x' },
     text: roots.map((r,i) => `$z_${i+1}$`),
-    textposition: 'top center',  
+    textposition: 'middle left',  
     textfont: {
         size: 10,        // reduce text size (default is ~12–14)
         color: 'dimgrey'   // optional: set label color
@@ -352,18 +375,29 @@ name: 'Unit Circle',
 xaxis : 'x', yaxis: 'y',
 };
 
+// // Pre-render LaTeX with dynamic values
+// const container = document.getElementById("pltheaders");
+// container.innerHTML = `$$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$$`;
+// // MathJax.typesetPromise([container]); // safer async version
+
 const layouta = {
-    title: { text: `Pole-zero` },    
-    xaxis: { title: 'Re(z)', zeroline: true, range: [-2,2] },
-    yaxis: { title: 'Im(z)', zeroline: true, range: [-2,2], scaleanchor: 'x' },
-    annotations: [
-        { text: `z² - ${a1.toFixed(3)} z + ${a0.toFixed(3)}`, xref: "paper", yref: "paper", x: 0.5, y: 1.1, showarrow: false },
-    ],
-    // grid: { rows: 2, columns: 1, pattern: 'independent' },
-    // width:520, height:250, 
-    showlegend: false,
-    autosize: true,
+  title: { 
+    text: '$\\hbox{overall system dynamics}$',
+    font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+  },
+  annotations: [
+    {
+      text: `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
+      xref: "paper", yref: "paper",
+      x: 0.5, y: 1.1,
+      showarrow: false
+  },],
+  xaxis: { title: 'Re(z)', zeroline: true, range: [-2,2] },
+  yaxis: { title: 'Im(z)', zeroline: true, range: [-2,2], scaleanchor: 'x' },
+  showlegend: false,
+  autosize: true,
 };
+
 /* subplot 2*/
 const traceCircle = {
     x:unitX, y:unitY, mode:'lines', 
@@ -374,7 +408,7 @@ const traceCircle = {
 const moving = {
     x:[pole], y:[0], mode:'markers+text', 
     marker:{symbol:'x',size:6, color: stable && !highpass? 'green':'red'}, 
-    text:['$z_p$'], textposition:'top center',
+    text:['$\\beta_p$'], textposition:'top center',
     xaxis : 'x', yaxis: 'y',
 };
 
@@ -411,38 +445,71 @@ const traceEnd = {
 };
 
 const layoutb = {
-    title: { text: `Pole-zero` },    
-    xaxis:{range:[-2,2], title:'Real axis'}, 
-    yaxis:{range:[-2,2], title:'Imag axis', scaleanchor: 'x'},
-    annotations: [
-        { text: "change-level", xref: "paper", yref: "paper", x: 0.5, y: 1.1, showarrow: false }
-    ],
-    // width:520, height:250, 
-    showlegend:false,
-    autosize: true
+    title: { text: '$\\hbox{change-level pole}, \\beta_p$', 
+    font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+  },    
+  xaxis:{range:[-2,2], title:'Real aaxis'}, 
+  yaxis:{range:[-2,2], title:'Imag axis', scaleanchor: 'x'},
+  annotations: [
+      { text: "", xref: "paper", yref: "paper", x: 0.5, y: 1.1, showarrow: false }
+  ],
+  // width:520, height:250, 
+  showlegend:false,
+  autosize: true
 };
 
 Plotly.newPlot('rightPlotctop',[ charequnitCircle, root1TraceTraj, root1TraceTrajhp, root1TraceStart, root1TraceEnd, root2TraceTraj, root2TraceTrajhp, root2TraceStart, root2TraceEnd, chareqpolesTrace, ], layouta, {displayModeBar:false, responsive: true });
+
 Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, traceStart, traceEnd], layoutb, {displayModeBar:false, responsive:true});
+
+
+
+// Plotly.relayout('rightPlotctop', {
+//   'annotations[0].text': svgString
+// });
+
+
+
+
+
 }
 
 
 /* Wire controls */
 function updateParamsFromInputs(){
+  params.input = inputEl.value;
+  
   params.beta = parseFloat(betaEl.value);
   params.gamma = parseFloat(gammaEl.value);
   params.eigval = parseFloat(lamEl.value);
   
   // recompute α bounds and clamp alpha slider range/position
-  const {aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
+  let {aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
+
   // set alpha slider attributes (some browsers ignore min/max update until reload; we set value/clamp)
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
-//   if(parseFloat(alphaEl.value) < aMin) alphaEl.value = 0.9*aMax;
-//   if(parseFloat(alphaEl.value) > aMax) alphaEl.value = 0.9*aMax;
+
   /* stable + fast */
-  alphaEl.value = 0.9*aMaxlp;
+  alphaEl.value = 0.99*aMaxlp;
   params.alpha = parseFloat(alphaEl.value);
-  params.input = inputEl.value;
+  
+  /* set gamma, using the other parameters */
+  const eal = eta*params.alpha*params.eigval;
+  gammaEl.min = -(1-params.beta)/(eal);
+  gammaEl.max = params.beta;
+  // console.log('eta', eta, 'eal', eal, 'gamma_min', gammaEl.min)
+
+  if(optBtn.disabled){
+    const gamma_mopt = -0.9*(1-params.beta)/(eal);
+    gammaEl.value = gamma_mopt;
+    params.gamma = gamma_mopt;
+    // recompute
+    ({aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true));
+    alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
+    alphaEl.value = 0.99*aMaxlp;
+    params.alpha = parseFloat(alphaEl.value);
+  }
+  // console.log('eta', eta, 'gamma_min', gammaEl.min)
 
   drawRight();
   drawSys();
@@ -481,8 +548,8 @@ function setgammalisten(beta, gamma) {
     if (nagBtn.disabled) {
         gamma = nagfcn(beta);
     }
-    if (optBtn.disabled) {
-        gamma = optfcn(beta);
+    if (sfunBtn.disabled) {
+        gamma = sfunfcn(beta);
     }
     return gamma;
 }
@@ -537,36 +604,53 @@ resetBtn.addEventListener('click', ()=>{
 });
 
 phbBtn.addEventListener('click', ()=>{
-    gammaEl.value = hbfcn(parseFloat(betaEl.value));
-    updateParamsFromInputs();
-    gammafree = false;freeBtn.disabled = false;
+    gammafree = false;
+    freeBtn.disabled = false;
     phbBtn.disabled = true;
     nagBtn.disabled = false;
+    sfunBtn.disabled = false;
     optBtn.disabled = false;
+    gammaEl.value = hbfcn(parseFloat(betaEl.value));
+    updateParamsFromInputs();
+
   });
 
 nagBtn.addEventListener('click', ()=>{
-    gammaEl.value = nagfcn(parseFloat(betaEl.value));
-    updateParamsFromInputs();    
-    gammafree = false;freeBtn.disabled = false;
+    gammafree = false;
+    freeBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = true;
+    sfunBtn.disabled = false;
     optBtn.disabled = false;
+    gammaEl.value = nagfcn(parseFloat(betaEl.value));
+    updateParamsFromInputs();    
   });
-optBtn.addEventListener('click', ()=>{
-    gammaEl.value = optfcn(parseFloat(betaEl.value));
-    updateParamsFromInputs();
-    gammafree = false;freeBtn.disabled = false;
+sfunBtn.addEventListener('click', ()=>{
+    gammafree = false;
+    freeBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
-    optBtn.disabled = true;
+    sfunBtn.disabled = true;    
+    optBtn.disabled = false;
+    gammaEl.value = sfunfcn(parseFloat(betaEl.value));
+    updateParamsFromInputs();
   });
+optBtn.addEventListener('click', ()=>{
+    gammafree = false;
+    freeBtn.disabled = false;
+    phbBtn.disabled = false;
+    nagBtn.disabled = false;
+    sfunBtn.disabled = false;    
+    optBtn.disabled = true;
+    updateParamsFromInputs();
+  });
+
 freeBtn.addEventListener('click', ()=>{
     gammafree = true;
     freeBtn.disabled = true
     phbBtn.disabled = false;
     nagBtn.disabled = false;
-    optBtn.disabled = false;
+    sfunBtn.disabled = false;
   });
 
 

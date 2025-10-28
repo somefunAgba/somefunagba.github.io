@@ -121,6 +121,9 @@ html, body {
     cursor: pointer;
     transition: background 0.2s;
   }
+  .btnalg{
+    font-size: 0.7rem !important;
+  }
   
   .btn:disabled {
     background: #dadce0;
@@ -184,4 +187,7 @@ html, body {
     color: green !important;
 }   
 
+#pltheaders{
+  z-index: 999;
+}
 

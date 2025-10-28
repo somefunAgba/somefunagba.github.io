@@ -6,7 +6,6 @@
   <title>SGM Quadratic Function Sim.</title>
 
     
-  <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
 
   <script
     type="text/javascript"
@@ -32,7 +31,7 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"
   />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>  -->
 
   <script>
     window.MathJax = {
@@ -43,11 +42,12 @@
         scale: 1.0
       },
       svg: {
-          fontCache: 'global'
+          fontCache: 'none'
       }
     };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  </script>  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
 
 
   <!-- CSS file in the same folder -->
@@ -60,6 +60,10 @@
     <div class="item-head">
       <p class="small">First Panel: Iteration-domain: Error $ε[t]$ and its change-level $\Delta\varepsilon[t]$ response.</p>
       <p class="small">Second and Third Panels: Pole-zero maps for selected $α$ with stability color cues</p>
+
+      <!-- <div id="pltheaders">
+      </div> -->
+      <!-- $z^2 - $ <span class="value" id="traceAVal"></span>$z + $<span class="value" id="detAVal"></span> -->
     </div>
 
     <div class="item-lsidebar">
@@ -67,13 +71,13 @@
         <h3>SGM: System Info</h3>
         <dl class="sys-info">
           <dt>Pole (change-level)</dt>
-          <dd class="cgreen">$ z_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
+          <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
 
           <dt>Gain (change-level)</dt>
           <dd >$ -\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
 
-          <dt>Lowpass stable $z_p$-range</dt>
-          <dd class="cgreen">$(0, {z_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
+          <dt>Lowpass stable $\beta_p$-range</dt>
+          <dd class="cgreen">$(0, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
       
           <dt>Lowpass stable $\alpha$-range</dt>
           <dd class="cgreen">$(\alpha_{\min}, \alpha_{\max})$ = <span class="value" id="alphaLimits"></span></dd>
@@ -87,7 +91,7 @@
 
             <div class="slider-group">
               <label>$\gamma$ <span id="gammaVal">0.00</span></label>
-              <input id="gamma" type="range" min="-1.0" max="1.0" step="0.001" value="0.0">
+              <input id="gamma" type="range" min="-1" max="1" step="0.001" value="0.0">
             </div>
 
             <div class="slider-group">
@@ -115,10 +119,11 @@
               <span class="status" id="stability">Stable</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center;">
-              <button id="PHB" class="btn">PHB</button>
-              <button id="NAG" class="btn">NAG</button>
-              <button id="OPT" class="btn">OPT</button>
-              <button id="free" class="btn">Free</button>
+              <button id="PHB" class="btn btnalg">PHB</button>
+              <button id="NAG" class="btn btnalg">NAG</button>
+              <button id="SFUN" class="btn btnalg">SFUN</button>
+              <button id="OPT" class="btn btnalg">OPT</button>
+              <button id="free" class="btn btnalg">Free</button>
             </div>      
         </div>  
       </aside>
