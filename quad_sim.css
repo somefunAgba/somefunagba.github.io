@@ -1,40 +1,40 @@
 
 html, body {
-    margin: 0;
-    padding: 0;
+    margin:0;
+    padding-left: 10%;
     height: 100%;
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    /* line-height: 1.5; */
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 .item-lsidebar{
     grid-area: sidebar;
-    background-color: inherit;
+    /* background-color: inherit;
     background-clip: border-box;
     border-end-end-radius: 50px;
     border-style: groove;
     padding-right: 10px;
-    padding-left: 10px;
+    padding-left: 10px; */
+}
 
+.infoPanel{
+    background-color: inherit;
+    background-clip: border-box;
+    border-end-end-radius: 25px;
+    border-style: groove;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 15px;
+    padding-top: 0px;
 }
 
 .item-lplt{
     grid-area: main-left;
     background: #eef;
-}
-
-.item-rplt{
-    grid-area: main-right;    
-    background: #eee;
-    display: grid;
-    column-gap: 1px;
-    row-gap: 2px;
-    grid-template-areas:
-        "main-right-t main-right-b";
 }
 
 .rplt-top{
@@ -52,22 +52,26 @@ html, body {
 
 .item-head{
     grid-area: header;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas: "note-grid";
 }
 
 .container{
     display: grid;
-    min-height: 80vh;
+    /* min-height: 50vh; */
     padding: 1rem;
     gap: 1rem;
     box-sizing: border-box;
-    grid-template-columns: 300px 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    column-gap: 10px;
-    row-gap: 50px;
+    grid-template-columns: 300px 500px 350px;
+    grid-template-rows: 300px 300px 300px;
+    column-gap: 5px;
+    row-gap: 5px;
     grid-template-areas:
-        "sidebar header header header"
-        "sidebar main-left main-right main-right" 
-        "sidebar footer footer footer";
+        "sidebar header main-left"
+        "sidebar header main-right-t" 
+        "sidebar footer main-right-b";
 }
 @media (max-width: 1024px) {
     .container {
@@ -76,7 +80,8 @@ html, body {
         "sidebar"
         "header"
         "main-left"
-        "main-right"
+        "main-right-t"
+        "main-right-b"
         "footer";
     }
     .item-lsidebar {
@@ -191,3 +196,93 @@ html, body {
   z-index: 999;
 }
 
+.note-container {
+  grid-area: note-grid;
+  display: grid;
+  column-gap: 1px;
+  row-gap: 2px;
+  grid-template-rows: 50px auto 50px;
+  grid-template-columns: 1fr 50px;
+  grid-template-areas:
+      "main-note note-top"
+      "main-note ."
+      "note-controls note-controls";
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  overflow: hidden;
+  background: #f9f9f9;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  background: #f9fafb;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+}
+
+.note-header {
+  grid-area: note-top;
+  padding: 0.5rem 0.75rem;
+}
+.note-title { margin: 0; font-size: 1rem; }
+.note-progress { font-weight: 600; font-size: 0.875rem; color: rgb(84 124 255); }
+
+.note-viewport {
+  grid-area: main-note;
+  overflow: hidden;
+  padding: 0 0.75rem;
+}
+
+
+.note-controls {
+  grid-area: note-controls; 
+  align-content: flex-end;
+  place-self: flex-end;
+  /* position: absolute; */
+  /* bottom: 2%;
+  right: 2%; */
+}
+
+.note-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  color: rgb(84 124 255);
+}
+
+.note-btn:focus{
+  outline: 1px solid #2563eb;
+  outline-offset: 0px;
+}
+
+/* lay notes side by side */
+/* smooth slide */
+.note-track {
+  display: flex;           
+  transition: transform 0.5s ease; 
+  height: 100%;
+  will-change: transform;
+}
+
+/* each note takes full container width */
+.note {
+  min-width: 100%;         
+  padding: 0.75rem;
+  box-sizing: border-box;
+  font-size: 0.875rem;
+}
+
+.note p { margin: 0.4rem 0; }
+details { margin-top: 0.4rem; }
+summary { cursor: pointer; 
+  font-weight: 600; 
+}
+
+.foot-ol1{
+  padding-left: 1rem;
+  text-align: justify;
+}
+.foot-ol1 li{
+  padding-bottom: 0.25rem;
+}
+.foot-sec1{
+  place-items: center;
+}

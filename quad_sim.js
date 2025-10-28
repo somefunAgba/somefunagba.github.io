@@ -1,4 +1,77 @@
  
+/*Note helpers*/
+// const notes = document.querySelectorAll('.note');
+// const track = document.querySelector('.note-track');
+
+// references
+const track = document.getElementById('note-track');
+const notes = Array.from(track.querySelectorAll('.note'));
+const progressEl = document.getElementById('note-progress');
+const nextBtn = document.getElementById('next');
+const prevBtn = document.getElementById('prev');
+
+let current = 0;
+// const widthPx = track.querySelector('.note').getBoundingClientRect().width;
+
+// Update UI to a given index
+async function showNote(index, {animate = true} = {}) {
+
+  // optional, control transition
+  track.style.transitionDuration = animate ? '500ms' : '0ms';
+
+  // process index to update global current index
+  index = Math.max(0, index);// Math.min(index, notes.length - 1));
+  current = (index % notes.length);
+
+  track.style.transform = `translateX(-${current * 100}%)`;
+  // track.style.transform = `translateX(-${current * widthPx}px)`;
+
+  // Update  progress
+  progressEl.textContent = `${current + 1} / ${notes.length}`;
+
+  // Dispatch a custom event for plot sync
+  const evt = new CustomEvent('notechange', { detail: { index: current } });
+  document.dispatchEvent(evt);
+}
+
+// Controls
+nextBtn.addEventListener('click', () => showNote(current + 1));
+prevBtn.addEventListener('click', () => showNote(current - 1));
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') showNote(current + 1);
+  if (e.key === 'ArrowLeft') showNote(current - 1);
+});
+
+// Basic swipe (touch)
+let startX = null;
+track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+track.addEventListener('touchmove', (e) => {}, { passive: true });
+track.addEventListener('touchend', (e) => {
+  if (startX === null) return;
+  const dx = e.changedTouches[0].clientX - startX;
+  if (dx < -30) showNote(current + 1);
+  else if (dx > 30) showNote(current - 1);
+  startX = null;
+});
+
+// Resize handling (if container width changes)
+window.addEventListener('resize', () => showNote(current, { animate: false }));
+
+// Example: sync with a plot (listen for external events)
+// document.addEventListener('plotstep', (e) => {
+//   // e.detail.step could be 0..notes.length-1
+//   showNote(e.detail.step);
+// });
+
+// Initialize
+showNote(0, { animate: false });
+
+
+
+
+
 /* Model helpers */
 function etafcn(beta, gamma){ 
     return (1 - beta) / (1 - gamma); 
@@ -157,7 +230,7 @@ function drawSys(){
   const layout = {
     title: { 
       text: `$\\text{iteration-domain (${params.input})}$`,
-      font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+      font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
     },
     xaxis: { title: { text: '$t$' }, range: [0, t.length - 1] },
     yaxis: { title: { text: '$\\hbox{signals}$' }, range: [-ylim, ylim] },
@@ -383,13 +456,13 @@ xaxis : 'x', yaxis: 'y',
 const layouta = {
   title: { 
     text: '$\\hbox{overall system dynamics}$',
-    font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+    font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
   },
   annotations: [
     {
       text: `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
       xref: "paper", yref: "paper",
-      x: 0.5, y: 1.1,
+      x: 0.5, y: 1.2,
       showarrow: false
   },],
   xaxis: { title: 'Re(z)', zeroline: true, range: [-2,2] },
@@ -407,8 +480,9 @@ const traceCircle = {
 
 const moving = {
     x:[pole], y:[0], mode:'markers+text', 
-    marker:{symbol:'x',size:6, color: stable && !highpass? 'green':'red'}, 
+    marker: {symbol:'x',size:5, color: stable && !highpass? 'green':'red'}, 
     text:['$\\beta_p$'], textposition:'top center',
+    textfont: {size:8,},
     xaxis : 'x', yaxis: 'y',
 };
 
@@ -446,7 +520,7 @@ const traceEnd = {
 
 const layoutb = {
     title: { text: '$\\hbox{change-level pole}, \\beta_p$', 
-    font: { size: 14, family: 'Arial, sans-serif', color: 'black' } 
+    font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
   },    
   xaxis:{range:[-2,2], title:'Real aaxis'}, 
   yaxis:{range:[-2,2], title:'Imag axis', scaleanchor: 'x'},

@@ -57,18 +57,51 @@
 <body>
    
 <div class="container">
-    <div class="item-head">
-      <p class="small">First Panel: Iteration-domain: Error $ε[t]$ and its change-level $\Delta\varepsilon[t]$ response.</p>
-      <p class="small">Second and Third Panels: Pole-zero maps for selected $α$ with stability color cues</p>
 
-      <!-- <div id="pltheaders">
-      </div> -->
-      <!-- $z^2 - $ <span class="value" id="traceAVal"></span>$z + $<span class="value" id="detAVal"></span> -->
+    <div class="item-head">
+
+      <div class="note-container" role="region">
+        <div class="note-header">
+          <div class="note-progress" aria-live="polite" id="note-progress">1 / 3</div>
+        </div>
+      
+        <div class="note-viewport" aria-live="polite" aria-atomic="true">
+          <div class="note-track" id="note-track">
+            <section class="note">
+              <h4 id="note-title-1">Step 1: Gradient Descent</h4>
+              <p>The update rule is \( x_{t+1} = x_t - \alpha \nabla f(x_t) \).</p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>For quadratic \( f(x) = \tfrac{1}{2}x^\top H x \), \( \nabla f(x) = Hx \), hence \( x_{t+1} = (I - \alpha H)x_t \).</p>
+              </details>
+              <blockquote>Tip: Slide the plot’s step size to see contraction change.</blockquote>
+            </section>
+      
+            <section class="note" >
+              <h4 id="note-title-2">Step 2: Error dynamics</h4>
+              <p>Define the error \( \varepsilon_t = x_t - x^* \). Then \( \varepsilon_{t+1} = (I - \alpha H)\varepsilon_t \).</p>
+              <p>Observe eigenvalue‑wise behavior: \( \varepsilon_{t+1}^{(i)} = (1 - \alpha \lambda_i)\varepsilon_t^{(i)} \).</p>
+            </section>
+      
+            <section class="note">
+              <h4 id="note-title-3">Step 3: Stability window</h4>
+              <p>For convergence in the quadratic case, \( 0 < \alpha < \tfrac{2}{\lambda_{\max}} \).</p>
+              <p>Plot highlight: when \( \alpha \ge \tfrac{2}{\lambda_{\max}} \), trajectories diverge.</p>
+            </section>
+          </div>
+        </div>
+      
+        <div class="note-controls">
+          <button class="note-btn" id="prev">Back</button>
+          <button class="note-btn" id="next" aria-label="Next note">Next</button>
+        </div>
+      </div>
+      
     </div>
 
     <div class="item-lsidebar">
-      <aside id="infoPanel">
-        <h3>SGM: System Info</h3>
+      <aside class="infoPanel" id="infoPanel">
+        <h3>SGM: LTI System Info</h3>
         <dl class="sys-info">
           <dt>Pole (change-level)</dt>
           <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
@@ -132,19 +165,24 @@
     <div class="item-lplt" id="leftPlotc">      
     </div>
 
-    <div class="item-rplt" id="rightPlot">
-        <div class="rplt-top" id="rightPlotctop"> 
-        </div> 
+
+    <div class="rplt-top" id="rightPlotctop"> 
+    </div> 
        
-        <div class="rplt-btm" id="rightPlotcbottom">
-        </div> 
-        
-    </div>     
+    <div class="rplt-btm" id="rightPlotcbottom">
+    </div>   
 
     <div class="item-foot">
-      <p>
-        First-order LTI change-level dynamics under a step input target. The pole-zero plot shows pole position and stability ranges.
-      </p>
+      <section class="foot-sec1">
+      <h4>First-order LTI change-level and overall error dynamics. </h4>
+      <ol class="foot-ol1"> 
+      <li>First plot shows the <em>iteration-domain response</em> of the SGM's error $ε[t]$ from an optimum point and its change-level $\Delta\varepsilon[t]$.</li>
+      <li>Second plot shows <em>two roots of the overall error behavior</em>.
+      <li>Third plot shows <em>change-level pole position</em>.</li> 
+      </ol>
+      <span> Highlighted in the second and third plots are <span class="cgreen">stable</span>, <span class="cred">oscillatory</span> and <span class="cred">unstable</span> (outside the unit-circle) ranges.</span>
+      </section>
+      
     </div>
 
 </div>
