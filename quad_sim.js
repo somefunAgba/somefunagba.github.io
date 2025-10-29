@@ -538,9 +538,13 @@ Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, 
 
 
 
-// Plotly.relayout('rightPlotctop', {
-//   'annotations[0].text': svgString
-// });
+Plotly.relayout('rightPlotctop', {
+  'annotations[0].text': `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
+  'annotations[0].x': 0.5,
+  'annotations[0].y': 1.15,
+  'annotations[0].xref': 'paper',
+  'annotations[0].yref': 'paper'
+});
 
 
 
