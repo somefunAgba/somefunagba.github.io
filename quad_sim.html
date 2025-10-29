@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>SGM Quadratic Function Sim.</title>
+  <title>AutoSGM Quadratic Function Sim.</title>
 
     
 
@@ -320,7 +320,7 @@
 
     <div class="item-lsidebar">
       <aside class="infoPanel" id="infoPanel">
-        <h3>SGM: LTI System Info</h3>
+        <h3><span class="cgreen">Auto</span>SGM: LTI System Info</h3>
         <dl class="sys-info">
           <dt>Pole (change-level)</dt>
           <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
@@ -328,10 +328,10 @@
           <dt>Gain (change-level)</dt>
           <dd >$ -\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
 
-          <dt>Lowpass stable $\beta_p$-range</dt>
-          <dd class="cgreen">$(0, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
+          <dt><span id="fstate">Lowpass</span> stable $\beta_p$-range</dt>
+          <dd class="cgreen">$({\beta_p}_{\min}, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
       
-          <dt>Lowpass stable $\alpha$-range</dt>
+          <dt><span id="fstate">Lowpass</span> stable $\alpha$-range</dt>
           <dd class="cgreen">$(\alpha_{\min}, \alpha_{\max})$ = <span class="value" id="alphaLimits"></span></dd>
         </dl>
 
@@ -370,13 +370,16 @@
               <button id="reset" class="btn">Reset</button>
               <span class="status" id="stability">Stable</span>
             </div>
-            <div style="display:flex;gap:8px;align-items:center;">
+            <div style="display:flex;gap:8px;align-items:center;">   
               <button id="PHB" class="btn btnalg">PHB</button>
               <button id="NAG" class="btn btnalg">NAG</button>
-              <button id="SFUN" class="btn btnalg">SFUN</button>
+              <button id="SFUN" class="btn btnalg">MLS</button>
+            </div>     
+            <div style="display:flex;gap:8px;align-items:center;">  
+              <button id="NOF" class="btn btnalg">RAW</button>   
               <button id="OPT" class="btn btnalg">OPT</button>
               <button id="free" class="btn btnalg">Free</button>
-            </div>      
+            </div>    
         </div>  
       </aside>
     </div>

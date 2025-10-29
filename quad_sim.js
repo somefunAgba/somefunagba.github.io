@@ -74,7 +74,11 @@ showNote(0, { animate: false });
 
 /* Model helpers */
 function etafcn(beta, gamma){ 
-    return (1 - beta) / (1 - gamma); 
+  let eta = 1
+  if (!israw){
+      eta = (1 - beta) / (1 - gamma)
+  } 
+  return eta; 
 }
 
 function hbfcn(beta){ 
@@ -96,6 +100,10 @@ function lrstablerng(beta, gamma, eigval, nonnegative=true){
   const eta = etafcn(beta,gamma);
   let aMin = 1e-10;
   let aMaxlp = beta / (eta * eigval);
+  if (israw){
+    aMaxlp = 0.33 / eigval;
+    // aMax = 1/eigval;
+  }
   let aMax = (1+beta)/(eta*eigval);
   const aMaxhpSafe = 0.99*aMax;
   if(Math.abs(aMax - aMin) < 1e-8) aMax = aMin + 1.0;
@@ -124,10 +132,17 @@ function addGaussianNoise(mean = 0, std = 0.01) {
 function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
   const eta = etafcn(beta,gamma);
   const eal = eta*alpha*lam;
-  const a = beta - eal
-  const b = -eal*(1 - gamma);
+  let a = 0, b = 0;
+  if (israw){
+    a = -eal;
+    b = -eal;
+  } else {
+    a = beta - eal;
+    b = -eal*(1 - gamma);
+  }
+
   let s_prev = 0.0;
-  let w_star = 1.25
+  let w_star = 1.25;
   let x_prev = -w_star;
   const xs = [];
   const ss = [];
@@ -175,10 +190,13 @@ const freeBtn = document.getElementById('free');
 const phbBtn = document.getElementById('PHB'), 
 nagBtn = document.getElementById('NAG'), 
 sfunBtn = document.getElementById('SFUN'),
-optBtn = document.getElementById('OPT');
+optBtn = document.getElementById('OPT'),
+rawBtn = document.getElementById('NOF');
 // Flag: is gamma locked to beta?
 let gammafree= true;
-freeBtn.disabled = true;
+let israw = false;
+rawBtn.disabled = false;
+freeBtn.disabled = false;
 
 const poleValEl = document.getElementById('poleVal');
 const gainValEl = document.getElementById('ingainVal');
@@ -187,6 +205,8 @@ const poleLimitsEl = document.getElementById('poleLimits');
 
 const traceAValEl = document.getElementById('traceAVal');
 const detAValEl = document.getElementById('detAVal');
+
+const fpass = document.querySelectorAll('#fstate');
 
 let params = {beta:parseFloat(betaEl.value), 
     gamma:parseFloat(gammaEl.value), 
@@ -218,6 +238,7 @@ function drawSys(){
   const sim = simulateResponse(params.beta, params.gamma, params.eigval, params.alpha, params.input, T);
   const gain = sim.b;
   gainValEl.textContent = `${gain.toFixed(3)}`;
+  poleValEl.textContent = `${sim.a.toFixed(3)}`;
 
   const xs = sim.xs;
   const ss = sim.ss;
@@ -295,6 +316,11 @@ function drawRight(){
   
   const stable = Math.abs(pole) < 1.0;
   const highpass = pole < 0;
+
+  fpass.forEach((fp) => {
+    fp.textContent = highpass ? 'Highpass' : 'Lowpass';
+  });
+  
   stabilityEl.textContent = highpass ? 'Highpass' : 'Lowpass';
   stabilityEl.style.color = highpass ? 'crimson' : 'yellowgreen';
   betaVal.textContent = params.beta.toFixed(2);
@@ -307,18 +333,25 @@ function drawRight(){
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
   const nlenp = poles.length;
   const nlenph = poleshp.length;
+  const zerosp = Array(nlenp).fill(0); 
+  const zerosph = Array(nlenph).fill(0); 
   const polemax = sysPole(aMin, params.beta, params.gamma, params.eigval);
   const polemin = sysPole(aMaxhpSafe, params.beta, params.gamma, params.eigval);
-  const eal = eta*params.alpha*params.eigval;
-  gammaEl.min = 0.9*(params.beta-1)/(eal);
-  gammaEl.max = params.beta;
+  if (!israw){
+    const eal = eta*params.alpha*params.eigval;
+    gammaEl.min = 0.9*(params.beta-1)/(eal);
+    gammaEl.max = params.beta;
+  }
 
   // Update info panel
   // recompute α bounds and clamp alpha slider range/position
-  poleValEl.textContent = `${pole.toFixed(3)}`;
   alphaLimitsEl.textContent = `(0, ${aMaxlp.toFixed(3)})`;
-  poleLimitsEl.textContent = `(0, ${params.beta.toFixed(3)})`;
-
+  if (!israw){
+    poleLimitsEl.textContent = `(0, ${params.beta.toFixed(3)})`;
+  } else {
+    poleLimitsEl.textContent = `(-0.5, 0)`;
+  }
+  
   if (highpass) {
     poleValEl.style.color = "crimson";
   } else {
@@ -326,9 +359,13 @@ function drawRight(){
   }
 
 //   const ingain = -eta*params.alpha*params.eigval*(1-params.gamma);
-  a1 = 1 + pole 
-//  a0 = pole - ingain
-  a0 = params.beta - eta*params.alpha*params.eigval*params.gamma;
+  let a1 = 1 + pole  // trace
+  let a0 = 0;
+  if (!israw){
+    //  a0 = pole - ingain // det
+    a0 = params.beta - eta*params.alpha*params.eigval*params.gamma;
+  } 
+  
   const jury1 = (1+a1+a0)>0
   const jury2 = (1-a1+a0)>0
   const jury3 = Math.abs(a0)<1
@@ -341,9 +378,6 @@ function drawRight(){
   root2ptshp = hproots.root2pts;
 //   console.log(root1pts)  
 //   console.log(root2pts)
-
-  // traceAValEl.textContent = `${a1.toFixed(3)}`;
-  // detAValEl.textContent = `${a0.toFixed(3)}`;
 
 
 /* subplot 1*/
@@ -368,7 +402,7 @@ const nlen = root1pts.re.length;
 
 const root1TraceTraj = {
   x: root1pts.re,
-  y: root1pts.im,
+  y: israw ? zerosp : root1pts.im,
   mode: 'lines',
   line: { color: 'yellowgreen', width: 1 },
   opacity: 0.5,
@@ -378,7 +412,7 @@ const root1TraceTraj = {
 
 const root1TraceStart = {
   x: [root1pts.re[0]],
-  y: [root1pts.im[0]],
+  y: israw ? [0] : [root1pts.im[0]],
   mode: 'markers+text',
   marker: { color: 'orangered', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -386,7 +420,7 @@ const root1TraceStart = {
 
 const root1TraceEnd = {
   x: [root1pts.re[nlen-1]],
-  y: [root1pts.im[nlen-1]],
+  y: israw ? [0] : [root1pts.im[nlen-1]],
   mode: 'markers+text',
   marker: { color: 'orangered', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -394,7 +428,7 @@ const root1TraceEnd = {
 
 const root2TraceTraj = {
   x: root2pts.re,
-  y: root2pts.im,
+  y: israw ? zerosp: root2pts.im,
   mode: 'lines',
   line: { color: 'yellowgreen', width: 1 },
   opacity: 0.5,
@@ -404,7 +438,7 @@ const root2TraceTraj = {
 
 const root2TraceStart = {
   x: [root2pts.re[0]],
-  y: [root2pts.im[0]],
+  y: israw ? [0] : [root2pts.im[0]],
   mode: 'markers+text',
   marker: { color: 'blue', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -412,7 +446,7 @@ const root2TraceStart = {
 
 const root2TraceEnd = {
   x: [root2pts.re[nlen-1]],
-  y: [root2pts.im[nlen-1]],
+  y: israw ? [0] : [root2pts.im[nlen-1]],
   mode: 'markers+text',
   marker: { color: 'blue', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -420,7 +454,7 @@ const root2TraceEnd = {
 
 const root1TraceTrajhp = {
     x: root1ptshp.re,
-    y: root1ptshp.im,
+    y: israw ? zerosph : root1ptshp.im,
     mode: 'lines',
     line: { color: 'crimson', width: 1 },
     opacity: 1,
@@ -430,7 +464,7 @@ const root1TraceTrajhp = {
 
 const root2TraceTrajhp = {
     x: root2ptshp.re,
-    y: root2ptshp.im,
+    y: israw ? zerosph : root2ptshp.im,
     mode: 'lines',
     line: { color: 'crimson', width: 1 },
     opacity: 1,
@@ -452,7 +486,7 @@ xaxis : 'x', yaxis: 'y',
 // const container = document.getElementById("pltheaders");
 // container.innerHTML = `$$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$$`;
 // // MathJax.typesetPromise([container]); // safer async version
-
+const a0fx = israw ? 0 : 3;
 const layouta = {
   title: { 
     text: '$\\hbox{overall system dynamics}$',
@@ -460,7 +494,7 @@ const layouta = {
   },
   annotations: [
     {
-      text: `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
+      text: `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(a0fx)}$`,
       xref: "paper", yref: "paper",
       x: 0.5, y: 1.15,
       showarrow: false
@@ -545,9 +579,9 @@ const layoutb = {
   autosize: true
 };
 
-Plotly.react('rightPlotctop',[ charequnitCircle, root1TraceTraj, root1TraceTrajhp, root1TraceStart, root1TraceEnd, root2TraceTraj, root2TraceTrajhp, root2TraceStart, root2TraceEnd, chareqpolesTrace, ], layouta, {displayModeBar:false, responsive: true });
+Plotly.newPlot('rightPlotctop',[ charequnitCircle, root1TraceTraj, root1TraceTrajhp, root1TraceStart, root1TraceEnd, root2TraceTraj, root2TraceTrajhp, root2TraceStart, root2TraceEnd, chareqpolesTrace, ], layouta, {displayModeBar:false, responsive: true });
 
-Plotly.react('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, traceStart, traceEnd], layoutb, {displayModeBar:false, responsive:true});
+Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, traceStart, traceEnd], layoutb, {displayModeBar:false, responsive:true});
 
 
 
@@ -569,13 +603,20 @@ Plotly.react('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, tr
 /* Wire controls */
 function updateParamsFromInputs(){
   params.input = inputEl.value;
-  
+
+  // if raw
+  if(israw){
+    betaEl.value = 0;
+    gammaEl.value = 0;
+  } 
+  console.log(israw, betaEl.value, params.beta)
   params.beta = parseFloat(betaEl.value);
   params.gamma = parseFloat(gammaEl.value);
   params.eigval = parseFloat(lamEl.value);
   
+
   // recompute α bounds and clamp alpha slider range/position
-  let {aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
+  let {aMin, aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
 
   // set alpha slider attributes (some browsers ignore min/max update until reload; we set value/clamp)
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
@@ -584,23 +625,25 @@ function updateParamsFromInputs(){
   alphaEl.value = 0.99*aMaxlp;
   params.alpha = parseFloat(alphaEl.value);
   
-  /* set gamma, using the other parameters */
-  const eal = eta*params.alpha*params.eigval;
-  gammaEl.min = -(1-params.beta)/(eal);
-  gammaEl.max = params.beta;
-  // console.log('eta', eta, 'eal', eal, 'gamma_min', gammaEl.min)
+  if (!israw) {   
+    /* set gamma, using the other parameters */
+    const eal = eta*params.alpha*params.eigval;
+    gammaEl.min = -(1-params.beta)/(eal);
+    gammaEl.max = params.beta;
+    // console.log('eta', eta, 'eal', eal, 'gamma_min', gammaEl.min)
 
-  if(optBtn.disabled){
-    const gamma_mopt = -0.9*(1-params.beta)/(eal);
-    gammaEl.value = gamma_mopt;
-    params.gamma = gamma_mopt;
-    // recompute
-    ({aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true));
-    alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
-    alphaEl.value = 0.99*aMaxlp;
-    params.alpha = parseFloat(alphaEl.value);
+    if(optBtn.disabled){
+      const gamma_mopt = -0.9*(1-params.beta)/(eal);
+      gammaEl.value = gamma_mopt;
+      params.gamma = gamma_mopt;
+      // recompute
+      ({aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true));
+      alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
+      alphaEl.value = 0.99*aMaxlp;
+      params.alpha = parseFloat(alphaEl.value);
+    }
+    // console.log('eta', eta, 'gamma_min', gammaEl.min)
   }
-  // console.log('eta', eta, 'gamma_min', gammaEl.min)
 
   drawRight();
   drawSys();
@@ -696,7 +739,9 @@ resetBtn.addEventListener('click', ()=>{
 
 phbBtn.addEventListener('click', ()=>{
     gammafree = false;
+    israw = false;
     freeBtn.disabled = false;
+    rawBtn.disabled = false;
     phbBtn.disabled = true;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
@@ -708,7 +753,9 @@ phbBtn.addEventListener('click', ()=>{
 
 nagBtn.addEventListener('click', ()=>{
     gammafree = false;
+    israw = false;
     freeBtn.disabled = false;
+    rawBtn.disabled = false;    
     phbBtn.disabled = false;
     nagBtn.disabled = true;
     sfunBtn.disabled = false;
@@ -718,7 +765,9 @@ nagBtn.addEventListener('click', ()=>{
   });
 sfunBtn.addEventListener('click', ()=>{
     gammafree = false;
+    israw = false;
     freeBtn.disabled = false;
+    rawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = true;    
@@ -728,7 +777,9 @@ sfunBtn.addEventListener('click', ()=>{
   });
 optBtn.addEventListener('click', ()=>{
     gammafree = false;
+    israw = false;
     freeBtn.disabled = false;
+    rawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;    
@@ -738,13 +789,26 @@ optBtn.addEventListener('click', ()=>{
 
 freeBtn.addEventListener('click', ()=>{
     gammafree = true;
-    freeBtn.disabled = true
+    israw = false;
+    freeBtn.disabled = true;
+    rawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
+    optBtn.disabled = false;
   });
 
-
+rawBtn.addEventListener('click', ()=>{
+    gammafree = false;
+    israw = true;
+    freeBtn.disabled = false;
+    rawBtn.disabled = true;
+    phbBtn.disabled = false;
+    nagBtn.disabled = false;
+    sfunBtn.disabled = false;
+    optBtn.disabled = false;
+    updateParamsFromInputs();
+  });
 
 /* Init */
 betaVal.textContent = params.beta.toFixed(2);
