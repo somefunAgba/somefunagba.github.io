@@ -34,7 +34,7 @@ html, body {
 
 .item-lplt{
     grid-area: main-left;
-    background: #eef;
+    /* background: #eef; */
 }
 
 .rplt-top{
@@ -73,30 +73,8 @@ html, body {
         "sidebar header main-right-t" 
         "sidebar footer main-right-b";
 }
-/* @media (max-width: 1024px) {
-  html, body {
-    margin:0;
-    padding-left: 0;
-  }
-    .container {
-      column-gap: 50px;
-      row-gap: 50px;
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "sidebar"
-        "header"
-        "main-left"
-        "main-right-t"
-        "main-right-b"
-        "footer";
-    }
-    .item-lsidebar {
-      border-radius: 0;
-      border-style: none;
-    }
-  } */
 
-  @media (max-width: 1024px) {
+@media (max-width: 1024px) {
     html, body {
       margin: 0;
       padding-left: 0;
@@ -125,7 +103,7 @@ html, body {
       align-self: start;
 
     }
-  }
+}
   
 
 /* controls*/  
@@ -229,9 +207,6 @@ html, body {
     color: green !important;
 }   
 
-#pltheaders{
-  z-index: 999;
-}
 
 .note-container {
   grid-area: note-grid;
@@ -323,3 +298,5 @@ summary { cursor: pointer;
 .foot-sec1{
   place-items: center;
 }
+
+

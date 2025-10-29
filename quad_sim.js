@@ -240,7 +240,7 @@ function drawSys(){
     autosize: true,
   };
   
-  Plotly.newPlot('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
+  Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
   
 }
     
@@ -462,11 +462,11 @@ const layouta = {
     {
       text: `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
       xref: "paper", yref: "paper",
-      x: 0.5, y: 1.2,
+      x: 0.5, y: 1.15,
       showarrow: false
   },],
-  xaxis: { title: 'Re(z)', zeroline: true, range: [-2,2] },
-  yaxis: { title: 'Im(z)', zeroline: true, range: [-2,2], scaleanchor: 'x' },
+  xaxis: { title: { text: '$\\Re(z)$' }, zeroline: true, range: [-1,1] },
+  yaxis: { title: { text: '$\\Im(z)$' }, zeroline: true, range: [-1.2,1.2], scaleanchor: 'x' },
   showlegend: false,
   autosize: true,
 };
@@ -519,11 +519,24 @@ const traceEnd = {
 };
 
 const layoutb = {
-    title: { text: '$\\hbox{change-level pole}, \\beta_p$', 
+    title: { text: '$\\hbox{change-level\'s single-pole dynamics}$', 
     font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
   },    
-  xaxis:{range:[-2,2], title:'Real aaxis'}, 
-  yaxis:{range:[-2,2], title:'Imag axis', scaleanchor: 'x'},
+  xaxis:{
+    range:[-2,2], 
+    title: { 
+      text: 'real axis',     
+      font: { size: 12,  color: 'darkgray'}, 
+    }, 
+  }, 
+  yaxis:{
+    range:[-1,1], 
+    title: { 
+      text: 'imaginary axis', 
+      font: { size: 12, color: 'darkgray' }, 
+    }, 
+    scaleanchor: 'x'
+  },
   annotations: [
       { text: "", xref: "paper", yref: "paper", x: 0.5, y: 1.1, showarrow: false }
   ],
@@ -532,19 +545,19 @@ const layoutb = {
   autosize: true
 };
 
-Plotly.newPlot('rightPlotctop',[ charequnitCircle, root1TraceTraj, root1TraceTrajhp, root1TraceStart, root1TraceEnd, root2TraceTraj, root2TraceTrajhp, root2TraceStart, root2TraceEnd, chareqpolesTrace, ], layouta, {displayModeBar:false, responsive: true });
+Plotly.react('rightPlotctop',[ charequnitCircle, root1TraceTraj, root1TraceTrajhp, root1TraceStart, root1TraceEnd, root2TraceTraj, root2TraceTrajhp, root2TraceStart, root2TraceEnd, chareqpolesTrace, ], layouta, {displayModeBar:false, responsive: true });
 
-Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, traceStart, traceEnd], layoutb, {displayModeBar:false, responsive:true});
+Plotly.react('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, traceStart, traceEnd], layoutb, {displayModeBar:false, responsive:true});
 
 
 
-Plotly.relayout('rightPlotctop', {
-  'annotations[0].text': `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
-  'annotations[0].x': 0.5,
-  'annotations[0].y': 1.15,
-  'annotations[0].xref': 'paper',
-  'annotations[0].yref': 'paper'
-});
+// Plotly.relayout('rightPlotctop', {
+//   'annotations[0].text': `$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$`,
+//   'annotations[0].x': 0.5,
+//   'annotations[0].y': 1.15,
+//   'annotations[0].xref': 'paper',
+//   'annotations[0].yref': 'paper'
+// });
 
 
 
