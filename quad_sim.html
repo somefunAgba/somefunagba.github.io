@@ -88,6 +88,225 @@
               <p>For convergence in the quadratic case, \( 0 < \alpha < \tfrac{2}{\lambda_{\max}} \).</p>
               <p>Plot highlight: when \( \alpha \ge \tfrac{2}{\lambda_{\max}} \), trajectories diverge.</p>
             </section>
+
+            <section class="note">
+              <h4 id="note-title-scalar">Step 1: Scalar Quadratic Function and Gradient</h4>
+              <p>
+                Consider the scalar quadratic function 
+                \( f(x) = \tfrac{1}{2}\lambda x^2 \).  
+                Its gradient is simply 
+                \( \nabla f(x) = \lambda x \).
+              </p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>
+                  Differentiating \( f(x) = \tfrac{1}{2}\lambda x^2 \) with respect to \(x\):  
+                  
+            
+                  \[
+                    \frac{df}{dx} = \lambda x.
+                  \]
+            
+            
+                </p>
+              </details>
+              <blockquote>
+                Tip: This simple form makes the scalar case a perfect starting point for analyzing gradient descent.
+              </blockquote>
+            </section>
+            
+            <section class="note">
+              <h4 id="note-title-change">Step 2: Change-Level Dynamics (AutoSGM)</h4>
+              <p>
+                In AutoSGM, the raw stochastic gradient is passed through a first‑order filter 
+                \( H_{\beta,\gamma}(z) = \dfrac{\eta(1 - \gamma z^{-1})}{1 - \beta z^{-1}} \).  
+                The update rule becomes
+                
+            
+                \[
+                  w_{t+1} = w_t - \alpha_t \, v_t,
+                \]
+            
+            
+                where \( v_t \) is the filtered gradient.
+              </p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>
+                  The filter realization is
+                  
+            
+                  \[
+                    v_t = \beta v_{t-1} + \eta \big(g_t - \gamma g_{t-1}\big).
+                  \]
+            
+            
+                  The change in iterate is
+                  
+            
+                  \[
+                    \Delta w_t = w_{t+1} - w_t = -\alpha_t v_t.
+                  \]
+            
+            
+                </p>
+                <p>
+                  This shows that the *change‑level dynamics* are governed by the pole \( \beta \) 
+                  and zero \( \gamma \) of the filter, which tune how past gradients shape the current step.
+                </p>
+              </details>
+              <blockquote>
+                Tip: In AutoSGM, momentum and look‑ahead (HB, NAG, Adam) are all special cases of this filter.  
+                The pole \( \beta \) controls memory; the zero \( \gamma \) controls gradient anticipation.
+              </blockquote>
+            </section>
+
+            <section class="note">
+              <h4 id="note-title-change2">Step 2: Change-Level Dynamics (AutoSGM)</h4>
+              <p>
+                AutoSGM applies a first-order filter to the stochastic gradient, shaping the step:
+                
+            
+                \[
+                  H_{\beta,\gamma}(z) = \frac{\eta(1 - \gamma z^{-1})}{1 - \beta z^{-1}}.
+                \]
+            
+            
+                The iterate update is
+                
+            
+                \[
+                  w_{t+1} = w_t - \alpha_t \, v_t,
+                \]
+            
+            
+                where \( v_t \) is the filtered gradient.
+              </p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>
+                  A causal realization of the filter yields
+                  
+            
+                  \[
+                    v_t = \beta \, v_{t-1} + \eta \big(g_t - \gamma \, g_{t-1}\big).
+                  \]
+            
+            
+                  Therefore, the change in iterate is
+                  
+            
+                \[
+                    \Delta w_t = w_{t+1} - w_t = -\alpha_t \, v_t.
+                  \]
+            
+            
+                </p>
+                <p>
+                  The pole \( \beta \) sets memory (momentum), and the zero \( \gamma \) sets anticipation (look-ahead).
+                  Tuning \((\beta,\gamma)\) recovers methods like Heavy-Ball (\(\gamma=0\)) and Nesterov (\(\gamma>0\)).
+                </p>
+              </details>
+              <blockquote>
+                Tip: Use \( \beta \) to smooth noisy gradients and \( \gamma \) to bias steps toward predicted descent.
+              </blockquote>
+            </section>
+ 
+            <section class="note">
+              <h4 id="note-title-error">Step 3: Overall Error Dynamics (AutoSGM)</h4>
+              <p>
+                For quadratic losses, let \( e_t = w_t - w^\star \) and \( g_t = H e_t \).
+                AutoSGM induces a second-order recurrence in the error:
+                
+            
+                \[
+                  e_{t+1} = (I - \alpha_t \eta H) e_t
+                            + \beta \big(e_t - e_{t-1}\big)
+                            - \alpha_t \eta \gamma H \, e_{t-1}.
+                ]
+              </p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>
+                  Starting from
+                  
+            
+                  \[
+                    w_{t+1} = w_t - \alpha_t (\beta v_{t-1} + \eta(g_t - \gamma g_{t-1})),
+                  \]
+            
+            
+                  with \( g_t = H e_t \) and \( v_{t-1} \) eliminating via the realization, we obtain the recurrence in \( e_t \) with coefficients set by \(\beta, \gamma, \eta, \alpha_t\).
+                </p>
+                <p>
+                  Along an eigen-direction \( \lambda_i \) of \( H \), the scalar mode evolves as
+                  
+            
+                  \[
+                    e_{t+1}^{(i)} = (1 - \alpha_t \eta \lambda_i) e_t^{(i)}
+                                    + \beta \big(e_t^{(i)} - e_{t-1}^{(i)}\big)
+                                    - \alpha_t \eta \gamma \lambda_i \, e_{t-1}^{(i)}.
+                  \]
+            
+            
+                </p>
+              </details>
+              <blockquote>
+                Tip: Stability requires the roots of the mode’s characteristic polynomial to lie inside the unit circle.
+                Heavy-Ball corresponds to \( \gamma=0 \); Nesterov uses \( \gamma>0 \) to accelerate well-conditioned directions.
+              </blockquote>
+            </section>
+
+            <section class="note">
+              <h4 id="note-title-error-scalar">Step 3 (Scalar): AutoSGM Error Dynamics</h4>
+              <p>
+                Specializing to the scalar quadratic \( f(x) = \tfrac{1}{2}\lambda x^2 \), 
+                the error is \( e_t = x_t - x^\star = x_t \).  
+                The AutoSGM recurrence becomes
+                
+            
+                \[
+                  e_{t+1} = (1 - \alpha_t \eta \lambda) e_t
+                            + \beta (e_t - e_{t-1})
+                            - \alpha_t \eta \gamma \lambda \, e_{t-1}.
+                \]
+            
+            
+              </p>
+              <details>
+                <summary>Show derivation</summary>
+                <p>
+                  Starting from the filtered update
+                  
+            
+                  \[
+                    v_t = \beta v_{t-1} + \eta(\lambda e_t - \gamma \lambda e_{t-1}),
+                  \]
+            
+            
+                  and \( x_{t+1} = x_t - \alpha_t v_t \),  
+                  substituting \( e_t = x_t \) yields the second‑order recurrence above.
+                </p>
+                <p>
+                  The characteristic polynomial for this scalar mode is
+                  
+            
+                  \[
+                    z^2 - (1 + \beta - \alpha_t \eta \lambda) z
+                        + (\beta - \alpha_t \eta \gamma \lambda) = 0.
+                  \]
+            
+            
+                  Its roots \( z_{1,2} \) govern stability and convergence.
+                </p>
+              </details>
+              <blockquote>
+                Tip: Convergence requires both roots \( z_{1,2} \) to lie inside the unit circle.  
+                Heavy‑Ball is recovered with \( \gamma = 0 \); Nesterov with \( \gamma > 0 \).
+              </blockquote>
+            </section>
+                                    
+
           </div>
         </div>
       
