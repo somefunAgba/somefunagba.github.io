@@ -64,6 +64,7 @@
     \newcommand{\rg}{\textrm{g}}
     \newcommand{\rx}{\textrm{x}}
     \newcommand{\rh}{\textrm{h}}
+    \newcommand{\rH}{\textrm{H}}
     \newcommand{\mean}[1]{\mathbb{E}[#1]}
     \)
 </div>
@@ -81,29 +82,33 @@
 
             <section class="note">
               <h4 id="note-title-0">Problem setup</h4>
-              Consider the simple but representative problem of minimizing per iteration $t$, a weighted quadratic loss function whose model is a 1-dimensional parameter-vector $\rw_t$.
+              Consider the simple but representative problem of minimizing, at each time-step or iteration $t>0$, a twice-differentiable, weighted quadratic loss function, 
 
               $$f(\rw_t) = \tfrac{1}{2} u_t^2\cdot\varepsilon_t^2,$$
 
-              where the error from an optimum value $\rw^*$ is $\varepsilon_t = \rw_t - \rw^* $, and the weighting variable $u_t$ is a wide-sense stationary, zero-mean Gaussian data process independent of the error. 
+              where the model is a 1-dimensional parameter-vector $\rw_t$, the error relative to an optimum value $\rw^*$ is $\varepsilon_t = \rw_t - \rw^* $, and the weighting variable $u_t$ is modeled as a wide-sense stationary, zero-mean Gaussian data process, statistically independent of the error. 
               
-              <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, constant second-moment or variance $\mean{u_t^2} = λ$, $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. </p>
+              <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, a finite second-moment (or variance) $\mean{u_t^2} = λ$, with $0<\lambda<\infty$, and uncorrelated values across time $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. Independence further implies that for any powers $i,j$, the joint moment $\mean{u_t^i ε_t^j} = \mean{u_t^i}\mean{ε_t^j}$.</p>
 
-              Differentiating $f(\rw_t)$ with respect to $\rw_t$, twice, we get the gradient and Hessian as,
-              $$ \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \varepsilon_t, \quad \mean{\rg_t} = \lambda\cdot \mean{ε_t} $$
+              Differentiating $f(\rw_t)$ with respect to $\rw_t$, we get the gradient $\rg_t$ and Hessian $\rH_t$ as follows,
+              $$ \begin{align}
+              \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \varepsilon_t, & \quad \mean{\rg_t} = \lambda\cdot \mean{ε_t}\\
+              \rH_t =  \nabla^2 f(\rw_t) =  u_t^2,& \quad \mean{\rH_t} = \lambda
+              \end{align}
+              $$
               
-              $$ \rh_t =  \nabla^2 f(\rw_t) =  u_t^2, \quad \mean{\rh_t} = \lambda$$
-
-              To optimize  $f(\rw_t)$, an algorithm of choice is known as the
+              To minimize  $f(\rw_t)$, an optimization algorithm of choice is known as the
               <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
               $$ \rw_{t+1} = \rw_t - \alpha_t \cdot \rg_t.$$ 
               
-              At each iteration, the update rule asks for a $\alpha_t$ from a <strong>learning rate</strong> oracle and $\rg_t$ from a gradient-generating oracle. While the algorithm takes a step in the direction of the gradient, it neither rigidly assumes its input is <strong>exact</strong> nor <strong>stochastic</strong> nor guarantees a per iteration <strong>descent</strong> of $f(\rw_t)$ to work, these two last terms have become commonly associated with the update rule.
+              At each iteration, the update rule receives $\alpha_t$ from a <strong>learning rate</strong> oracle and $\rg_t$ from a gradient-generating oracle. Although, the algorithm updates $\rw_t$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rw_t)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
 
               $$ \varepsilon_{t+1} = \varepsilon_t - \alpha_t \cdot \rg_t.$$ 
-
               <p>
-               <strong>Goal</strong>. Our goal is for the algorithm, starting from any initial value $\varepsilon_0$, to drive its error to converge to its optimum value, $0$ in approximately one or two iterations. 
+              We will further assume that the system dynamics are linear time-invariant (LTI). This means $\alpha_t = \alpha, \forall t$, a constant learning rate across iterations, and so
+              $$ \varepsilon_{t+1} = \varepsilon_t - \alpha \cdot \rg_t.$$ 
+              
+              <strong>Goal</strong>. In this controlled and interpretable setting, we desire that the algorithm drives its error, starting from any initial non-zero value $\varepsilon_0$, to converge to its optimum value of <strong>zero</strong> in approximately one or two iterations. 
               </p>
               
               <!-- <details>

@@ -142,7 +142,7 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
   }
 
   let s_prev = 0.0;
-  let w_star = 1.25;
+  let w_star = 1;
   let x_prev = -w_star;
   const xs = [];
   const ss = [];
