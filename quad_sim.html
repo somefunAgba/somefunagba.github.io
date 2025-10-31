@@ -63,6 +63,7 @@
     \newcommand{\rw}{\textrm{w}}
     \newcommand{\rg}{\textrm{g}}
     \newcommand{\rx}{\textrm{x}}
+    \newcommand{\rh}{\textrm{h}}
     \newcommand{\mean}[1]{\mathbb{E}[#1]}
     \)
 </div>
@@ -88,15 +89,22 @@
               
               <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, constant second-moment or variance $\mean{u_t^2} = λ$, $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. </p>
 
-              Differentiating $f(\rw_t)$ with respect to $\rw_t$, we get the gradient as,
-                $$ \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \rw_t. $$
+              Differentiating $f(\rw_t)$ with respect to $\rw_t$, twice, we get the gradient and Hessian as,
+              $$ \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \varepsilon_t, \quad \mean{\rg_t} = \lambda\cdot \mean{ε_t} $$
               
+              $$ \rh_t =  \nabla^2 f(\rw_t) =  u_t^2, \quad \mean{\rh_t} = \lambda$$
 
               To optimize  $f(\rw_t)$, an algorithm of choice is known as the
               <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
               $$ \rw_{t+1} = \rw_t - \alpha_t \cdot \rg_t.$$ 
               
               At each iteration, the update rule asks for a $\alpha_t$ from a <strong>learning rate</strong> oracle and $\rg_t$ from a gradient-generating oracle. While the algorithm neither rigidly assumes its input is <strong>stochastic</strong> nor a per iteration <strong>descent</strong> of $f(\rw_t)$ to work, these two terms have become commonly associated with the update rule.
+
+              $$ \varepsilon_{t+1} = \varepsilon_t - \alpha_t \cdot \rg_t.$$ 
+              
+              <p>
+               <strong>Goal</strong>. Our goal is for the algorithm, starting from any initial value $\varepsilon_0$, to drive its error to converge to its optimum value, $0$ in approximately one or two iterations. 
+              </p>
               
               <!-- <details>
                 <summary>Show derivation</summary>
