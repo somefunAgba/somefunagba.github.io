@@ -56,6 +56,16 @@
 </head>
 <body>
    
+<div style="display: none">
+    \(
+    \newcommand{\RR}{\mathbb{R}}
+    \newcommand{\bold}[1]{\mathbf{#1}}
+    \newcommand{\rw}{\textrm{w}}
+    \newcommand{\rg}{\textrm{g}}
+    \newcommand{\rx}{\textrm{x}}
+    \newcommand{\mean}[1]{\mathbb{E}[#1]}
+    \)
+</div>
 <div class="container">
 
     <div class="item-head">
@@ -67,19 +77,37 @@
       
         <div class="note-viewport" aria-live="polite" aria-atomic="true">
           <div class="note-track" id="note-track">
+
             <section class="note">
-              <h4 id="note-title-1">Step 1: Gradient Descent</h4>
-              <p>The update rule is \( x_{t+1} = x_t - \alpha \nabla f(x_t) \).</p>
-              <details>
+              <h4 id="note-title-0">Problem setup</h4>
+              Consider the simple but representative problem of minimizing per iteration $t$, a weighted quadratic loss function whose model is a 1-dimensional parameter-vector $\rw_t$.
+
+              $$f(\rw_t) = \tfrac{1}{2} u_t^2\cdot\varepsilon_t^2,$$
+
+              where the error from an optimum value $\rw^*$ is $\varepsilon_t = \rw_t - \rw^* $, and the weighting variable $u_t$ is a wide-sense stationary, zero-mean Gaussian data process independent of the error. 
+              
+              <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, constant second-moment or variance $\mean{u_t^2} = λ$, $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. </p>
+
+              Differentiating $f(\rw_t)$ with respect to $\rw_t$, we get the gradient as,
+                $$ \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \rw_t. $$
+              
+
+              To optimize  $f(\rw_t)$, an algorithm of choice is known as the
+              <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
+              $$ \rw_{t+1} = \rw_t - \alpha_t \cdot \rg_t.$$ 
+              
+              At each iteration, the update rule asks for a $\alpha_t$ from a <strong>learning rate</strong> oracle and $\rg_t$ from a gradient-generating oracle. While the algorithm neither rigidly assumes its input is <strong>stochastic</strong> nor a per iteration <strong>descent</strong> of $f(\rw_t)$ to work, these two terms have become commonly associated with the update rule.
+              
+              <!-- <details>
                 <summary>Show derivation</summary>
                 <p>For quadratic \( f(x) = \tfrac{1}{2}x^\top H x \), \( \nabla f(x) = Hx \), hence \( x_{t+1} = (I - \alpha H)x_t \).</p>
               </details>
-              <blockquote>Tip: Slide the plot’s step size to see contraction change.</blockquote>
+              <blockquote>Tip: Slide the plot’s step size to see contraction change.</blockquote> -->
             </section>
       
             <section class="note" >
               <h4 id="note-title-2">Step 2: Error dynamics</h4>
-              <p>Define the error \( \varepsilon_t = x_t - x^* \). Then \( \varepsilon_{t+1} = (I - \alpha H)\varepsilon_t \).</p>
+
               <p>Observe eigenvalue‑wise behavior: \( \varepsilon_{t+1}^{(i)} = (1 - \alpha \lambda_i)\varepsilon_t^{(i)} \).</p>
             </section>
       
@@ -89,31 +117,6 @@
               <p>Plot highlight: when \( \alpha \ge \tfrac{2}{\lambda_{\max}} \), trajectories diverge.</p>
             </section>
 
-            <section class="note">
-              <h4 id="note-title-scalar">Step 1: Scalar Quadratic Function and Gradient</h4>
-              <p>
-                Consider the scalar quadratic function 
-                \( f(x) = \tfrac{1}{2}\lambda x^2 \).  
-                Its gradient is simply 
-                \( \nabla f(x) = \lambda x \).
-              </p>
-              <details>
-                <summary>Show derivation</summary>
-                <p>
-                  Differentiating \( f(x) = \tfrac{1}{2}\lambda x^2 \) with respect to \(x\):  
-                  
-            
-                  \[
-                    \frac{df}{dx} = \lambda x.
-                  \]
-            
-            
-                </p>
-              </details>
-              <blockquote>
-                Tip: This simple form makes the scalar case a perfect starting point for analyzing gradient descent.
-              </blockquote>
-            </section>
             
             <section class="note">
               <h4 id="note-title-change">Step 2: Change-Level Dynamics (AutoSGM)</h4>

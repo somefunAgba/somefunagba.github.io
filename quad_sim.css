@@ -6,7 +6,7 @@ html, body {
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    line-height: 1.5;
+    /* line-height: 1.5; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -64,8 +64,8 @@ html, body {
     padding: 1rem;
     gap: 1rem;
     box-sizing: border-box;
-    grid-template-columns: 300px 500px 350px;
-    grid-template-rows: 300px 300px 300px;
+    grid-template-columns: 300px 500px 400px;
+    grid-template-rows: 300px 400px 300px;
     column-gap: 5px;
     row-gap: 5px;
     grid-template-areas:
@@ -213,11 +213,11 @@ html, body {
   display: grid;
   column-gap: 1px;
   row-gap: 2px;
-  grid-template-rows: 50px auto 50px;
+  grid-template-rows: 15px auto 25px;
   grid-template-columns: 1fr 50px;
   grid-template-areas:
-      "main-note note-top"
-      "main-note ."
+      "note-top note-top"
+      "main-note main-note"
       "note-controls note-controls";
   border: 1px solid #ccc;
   padding: 0.75rem;
@@ -231,7 +231,9 @@ html, body {
 
 .note-header {
   grid-area: note-top;
-  padding: 0.5rem 0.75rem;
+  align-content: flex-end;
+  place-self: flex-end;
+  padding: 0rem 0rem;
 }
 .note-title { margin: 0; font-size: 1rem; }
 .note-progress { font-weight: 600; font-size: 0.875rem; color: rgb(84 124 255); }
@@ -240,6 +242,7 @@ html, body {
   grid-area: main-note;
   overflow: hidden;
   padding: 0 0.75rem;
+  margin-top: -50px;
 }
 
 
