@@ -132,7 +132,7 @@ $$
               <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
               $$ \rwtp = \rwt - \alpha_t \, \gradt.$$ 
               
-              At each iteration, the update rule receives a non-negative $\alpha_t$ from a <strong>learning rate</strong> oracle and $\gradt$ from a gradient-generating oracle. Although, the algorithm updates $\rwt$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rwt)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
+              At each iteration, the update rule receives an $\alpha_t > 0$ from a <strong>learning rate</strong> oracle and $\gradt$ from a gradient-generating oracle. Although, the algorithm updates $\rwt$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rwt)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
 
               $$ \errtp = \errt - \alpha_t \, \gradt.$$ 
               <p>
@@ -155,16 +155,11 @@ $$
             </section>
       
             <section class="note" >
-              <h4 id="note-title-1">Error dynamics</h4>
-              Recall that $\gradt = x_t^2\cdot \errt$, we can write the error equation as
-              <p> 
-                \[
-                \begin{align} 
-                \derrtp = -\alpha \, \gradt \\ 
-                \errtp =  \errt +  \derrtp,
-                \end{align}
-                \]
-              so that, $\gradt = u_t^2\cdot \errtm + u_t^2\cdot \derrt$, and
+              <h4 id="note-title-1">Expected Error Dynamics (Mean Convergence)</h4>
+
+              <p>
+              Recall that $\gradt = u_t^2\cdot \errt$, we can write the error equation as $\errtp =  \errt +  \derrtp$, where $\derrtp = -\alpha \, \gradt$,
+              from which we get $\gradt = u_t^2\cdot \errtm + u_t^2\cdot \derrt$, and the dynamics
               </p>
 
               $$
@@ -191,10 +186,16 @@ $$
               $$ 
 
 
-             Equation $(\ref{eq:smeq})$, tells us that the expected error $\rmt$ is the sum of the expected change-level error $\rst$, and that the expected change-level error dynamics is that of a single-pole filter,
+             Equation $(\ref{eq:smeq})$, tells us that the expected error $\rmt$ is the sum of the expected change-level error $\rst$, and that the expected change-level error dynamics is that of a single-pole LTI filter,
              $$\rstp = \beta_p\,\rst + k_p \, \rmtm$$ with input $\rmtm$, its transfer-function is 
-             $$H(z) = \tfrac{k_p}{1-\beta_p\,z^{-1}}$$
+             $$H_{s}(z) = \frac{k_p}{1-\beta_p\,z^{-1}}.$$
 
+            The change-level system $H_{s}(z)$ is both asymptotically and exponentially stable if its single pole satisfies $\lvert \beta_p\rvert < 1$. Since $\alpha >0$, $\beta_p = -\alpha \lambda$ is neagtive, this translates to $-1 < -\alpha\lambda < 0$, that is $1 > \alpha\lambda$, and $\alpha\lambda > 0$, which imply
+
+            $$\begin{equation}\label{eq:mewin}
+            \boxed{0 < \alpha < \tfrac{1}{\lambda}.} 
+            \end{equation}$$ 
+            
             The overall dynamics of the expected error, written in matrix form is
               $$
               \begin{equation}
@@ -219,18 +220,30 @@ $$
               }_{\rxtm}
               
               \label{eq:smeqmat}
-              \end{equation}
+              \end{equation}.
               $$
+              Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$.
+              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and so $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}.$ 
 
-              and compactly, the two-state LTI equation is $\rxt = \rA^{t}\,\rxi$.
-
-             
+              <p>
+              By eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we obtain a certificate on the exponential convergence of the expected error states as
+              $$ \boxed{\| \rxt \| \le 2 \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|.}$$
+              </p>
             </section>
       
             <section class="note">
-              <h4 id="note-title-3">Step 3: Stability window</h4>
-              <p>For convergence in the quadratic case, \( 0 < \alpha < \tfrac{2}{\lambda_{\max}} \).</p>
-              <p>Plot highlight: when \( \alpha \ge \tfrac{2}{\lambda_{\max}} \), trajectories diverge.</p>
+              <h4 id="note-title-3">Reflections: Mean Convergence</h4>
+
+              - summarize the key results
+              eq 4, eq 5 and the overall system result
+              
+              - play with the controls, Click on raw, then free, then play, and see oscillatory behavior and even diverging behavior
+
+              - see that it is not enough, while the impulse response of the error converges fast in this range, we need tighter range for the step-response to converge as fast.
+
+              To obtain a tighter certificate, we need to check mean-square convergence
+
+
             </section>
 
             
@@ -445,7 +458,7 @@ $$
           <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
 
           <dt>Gain (change-level)</dt>
-          <dd >$ -\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
+          <dd >$ k_p=-\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
 
           <dt><span id="fstate">Lowpass</span> stable $\beta_p$-range</dt>
           <dd class="cgreen">$({\beta_p}_{\min}, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
