@@ -29,6 +29,9 @@ async function showNote(index, {animate = true} = {}) {
   // Update  progress
   progressEl.textContent = `${current + 1} / ${notes.length}`;
 
+  // Save to localStorage
+  localStorage.setItem('noteIndex', current);
+
   // Dispatch a custom event for plot sync
   const evt = new CustomEvent('notechange', { detail: { index: current } });
   document.dispatchEvent(evt);
@@ -66,7 +69,12 @@ window.addEventListener('resize', () => showNote(current, { animate: false }));
 // });
 
 // Initialize
-showNote(0, { animate: false });
+// showNote(0, { animate: false });
+
+// Load saved index or default to 0
+// Now when the user reloads the page, the viewer will automatically return to the last note they were viewing. This works across sessions as long as localStorage is available.
+const savedIndex = parseInt(localStorage.getItem('noteIndex'), 10);
+showNote(Number.isFinite(savedIndex) ? savedIndex : 0, { animate: false });
 
 
 

@@ -301,5 +301,15 @@ summary { cursor: pointer;
 .foot-sec1{
   place-items: center;
 }
-
-
+.teaser{
+  border-left: 2px solid #4CAF50;
+  padding-left: 0.75rem;
+  margin-top: 15px;
+  background-color: rgb(255, 255, 255);
+}
+.boxeq{
+  display: inline-block;
+  border: 1px #ccc; 
+  border-style: groove;
+  margin: 5px 0;
+}

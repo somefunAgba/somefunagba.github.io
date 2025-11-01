@@ -5,69 +5,100 @@
   <meta charset="utf-8" />
   <title>AutoSGM Quadratic Function Sim.</title>
 
-    
-
-  <script
-    type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"
-  ></script>
-  <script
-    type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/three@0.137.0/examples/js/controls/OrbitControls.js"
-  ></script>
-  <!--
-    - a minified version mathbox.min.js is also available;
-    - recommend using a specific version (not @latest) in public sites
-  -->
-  <script
-    type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/mathbox@latest/build/bundle/mathbox.js"
-  ></script>
-  <!-- <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/mathbox@latest/build/mathbox.css"
-  /> -->
-  <!-- <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"
-  />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>  -->
-
   <script>
     window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      loader: {load: ['[tex]/color']},
+      tex: {          
+        inlineMath: [['$', '$'], ['\\(', '\\)']],        
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        packages: { '[+]': ['color']},
+        tags: 'ams',        
+        macros: {
+          rw: "\\textrm{w}",
+          rwt: "\\textcolor{OliveGreen}{\\rw_t}",
+          rwtp: "\\textcolor{OliveGreen}{\\rw_{t+1}}",
+          rmt: "\\textcolor{OrangeRed}{m_t}",
+          rmtp: "\\textcolor{OrangeRed}{m_{t+1}}",
+          rmtm: "\\textcolor{OrangeRed}{m_{t-1}}",
+          rst: "\\textcolor{OrangeRed}{s_t}",
+          rstp: "\\textcolor{OrangeRed}{s_{t+1}}",
+          rstm: "\\textcolor{OrangeRed}{s_{t-1}}",
+          rg: "\\textrm{g}",
+          rh: "\\textrm{h}",
+          rH: "\\mathbf{H}",
+          rx: "\\textrm{x}",
+          rxt: "\\rx_t",
+          rxtp: "\\rx_{t+1}",
+          rxtm: "\\rx_{t-1}",
+          rxi: "\\rx_0",
+          rA: "\\mathbf{A}",
+          gradt: "\\textcolor{RoyalBlue}{\\rg_{t}}",
+          gradtm: "\\textcolor{RoyalBlue}{\\rg_{t-1}}",
+        },
       },
-      chtml: {
-        scale: 1.0
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
       },
       svg: {
           fontCache: 'none'
       }
     };
   </script>  
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
+  <script id="MathJax-script" type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
+  <script src="https://cdn.plot.ly/plotly-3.1.2.min.js" charset="utf-8"></script>
 
   <!-- CSS file in the same folder -->
   <link rel="stylesheet" href="quad_sim.css">
-  
-</head>
-<body>
-   
-<div style="display: none">
-    \(
-    \newcommand{\RR}{\mathbb{R}}
-    \newcommand{\bold}[1]{\mathbf{#1}}
-    \newcommand{\rw}{\textrm{w}}
-    \newcommand{\rg}{\textrm{g}}
-    \newcommand{\rx}{\textrm{x}}
-    \newcommand{\rh}{\textrm{h}}
-    \newcommand{\rH}{\textrm{H}}
-    \newcommand{\mean}[1]{\mathbb{E}[#1]}
-    \)
+
+  <!-- <script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/three@0.137.0/examples/js/controls/OrbitControls.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/mathbox@latest/build/bundle/mathbox.js"
+></script> -->
+
+<div style="display: none;">
+$$
+\newcommand{\errt}{\textcolor{RubineRed}{\varepsilon_t}}
+\newcommand{\errtm}{\textcolor{RubineRed}{\varepsilon_{t-1}}}
+\newcommand{\errtp}{\textcolor{RubineRed}{\varepsilon_{t+1}}}
+\newcommand{\errti}{\textcolor{RubineRed}{\varepsilon_0}}
+\newcommand{\derrtp}{\textcolor{RubineRed}{\Delta\varepsilon_{t+1}}}
+\newcommand{\derrt}{\textcolor{RubineRed}{\Delta\varepsilon_{t}}}
+\newcommand{\derrti}{\textcolor{RubineRed}{\Delta\varepsilon_{0}}}
+$$
+$$
+\newcommand{\mean}[1]{\mathbb{E}[#1]}
+\newcommand{\mgradt}{\mean{\gradt}}
+\newcommand{\mgradtm}{\mean{\gradtm}}
+\newcommand{\merrt}{\mean{\errt}}
+\newcommand{\merrtm}{\mean{\errtm}}
+\newcommand{\merrtp}{\mean{\errtp}}
+\newcommand{\mderrtp}{\mean{\derrtp}}
+\newcommand{\mderrt}{\mean{\derrt}}
+$$ 
+$$
+\newcommand{\vgradt}{\mean{\gradt^2}}
+\newcommand{\vgradtm}{\mean{\gradtm^2}}
+\newcommand{\verrt}{\mean{\errt^2}}
+\newcommand{\verrtm}{\mean{\errtm^2}}
+\newcommand{\verrtp}{\mean{\errtp^2}}
+\newcommand{\vderrtp}{\mean{\derrtp^2}}
+\newcommand{\vderrt}{\mean{\derrt^2}}
+$$   
 </div>
+
+</head>
+
+<body>     
+
 <div class="container">
 
     <div class="item-head">
@@ -84,32 +115,37 @@
               <h4 id="note-title-0">Problem setup</h4>
               Consider the simple but representative problem of minimizing, at each time-step or iteration $t>0$, a twice-differentiable, weighted quadratic loss function, 
 
-              $$f(\rw_t) = \tfrac{1}{2} u_t^2\cdot\varepsilon_t^2,$$
+              $$f(\rwt) = \tfrac{1}{2} u_t^2 \cdot \errt^2,$$
 
-              where the model is a 1-dimensional parameter-vector $\rw_t$, the error relative to an optimum value $\rw^*$ is $\varepsilon_t = \rw_t - \rw^* $, and the weighting variable $u_t$ is modeled as a wide-sense stationary, zero-mean Gaussian data process, statistically independent of the error. 
+              where the model is a 1-dimensional parameter-vector $\rwt$, the error relative to an optimum value $\rw^*$ is $\errt = \rwt - \rw^* $, and the weighting variable $u_t$ is modeled as a wide-sense stationary, zero-mean Gaussian data process, statistically independent of the error. 
               
-              <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, a finite second-moment (or variance) $\mean{u_t^2} = λ$, with $0<\lambda<\infty$, and uncorrelated values across time $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. Independence further implies that for any powers $i,j$, the joint moment $\mean{u_t^i ε_t^j} = \mean{u_t^i}\mean{ε_t^j}$.</p>
+              <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, a finite second-moment (or variance) $\mean{u_t^2} = λ$, with $0<\lambda<\infty$, and uncorrelated values across time $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. Independence further implies that for any powers $i,j$, the joint moment $\mean{u_t^i \errt^j} = \mean{u_t^i}\mean{\errt^j}$.</p>
 
-              Differentiating $f(\rw_t)$ with respect to $\rw_t$, we get the gradient $\rg_t$ and Hessian $\rH_t$ as follows,
+              Differentiating $f(\rwt)$ with respect to $\rwt$, we get the gradient $\gradt$ and Hessian $\rH_t$ as follows,
               $$ \begin{align}
-              \rg_t =  \nabla f(\rw_t) =  u_t^2\cdot \varepsilon_t, & \quad \mean{\rg_t} = \lambda\cdot \mean{ε_t}\\
-              \rH_t =  \nabla^2 f(\rw_t) =  u_t^2,& \quad \mean{\rH_t} = \lambda
+              \gradt =  \nabla f(\rwt) =  u_t^2\cdot \varepsilon_t, & \quad \mean{\gradt} = \lambda\cdot \mean{\errt}\\
+              \rH_t =  \nabla^2 f(\rwt) =  u_t^2,& \quad \mean{\rH_t} = \lambda
               \end{align}
               $$
               
-              To minimize  $f(\rw_t)$, an optimization algorithm of choice is known as the
+              To minimize  $f(\rwt)$, an optimization algorithm of choice is known as the
               <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
-              $$ \rw_{t+1} = \rw_t - \alpha_t \cdot \rg_t.$$ 
+              $$ \rwtp = \rwt - \alpha_t \, \gradt.$$ 
               
-              At each iteration, the update rule receives $\alpha_t$ from a <strong>learning rate</strong> oracle and $\rg_t$ from a gradient-generating oracle. Although, the algorithm updates $\rw_t$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rw_t)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
+              At each iteration, the update rule receives a non-negative $\alpha_t$ from a <strong>learning rate</strong> oracle and $\gradt$ from a gradient-generating oracle. Although, the algorithm updates $\rwt$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rwt)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
 
-              $$ \varepsilon_{t+1} = \varepsilon_t - \alpha_t \cdot \rg_t.$$ 
+              $$ \errtp = \errt - \alpha_t \, \gradt.$$ 
               <p>
               We will further assume that the system dynamics are linear time-invariant (LTI). This means $\alpha_t = \alpha, \forall t$, a constant learning rate across iterations, and so
-              $$ \varepsilon_{t+1} = \varepsilon_t - \alpha \cdot \rg_t.$$ 
+              $$ \errtp = \errt - \alpha \, \gradt.$$ 
               
-              <strong>Goal</strong>. In this controlled and interpretable setting, we desire that the algorithm drives its error, starting from any initial non-zero value $\varepsilon_0$, to converge to its optimum value of <strong>zero</strong> in approximately one or two iterations. 
+              <strong>Goal</strong>. In this controlled and interpretable setting, we desire that the algorithm drives its error, starting from any initial non-zero value $\errti$, to converge to its optimum value of <strong>zero</strong> in approximately one or two iterations. 
               </p>
+
+              <div class="teaser">
+              As we move forward, we will discover that <b>ensuring convergence</b> in this setting is equivalent to certifying the <b>stability conditions</b> of LTI filters.
+              </div>
+              
               
               <!-- <details>
                 <summary>Show derivation</summary>
@@ -119,9 +155,76 @@
             </section>
       
             <section class="note" >
-              <h4 id="note-title-2">Step 2: Error dynamics</h4>
+              <h4 id="note-title-1">Error dynamics</h4>
+              Recall that $\gradt = x_t^2\cdot \errt$, we can write the error equation as
+              <p> 
+                \[
+                \begin{align} 
+                \derrtp = -\alpha \, \gradt \\ 
+                \errtp =  \errt +  \derrtp,
+                \end{align}
+                \]
+              so that, $\gradt = u_t^2\cdot \errtm + u_t^2\cdot \derrt$, and
+              </p>
 
-              <p>Observe eigenvalue‑wise behavior: \( \varepsilon_{t+1}^{(i)} = (1 - \alpha \lambda_i)\varepsilon_t^{(i)} \).</p>
+              $$
+              \begin{equation}              
+              \label{eq:smc1}
+              \begin{aligned} 
+              \derrtp &= -\alpha u_t^2 \cdot \derrt -\alpha u_t^2 \cdot \errtm \\ 
+              \errt &= \derrt + \errtm.
+              \end{aligned}
+              \end{equation}
+
+              $$
+
+              Taking expectation of the terms in ($\ref{eq:smc1}$), and denote $\rmt = \merrt$, $\rst = \mderrt$, $\beta_p = -\alpha \lambda$, and $k_p = -\alpha \lambda$, the expected error dynamics is
+
+              $$
+              \begin{equation}\label{eq:smeq}
+              \boxed{
+              \begin{aligned} 
+              \rstp &= \beta_p\,\rst + k_p \, \rmtm \\ 
+              \rmt &= \rst + \rmtm.
+              \end{aligned}}
+              \end{equation}
+              $$ 
+
+
+             Equation $(\ref{eq:smeq})$, tells us that the expected error $\rmt$ is the sum of the expected change-level error $\rst$, and that the expected change-level error dynamics is that of a single-pole filter,
+             $$\rstp = \beta_p\,\rst + k_p \, \rmtm$$ with input $\rmtm$, its transfer-function is 
+             $$H(z) = \tfrac{k_p}{1-\beta_p\,z^{-1}}$$
+
+            The overall dynamics of the expected error, written in matrix form is
+              $$
+              \begin{equation}
+              \underbrace{
+              \begin{bmatrix}
+              \rstp \\
+              \rmt
+              \end{bmatrix}
+              }_{\rxt}
+              =
+              \underbrace{
+              \begin{bmatrix}
+              \beta_p & k_p \\
+              1 & 1
+              \end{bmatrix}
+              }_{\rA}
+              \underbrace{
+              \begin{bmatrix}
+              \rst \\
+              \rmtm
+              \end{bmatrix}
+              }_{\rxtm}
+              
+              \label{eq:smeqmat}
+              \end{equation}
+              $$
+
+              and compactly, the two-state LTI equation is $\rxt = \rA^{t}\,\rxi$.
+
+             
             </section>
       
             <section class="note">
