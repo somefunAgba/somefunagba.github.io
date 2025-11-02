@@ -34,6 +34,10 @@
           rxt: "\\rx_t",
           rxtp: "\\rx_{t+1}",
           rxtm: "\\rx_{t-1}",
+          rq: "\\textrm{q}",
+          rqt: "\\rq_t",
+          rqtp: "\\rq_{t+1}",
+          rqtm: "\\rq_{t-1}",          
           rxi: "\\rx_0",
           rr: "\\textrm{r}",
           rrt: "\\rr_t",
@@ -477,26 +481,56 @@ $$
                 $$
               </p>
 
-              A causal realization of this LTI filter is
-              $
+              A causal realization of this first-order LTI filter is
+              $$
                 \gradvt = \beta \, \gradvtm + \eta\,\big(\gradt - \gamma \, \gradtm \big).
-              $
-              Therefore, we directly get an explicit change-level dynamics that inherits the lowpass structure of $H_{\beta,\gamma}(z)$,
+              $$
+              Therefore, we directly get an explicit change-level dynamics that inherits the lowpass structure of  $H_{\beta,\gamma}(z)$,
               \[
                 \derrtp = \errtp - \errt = -\alpha \, \gradvt.
               \]
               </p>
-
+              In general, for any choice of $(\beta,\gamma)$, the filter's  canonical realization is
+              \[ 
+              \boxed{
+              \begin{aligned}
+              \rqt = \beta \, \rqtm + \gradt\\
+              \gradvt = \eta\,(\rqt - \gamma\,\rqtm)
+              \end{aligned}}.
+              \]
               <p>
-                Tuning $\gamma$ recovers classic methods, which often use $\eta= \tfrac{1}{1-\gamma}$. Heavy-Ball $\gamma = 0$. Nesterov's Accelerated Gradient $\gamma = \tfrac{\beta}{1+\beta}$.
+                Tuning $\gamma$ recovers classic methods, which often use $\eta= \tfrac{1}{1-\gamma}$.
               </p>
 
-              The filter's minimal realization is
+              <ul class="clist1">
+              <li>
+              Heavy-Ball sets $\gamma = 0$, the realization simplifies to
+              $\gradvt = \beta \, \gradvtm + \eta\,\gradt$.            
+              </li>
 
-              In Heavy-Ball setting, simplifies it to
+              <li>
+              Nesterov's Accelerated Gradient (NAG) sets $\gamma = \tfrac{\beta}{1+\beta}$, the realization simplifies to
+              \[
+              \begin{aligned}
+              \rqt = \beta \, \rqtm + \,\gradt\\
+              \gradvt = \beta \, \rqt + \gradt.
+              \end{aligned}
+              \]                
+              </li>
+              </ul>
 
-              In NAG setting, simplifies it to
+              The change-level now takes the appearance of a lowpass filter
+              \[
+                \derrtp = \beta \, \derrt + \alpha\,\eta\,\bigl(\gamma\,\gradtm - \gradt \bigr),
+              \]
+              instead of the former version
+              \[
+                \derrtp = -\alpha\,\gradt.
+              \]
 
+              <div class="teaser">
+                All is now set. Next, we will analyze the mean error dynamics, and see that this lowpass regularizing structure gets us close to our goal. Freeing us from the shackles of old dogma.
+              </div>
 
               <!-- <blockquote>
                 Tip: Use \( \beta \) to smooth noisy gradients and \( \gamma \) to bias steps toward predicted descent.
