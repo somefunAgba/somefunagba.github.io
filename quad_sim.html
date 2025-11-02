@@ -268,15 +268,15 @@ $$
               
               <h5>Play with the controls </h5>
               <ol>
-                <li>Click on the RAW button</li>
-                <li>Ensure the Input reads Step </li>
+                <li>Click on the RAW-M button</li>
+                <li>Ensure the Input selector reads Step </li>
                 <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{1}{\lambda}$</li>
               </ol>
               
               <ol>
-                <li>Click on the RAW button</li>
-                <li>Ensure the Input reads Impulse</li>
-                <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{1}{\lambda}$</li>
+                <li>Click on the Pause button</li>
+                <li>Change the Input selector to read Impulse</li>
+                <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{1}{\lambda}$. Pause. </li>
               </ol>
             
               <b>Observations </b>
@@ -424,7 +424,7 @@ $$
               </ol>
               
               <ol>
-                <li>Click on the RAW-O button. This automatically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
+                <li>Click on the RAW-L button. This automatically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
                 <li>Ensure the Input reads either Step or Impulse</li>
                 <li>Observe, the overall system response. </li>
               </ol>
@@ -432,7 +432,7 @@ $$
               <b>Observations </b>
               <ol>            
                 <li>
-                  The marginal stability choice $\alpha = \tfrac{1}{\sqrt{3}\lambda}$ is tight, if we can tolerate minimal early overshoots.
+                  The marginally stable $\alpha = \tfrac{1}{\sqrt{3}\lambda}$ is tight, but we need to tolerate minimal ripples.
                 </li>
                 <li>
                   The smaller $\alpha = \tfrac{1}{{3}\lambda}$, gives the same behavior, ripple-free, but a tiny-bit slower.
@@ -460,52 +460,47 @@ $$
             <section class="note">
               <h4 id="note-title-5">AutoSGM</h4>
               <p>
-                AutoSGM applies a first-order filter to the stochastic gradient, shaping the step:
-                
-            
+                The SGM algorithm now uses a smooth version of the gradient, we replace $\gradt$ with a smooth version $\gradvt = H_{\beta,\gamma}(z) \{ \gradt \}$,
                 \[
-                  H_{\beta,\gamma}(z) = \frac{\eta(1 - \gamma z^{-1})}{1 - \beta z^{-1}}.
+                  H_{\beta,\gamma}(z) = \eta\,\frac{1 - \gamma z^{-1}}{1 - \beta z^{-1}}.
                 \]
-            
-            
-                The iterate update is
-                
-            
-                \[
-                  w_{t+1} = w_t - \alpha_t \, v_t,
-                \]
-            
-            
-                where \( v_t \) is the filtered gradient.
+                In the transfer-function, we have the filter's pole $ 0 < \beta < 1$ , the filter's zero $ \gamma \le \beta $, and $0 < \eta \le 1$. Here, we will always ensure the D.C gain of the filter is $1$, that is, $\eta = \tfrac{1-\beta}{1-\gamma}$.
               </p>
-              <details>
-                <summary>Show derivation</summary>
-                <p>
-                  A causal realization of the filter yields
-                  
-            
-                  \[
-                    v_t = \beta \, v_{t-1} + \eta \big(g_t - \gamma \, g_{t-1}\big).
-                  \]
-            
-            
-                  Therefore, the change in iterate is
-                  
-            
-                \[
-                    \Delta w_t = w_{t+1} - w_t = -\alpha_t \, v_t.
-                  \]
-            
-            
-                </p>
-                <p>
-                  The pole \( \beta \) sets memory (momentum), and the zero \( \gamma \) sets anticipation (look-ahead).
-                  Tuning \((\beta,\gamma)\) recovers methods like Heavy-Ball (\(\gamma=0\)) and Nesterov (\(\gamma>0\)).
-                </p>
-              </details>
-              <blockquote>
+              <p>
+                The update rule is now
+                $
+                  \rwtp = \rwt - \alpha \, \gradvt,
+                $
+                using the error, we have
+                $$
+                \errtp = \errt - \alpha \, \gradvt.
+                $$
+              </p>
+
+              A causal realization of this LTI filter is
+              $
+                \gradvt = \beta \, \gradvtm + \eta\,\big(\gradt - \gamma \, \gradtm \big).
+              $
+              Therefore, we directly get an explicit change-level dynamics that inherits the lowpass structure of $H_{\beta,\gamma}(z)$,
+              \[
+                \derrtp = \errtp - \errt = -\alpha \, \gradvt.
+              \]
+              </p>
+
+              <p>
+                Tuning $\gamma$ recovers classic methods, which often use $\eta= \tfrac{1}{1-\gamma}$. Heavy-Ball $\gamma = 0$. Nesterov's Accelerated Gradient $\gamma = \tfrac{\beta}{1+\beta}$.
+              </p>
+
+              The filter's minimal realization is
+
+              In Heavy-Ball setting, simplifies it to
+
+              In NAG setting, simplifies it to
+
+
+              <!-- <blockquote>
                 Tip: Use \( \beta \) to smooth noisy gradients and \( \gamma \) to bias steps toward predicted descent.
-              </blockquote>
+              </blockquote> -->
             </section>
  
             <section class="note">
@@ -634,12 +629,12 @@ $$
         <div id="controls">
             <div class="slider-group">
               <label>$\beta$ <span id="betaVal">0.90</span></label>
-              <input id="beta" type="range" min="0.001" max="0.99" step="0.005" value="0.9">
+              <input id="beta" type="range" min="0.001" max="0.99" step="0.001" value="0.9">
             </div>
 
             <div class="slider-group">
               <label>$\gamma$ <span id="gammaVal">0.00</span></label>
-              <input id="gamma" type="range" min="-1" max="1" step="0.001" value="0.0">
+              <input id="gamma" type="range" min="-1" max="1" step="0.01" value="0.0">
             </div>
 
             <div class="slider-group">
@@ -673,7 +668,7 @@ $$
             </div>     
             <div style="display:flex;gap:8px;align-items:center;">  
               <button id="NOF" class="btn btnalg">RAW-M</button>   
-              <button id="NOF2" class="btn btnalg">RAW-O</button>  
+              <button id="NOF2" class="btn btnalg">RAW-L</button>  
               <button id="OPT" class="btn btnalg">OPT</button>
               <button id="free" class="btn btnalg">Free</button>
             </div>    

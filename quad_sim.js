@@ -2,7 +2,7 @@
 if (window.innerWidth < 1024) { // only on mobile widths
   const meta = document.querySelector('meta[name=viewport]');
   if (meta) {
-    meta.setAttribute('content', 'width=device-width, initial-scale=0.95');
+    meta.setAttribute('content', 'width=device-width, initial-scale=0.9');
   }
 }
 
@@ -433,6 +433,7 @@ function drawRight(){
 /* subplot 1*/
 
 // Poles trace
+// i+1 changed to 2-i to align with notes
 const chareqpolesTrace = {
     x: roots.map(r => r[0]),
     y: roots.map(r => r[1]),
@@ -440,7 +441,7 @@ const chareqpolesTrace = {
     type: 'scatter',
     name: 'Poles',
     marker: { color: jstable? 'green':'red', size: 6, symbol: 'x' },
-    text: roots.map((r,i) => `$z_${i+1}$`),
+    text: roots.map((r,i) => `$z_${2-i}$`), 
     textposition: 'middle left',  
     textfont: {
         size: 10,        // reduce text size (default is ~12–14)
@@ -759,31 +760,73 @@ betaEl.addEventListener('input', () => {
   
 
 /* Play / Pause / Reset */
+// let animTimer = null;
+// function startAnim(){
+//   if(animTimer) return;
+//   const {aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
+//   const frames = 360;
+//   let i = 0;
+//   animTimer = setInterval(()=>{
+//     const a = aMin + (aMaxhpSafe - aMin) * (i % frames) / (frames - 1);
+//     alphaEl.value = a;
+//     params.alpha = a;
+//     alphaVal.textContent = params.alpha.toFixed(3);
+//     drawRight();
+//     drawSys();
+//     i++;
+//   }, 30);
+//   playBtn.disabled = true;
+//   pauseBtn.disabled = false;
+// }
+
 let animTimer = null;
-function startAnim(){
-  if(animTimer) return;
-  const {aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true);
-  const frames = 360;
-  let i = 0;
-  animTimer = setInterval(()=>{
-    const a = aMin + (aMaxhpSafe - aMin) * (i % frames) / (frames - 1);
+
+function startAnim() {
+  if (animTimer) return;
+
+  const { aMin, aMax, eta, aMaxlp, aMaxhpSafe } = lrstablerng(
+    params.beta, params.gamma, params.eigval, true
+  );
+
+  const duration = 5000; // one full sweep in ms (5s)
+  const startTime = performance.now();
+
+  function animate(now) {
+    const elapsed = (now - startTime) % duration;
+    let progress = elapsed / duration; // linear 0 → 1
+
+    // --- ease-in/ease-out using cosine ---
+    // maps linear progress to a smooth S-curve
+    // progress = 0.5 *( 1 + 0.5*Math.cos(progress * Math.PI * 2));
+
+    // interpolate alpha across range
+    const a = aMin + (aMaxhpSafe - aMin) * progress;
     alphaEl.value = a;
     params.alpha = a;
     alphaVal.textContent = params.alpha.toFixed(3);
+
     drawRight();
     drawSys();
-    i++;
-  }, 30);
+
+    animTimer = requestAnimationFrame(animate);
+  }
+
+  animTimer = requestAnimationFrame(animate);
   playBtn.disabled = true;
   pauseBtn.disabled = false;
 }
-function stopAnim(){
-  if(animTimer){ clearInterval(animTimer); animTimer = null; }
+
+function stopAnim() {
+  if (animTimer) {
+    cancelAnimationFrame(animTimer);
+    animTimer = null;
+  }
   playBtn.disabled = false;
   pauseBtn.disabled = true;
 }
-playBtn.addEventListener('click', ()=> startAnim());
-pauseBtn.addEventListener('click', ()=> stopAnim());
+
+playBtn.addEventListener('click', startAnim);
+pauseBtn.addEventListener('click', stopAnim);
 resetBtn.addEventListener('click', ()=>{
   stopAnim();
   betaEl.value = 0.9; 
