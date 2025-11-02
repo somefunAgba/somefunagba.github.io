@@ -29,6 +29,7 @@
           rv: "\\textrm{v}",
           rh: "\\textrm{h}",
           rH: "\\mathbf{H}",
+          rc: "\\textrm{c}",
           rx: "\\textrm{x}",
           rxt: "\\rx_t",
           rxtp: "\\rx_{t+1}",
@@ -141,8 +142,8 @@ $$
 
               Differentiating $f(\rwt)$ with respect to $\rwt$, we get the gradient $\gradt$ and Hessian $\rH_t$ as follows,
               $$ \begin{align}
-              \gradt =  \nabla f(\rwt) =  u_t^2\cdot \varepsilon_t, & \quad \mean{\gradt} = \lambda\cdot \mean{\errt}\\
-              \rH_t =  \nabla^2 f(\rwt) =  u_t^2,& \quad \mean{\rH_t} = \lambda
+              \gradt =  \nabla f(\rwt) =  u_t^2\cdot \varepsilon_t, & \quad \mean{\gradt} = \lambda\, \mean{\errt}.\\
+              \rH_t =  \nabla^2 f(\rwt) =  u_t^2,& \quad \mean{\rH_t} = \lambda.
               \end{align}
               $$
               
@@ -198,8 +199,8 @@ $$
               \boxed{
               \begin{aligned} 
               \rstp &= \beta_p\,\rst + k_p \, \rmtm \\ 
-              \rmt &= \rst + \rmtm.
-              \end{aligned}}
+              \rmt &= \rst + \rmtm
+              \end{aligned}}.
               \end{equation}
               $$ 
 
@@ -211,7 +212,7 @@ $$
               The change-level system $H_{s}(z)$ is both asymptotically and exponentially stable if its single pole satisfies $\lvert \beta_p\rvert < 1$. Since $\alpha >0$, $\beta_p = -\alpha \lambda$ is negative, this translates to $-1 < -\alpha\lambda < 0$, that is $1 > \alpha\lambda$, and $\alpha\lambda > 0$, which imply
 
               $$\begin{equation}\label{eq:mewin}
-              \boxed{0 < \alpha < \tfrac{1}{\lambda}.} 
+              \boxed{0 < \alpha < \tfrac{1}{\lambda}}.
               \end{equation}$$ 
               
               The overall dynamics of the expected error, written in matrix form is
@@ -241,11 +242,11 @@ $$
               \end{equation}
               $$
               Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$.
-              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and so $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}.$ 
+              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and so $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$. 
 
               <p>
               By eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
-              $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|.}$$
+              $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
               </p>
             </section>
       
@@ -253,10 +254,10 @@ $$
               <h4 id="note-title-2">Reflections: Mean Convergence</h4>
               The main results from the error convergence in the mean-sense are the stricter range
               $$
-              \boxed{0 < \alpha < \tfrac{1}{\lambda},} 
+              \boxed{0 < \alpha < \tfrac{1}{\lambda}},
               $$
               and the exponential covergence bound
-              $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|,}
+              $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|},
               $$   
               where we denoted
               $\rxt$ as the two-state vector       
@@ -265,7 +266,6 @@ $$
               \end{bmatrix}}^{\top}
               $.
               
-
               <h5>Play with the controls </h5>
               <ol>
                 <li>Click on the RAW button</li>
@@ -309,16 +309,15 @@ $$
               \boxed{0 < \alpha \le \tfrac{1}{\sqrt{3}}\cdot\tfrac{1}{\lambda},} 
               $$ 
               </p>
-              and further optimizing for a ripple-free choice in this range, gives
+              and further, matching the mean-square convergence rate to the mean convergence rate in this range leads to the choice
               $$
-              \boxed{\alpha = \tfrac{1}{3}\cdot\tfrac{1}{\lambda}.} 
+              \boxed{\alpha = \tfrac{1}{3}\cdot\tfrac{1}{\lambda}}.
               $$ 
 
             </section>
            
             <section class="note">
               <h4 id="note-title-3">Error Dynamics (Mean-square Convergence)</h4>
-              <p>
                 We start by squaring the recursions in (\ref{eq:smc1}), which yields
                 $$
                 \begin{equation}              
@@ -340,19 +339,20 @@ $$
                 \end{aligned}}
                 \end{equation}
                 $$ 
-
                 Equation $(\ref{eq:sqmeq})$, tells us that the expected change-level squared error dynamics is that of a single-pole LTI lowpass filter,
                 $\rstp = \beta_v\,\rst + k_v \, y_t$, with input $y_t = \rmtm -  2\,\mean{\errt\errtm}$, its transfer-function is 
                 $$H_{v}(z) = \frac{k_v}{1-\beta_v\,z^{-1}}.$$
   
                 The change-level system $H_{v}(z)$ is both asymptotically and exponentially stable if its single pole satisfies $\lvert \beta_v\rvert < 1$. Since $\alpha >0$, and $\beta_v = 3\,\alpha^2 \lambda^2 > 0$ this translates to $0 < 3\alpha^2\lambda^2 < 1$,  which imply
-                $$\begin{equation}\label{eq:sqmewin}
-                \boxed{0 < \alpha < \tfrac{1}{\sqrt{3}}\tfrac{1}{\lambda}.} 
-                \end{equation}$$ 
-                
-                The overall dynamics of the mean-squared error, written in matrix form is
                 $$
-                \begin{equation}
+                \begin{equation}\label{eq:sqmewin}
+                \boxed{0 < \alpha < \tfrac{1}{\sqrt{3}}\tfrac{1}{\lambda}}. 
+                \end{equation}
+                $$ 
+              
+                Denote $ \rc_t =\mean{\errt\errtm}$. The overall dynamics, written in matrix form is
+                $$
+                \begin{align}
                 \underbrace{
                 \begin{bmatrix}
                 \rstp \\
@@ -381,25 +381,25 @@ $$
                   }_{\rB}
                   \underbrace{
                   \begin{bmatrix}
-                  \mean{\errt\errtm} \\
+                 \rc_t \\
                   0
                   \end{bmatrix}
                   }_{\rrt}.
                 \label{eq:sqmeqmat}
-                \end{equation}
+                \end{align}
                 $$
-                
+               
                Stability of the LTI system requires the magnitude of the eigenvalues of $\rA$, $\lvert z_1 \rvert = 0$, and $\textcolor{Mahogany}{\lvert z_2 \rvert = \lvert 1-3\,\alpha^2\lambda^2 \rvert}$ obtained via $\det(z\mathbf{I}-\rA)=0 $ to be distinct and strictly less than 1. 
                 Assume the overall system input is bounded, $\sup_t \lvert \rrt \rvert \le R,\quad 0 < R< \infty$, we can obtain the stability certificate for the error's mean-square convergence as
                 $$
                 \boxed{
-                  \|\rxt\| \le \tfrac{2}{1-\beta_v}\Bigl( \textcolor{Mahogany}{\lvert z_2 \rvert } ^t \|\rxi\| + 2\,R\, \tfrac{1-\textcolor{Mahogany}{\lvert z_2 \rvert } ^t}{1-\textcolor{Mahogany}{\lvert z_2 \rvert }} \Bigr).
-                }
+                  \|\rxt\| \le \tfrac{2}{1-\beta_v}\Bigl( \textcolor{Mahogany}{\lvert z_2 \rvert } ^t \|\rxi\| + 2\,R\, \tfrac{1-\textcolor{Mahogany}{\lvert z_2 \rvert } ^t}{1-\textcolor{Mahogany}{\lvert z_2 \rvert }} \Bigr)
+                }.
                 $$
                 Equating the maximum eigenvalue magnitude for the mean-square covergence to that for the mean covergence obtained previously,
                 $\lvert 1 - 3\,\alpha^2\lambda^2 \rvert = \lvert 1 - \alpha \lambda \rvert$, so that approximately, both converge to $0$ at the same rate, we get
                 $$
-                \boxed{\alpha = \frac{1}{3\,\lambda}}.
+                \boxed{\alpha = \tfrac{1}{3\,\lambda}}.
                 $$
 
             </section>
