@@ -407,22 +407,22 @@ $$
               $$ \errtp = \errt - \alpha \, \gradt.$$ 
               The main results to additionally guarantee error convergence in the mean-square sense are the stricter range
               $$
-              \boxed{0 < \alpha \le \frac{1}{\sqrt{3}\lambda} < \frac{1}{\lambda},} 
+              \boxed{0 < \alpha < \frac{1}{\sqrt{3}\lambda}} < \frac{1}{\lambda}, 
               $$
-              or the ripple-free, similar rate choice
+              or the <strong>matched mean rate to mean-square rate </strong> choice
               $$
-              \boxed{\alpha = \frac{1}{3\,\lambda}}.
+              \boxed{\alpha = \frac{1}{3\,\lambda}} < \frac{1}{\sqrt{3}\lambda}.
               $$
               
               <h5>Play with the controls </h5>
               <ol>
-                <li>Click on the RAW button. This automataically sets $\alpha < \tfrac{1}{3\lambda}$. </li>
+                <li>Click on the RAW button. This automatically sets $\alpha = \tfrac{1}{3\lambda}$. </li>
                 <li>Ensure the Input reads either Step or Impulse </li>
                 <li>Observe, the overall system response. </li>
               </ol>
               
               <ol>
-                <li>Click on the RAW-OPT button. This automataically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
+                <li>Click on the RAW-OPT button. This automatically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
                 <li>Ensure the Input reads either Step or Impulse</li>
                 <li>Observe, the overall system response. </li>
               </ol>
@@ -430,13 +430,13 @@ $$
               <b>Observations </b>
               <ol>            
                 <li>
-                  Choosing $\alpha = \tfrac{1}{\sqrt{3}\lambda}$ is tight, if we can tolerate minimal early overshoots.
+                  The marginal stability choice $\alpha = \tfrac{1}{\sqrt{3}\lambda}$ is tight, if we can tolerate minimal early overshoots.
                 </li>
                 <li>
-                  Choosing $\alpha = \tfrac{1}{{3}\lambda}$, gives us a tight ripple-free fast behavior, though a little bit slower.
+                  Using $\alpha = \tfrac{1}{{3}\lambda}$, gives us a tight ripple-free fast behavior, though a little bit slower.
                 </li>
                 <li>
-                  <b>Design Gap</b>. Neither choice of $\alpha$ in the stability range gets us close to our true goal.
+                  <b>Design Gap</b>. No single $\alpha$ within the stability range achieves our true goal.
                 </li>
               </ol>
               
@@ -445,18 +445,18 @@ $$
               <p>
               In the next page, we will introduce the <b>AutoSGM</b> structure that helps us achieve our <strong>at most two-step convergence goal</strong>, by smoothing (lowpass regularization of) the raw gradient input to the SGM via the means of a LTI filter.
               </p>
-              This kind of structure has been called <b>momentum</b> in classic optimization and mainstream machine learning.
+              This has been called <b>momentum</b> in classic optimization and mainstream machine learning.
               <p>
               In other words, the SGM algorithm now uses a smooth version of the gradient, replace $\gradt$ with a smooth version $\gradvt$, and the error recursion becomes
               $$ \errtp = \errt - \alpha \, \gradvt.$$ 
               </p>
               </div>
-
+              Still, the same SGM, the <strong>key difference</strong> is that the algorithm's input is now adorned with a better cloth.
 
             </section>
            
             <section class="note">
-              <h4 id="note-title-change2">Step 2: Change-Level Dynamics (AutoSGM)</h4>
+              <h4 id="note-title-5">AutoSGM</h4>
               <p>
                 AutoSGM applies a first-order filter to the stochastic gradient, shaping the step:
                 
