@@ -315,3 +315,9 @@ summary { cursor: pointer;
   border-style: groove;
   margin: 5px 0;
 }
+
+
+
+/*mathjax*/
+.mathjax-hidden { visibility: hidden; }
+
