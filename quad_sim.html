@@ -532,54 +532,11 @@ $$
                 All is now set. Next, we will analyze the mean error dynamics, and see that this lowpass regularizing structure gets us close to our goal. Freeing us from the shackles of old dogma.
               </div>
 
-              <!-- <blockquote>
-                Tip: Use \( \beta \) to smooth noisy gradients and \( \gamma \) to bias steps toward predicted descent.
-              </blockquote> -->
             </section>
  
             <section class="note">
-              <h4 id="note-title-error">Step 3: Overall Error Dynamics (AutoSGM)</h4>
-              <p>
-                For quadratic losses, let \( e_t = w_t - w^\star \) and \( g_t = H e_t \).
-                AutoSGM induces a second-order recurrence in the error:
-                
-            
-                \[
-                  e_{t+1} = (I - \alpha_t \eta H) e_t
-                            + \beta \big(e_t - e_{t-1}\big)
-                            - \alpha_t \eta \gamma H \, e_{t-1}.
-                ]
-              </p>
-              <details>
-                <summary>Show derivation</summary>
-                <p>
-                  Starting from
-                  
-            
-                  \[
-                    w_{t+1} = w_t - \alpha_t (\beta v_{t-1} + \eta(g_t - \gamma g_{t-1})),
-                  \]
-            
-            
-                  with \( g_t = H e_t \) and \( v_{t-1} \) eliminating via the realization, we obtain the recurrence in \( e_t \) with coefficients set by \(\beta, \gamma, \eta, \alpha_t\).
-                </p>
-                <p>
-                  Along an eigen-direction \( \lambda_i \) of \( H \), the scalar mode evolves as
-                  
-            
-                  \[
-                    e_{t+1}^{(i)} = (1 - \alpha_t \eta \lambda_i) e_t^{(i)}
-                                    + \beta \big(e_t^{(i)} - e_{t-1}^{(i)}\big)
-                                    - \alpha_t \eta \gamma \lambda_i \, e_{t-1}^{(i)}.
-                  \]
-            
-            
-                </p>
-              </details>
-              <blockquote>
-                Tip: Stability requires the roots of the mode’s characteristic polynomial to lie inside the unit circle.
-                Heavy-Ball corresponds to \( \gamma=0 \); Nesterov uses \( \gamma>0 \) to accelerate well-conditioned directions.
-              </blockquote>
+              <h4 id="note-title-6">AutoSGM: Error Dynamics (Mean Convergence)</h4>
+              <p></p>
             </section>
 
             <section class="note">
