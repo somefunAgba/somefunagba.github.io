@@ -1,4 +1,11 @@
- 
+/* For notes*/
+if (window.innerWidth < 1024) { // only on mobile widths
+  const meta = document.querySelector('meta[name=viewport]');
+  if (meta) {
+    meta.setAttribute('content', 'width=device-width, initial-scale=0.95');
+  }
+}
+
 /*Note helpers*/
 // const notes = document.querySelectorAll('.note');
 // const track = document.querySelector('.note-track');
@@ -100,7 +107,7 @@ showNote(Number.isFinite(savedIndex) ? savedIndex : 0, { animate: false });
 /* Model helpers */
 function etafcn(beta, gamma){ 
   let eta = 1
-  if (!israw){
+  if (!israw || !israwm){
       eta = (1 - beta) / (1 - gamma)
   } 
   return eta; 
@@ -126,8 +133,11 @@ function lrstablerng(beta, gamma, eigval, nonnegative=true){
   let aMin = 1e-10;
   let aMaxlp = beta / (eta * eigval);
   if (israw){
-    aMaxlp = 0.33 / eigval;
+    aMaxlp = 1 / (3*eigval);
     // aMax = 1/eigval;
+  }
+  if (israwm) {
+    aMaxlp = 1 / (Math.sqrt(3)*eigval);
   }
   let aMax = (1+beta)/(eta*eigval);
   const aMaxhpSafe = 0.99*aMax;
@@ -158,7 +168,7 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
   const eta = etafcn(beta,gamma);
   const eal = eta*alpha*lam;
   let a = 0, b = 0;
-  if (israw){
+  if (israw || israwm){
     a = -eal;
     b = -eal;
   } else {
@@ -217,9 +227,11 @@ nagBtn = document.getElementById('NAG'),
 sfunBtn = document.getElementById('SFUN'),
 optBtn = document.getElementById('OPT'),
 rawBtn = document.getElementById('NOF');
+moptrawBtn = document.getElementById('NOF2');
 // Flag: is gamma locked to beta?
 let gammafree= true;
 let israw = false;
+let israwm = false;
 rawBtn.disabled = false;
 freeBtn.disabled = false;
 
@@ -258,7 +270,6 @@ function overlayDataOneState(beta,gamma,eigval){
 
 /* ===== Error plot (time-domain) ===== */
 function drawSys(){
-  // simulate
   const T = 120;
   const sim = simulateResponse(params.beta, params.gamma, params.eigval, params.alpha, params.input, T);
   const gain = sim.b;
@@ -267,27 +278,41 @@ function drawSys(){
 
   const xs = sim.xs;
   const ss = sim.ss;
-  const t = Array.from({length:xs.length}, (_,i)=>i);
+
+  // --- find where error "settles" ---
+  const ctol = 1e-3; // tolerance for "settled"
+  let maxIter = xs.length - 1;
+  const n = xs.length - 1;
+
+  // scan backwards: find last index where error magnitude > tol
+  for (let i = xs.length - 1; i >= 0; i--) {
+    if (Math.abs(xs[i]) > ctol) {
+      maxIter = i + 3; // add a small buffer
+      if (maxIter >= n) maxIter = n;
+      break;
+    }
+  }
+  // console.log(maxIter, n)
+
+  const t = Array.from({length:n}, (_,i)=>i);
   const peak = Math.max(...xs.map(Math.abs));
   const ylim = Math.max(1.0, peak*1.2);
 
-  const traceX = {x:t, y:xs, mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } ε[t]$'};
-  const traceS = {x:t, y:ss, mode:'lines', line:{color:'coral', dash:'dot', width: 1}, name:'$\\hbox{change, } \\Delta ε[t]$'};
+  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } ε[t]$'};
+  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\Delta ε[t]$'};
+
   const layout = {
     title: { 
       text: `$\\text{iteration-domain (${params.input})}$`,
       font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
     },
-    xaxis: { title: { text: '$t$' }, range: [0, t.length - 1] },
+    xaxis: { title: { text: '$t$' }, range: [0, maxIter] },
     yaxis: { title: { text: '$\\hbox{signals}$' }, range: [-ylim, ylim] },
-    // width: 300,
-    // height: 300,
     showlegend: true,
     autosize: true,
   };
   
   Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
-  
 }
     
 
@@ -371,7 +396,7 @@ function drawRight(){
   // Update info panel
   // recompute α bounds and clamp alpha slider range/position
   alphaLimitsEl.textContent = `(0, ${aMaxlp.toFixed(3)})`;
-  if (!israw){
+  if (!israw || !israwm){
     poleLimitsEl.textContent = `(0, ${params.beta.toFixed(3)})`;
   } else {
     poleLimitsEl.textContent = `(-0.5, 0)`;
@@ -386,7 +411,7 @@ function drawRight(){
 //   const ingain = -eta*params.alpha*params.eigval*(1-params.gamma);
   let a1 = 1 + pole  // trace
   let a0 = 0;
-  if (!israw){
+  if (!israw || israwm){
     //  a0 = pole - ingain // det
     a0 = params.beta - eta*params.alpha*params.eigval*params.gamma;
   } 
@@ -424,10 +449,10 @@ const chareqpolesTrace = {
     xaxis : 'x', yaxis: 'y',
 };
 const nlen = root1pts.re.length;
-
+const israws = israw || israwm 
 const root1TraceTraj = {
   x: root1pts.re,
-  y: israw ? zerosp : root1pts.im,
+  y: israws ? zerosp : root1pts.im,
   mode: 'lines',
   line: { color: 'yellowgreen', width: 1 },
   opacity: 0.5,
@@ -437,7 +462,7 @@ const root1TraceTraj = {
 
 const root1TraceStart = {
   x: [root1pts.re[0]],
-  y: israw ? [0] : [root1pts.im[0]],
+  y: israws ? [0] : [root1pts.im[0]],
   mode: 'markers+text',
   marker: { color: 'orangered', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -445,7 +470,7 @@ const root1TraceStart = {
 
 const root1TraceEnd = {
   x: [root1pts.re[nlen-1]],
-  y: israw ? [0] : [root1pts.im[nlen-1]],
+  y: israws ? [0] : [root1pts.im[nlen-1]],
   mode: 'markers+text',
   marker: { color: 'orangered', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -453,7 +478,7 @@ const root1TraceEnd = {
 
 const root2TraceTraj = {
   x: root2pts.re,
-  y: israw ? zerosp: root2pts.im,
+  y: israws ? zerosp: root2pts.im,
   mode: 'lines',
   line: { color: 'yellowgreen', width: 1 },
   opacity: 0.5,
@@ -463,7 +488,7 @@ const root2TraceTraj = {
 
 const root2TraceStart = {
   x: [root2pts.re[0]],
-  y: israw ? [0] : [root2pts.im[0]],
+  y: israws ? [0] : [root2pts.im[0]],
   mode: 'markers+text',
   marker: { color: 'blue', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -471,7 +496,7 @@ const root2TraceStart = {
 
 const root2TraceEnd = {
   x: [root2pts.re[nlen-1]],
-  y: israw ? [0] : [root2pts.im[nlen-1]],
+  y: israws ? [0] : [root2pts.im[nlen-1]],
   mode: 'markers+text',
   marker: { color: 'blue', size: 3 },
   xaxis: 'x', yaxis: 'y'
@@ -479,7 +504,7 @@ const root2TraceEnd = {
 
 const root1TraceTrajhp = {
     x: root1ptshp.re,
-    y: israw ? zerosph : root1ptshp.im,
+    y: israws ? zerosph : root1ptshp.im,
     mode: 'lines',
     line: { color: 'crimson', width: 1 },
     opacity: 1,
@@ -489,7 +514,7 @@ const root1TraceTrajhp = {
 
 const root2TraceTrajhp = {
     x: root2ptshp.re,
-    y: israw ? zerosph : root2ptshp.im,
+    y: israws ? zerosph : root2ptshp.im,
     mode: 'lines',
     line: { color: 'crimson', width: 1 },
     opacity: 1,
@@ -511,7 +536,7 @@ xaxis : 'x', yaxis: 'y',
 // const container = document.getElementById("pltheaders");
 // container.innerHTML = `$$z^2 - ${a1.toFixed(3)}z + ${a0.toFixed(3)}$$`;
 // // MathJax.typesetPromise([container]); // safer async version
-const a0fx = israw ? 0 : 3;
+const a0fx = israws ? 0 : 3;
 const layouta = {
   title: { 
     text: '$\\hbox{overall system dynamics}$',
@@ -630,11 +655,12 @@ function updateParamsFromInputs(){
   params.input = inputEl.value;
 
   // if raw
-  if(israw){
+  const israws = israw || israwm;
+  if(israws){
     betaEl.value = 0;
     gammaEl.value = 0;
   } 
-  console.log(israw, betaEl.value, params.beta)
+  console.log(israws, betaEl.value, params.beta)
   params.beta = parseFloat(betaEl.value);
   params.gamma = parseFloat(gammaEl.value);
   params.eigval = parseFloat(lamEl.value);
@@ -647,10 +673,15 @@ function updateParamsFromInputs(){
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
 
   /* stable + fast */
-  alphaEl.value = 0.99*aMaxlp;
+  if (israw){
+    alphaEl.value = 1*aMaxlp;
+  } else {
+    alphaEl.value = 0.99*aMaxlp; // close to marginal
+  }
+
   params.alpha = parseFloat(alphaEl.value);
   
-  if (!israw) {   
+  if (!israws) {   
     /* set gamma, using the other parameters */
     const eal = eta*params.alpha*params.eigval;
     gammaEl.min = -(1-params.beta)/(eal);
@@ -764,9 +795,9 @@ resetBtn.addEventListener('click', ()=>{
 
 phbBtn.addEventListener('click', ()=>{
     gammafree = false;
-    israw = false;
+    israw = false; israwm = false;
     freeBtn.disabled = false;
-    rawBtn.disabled = false;
+    rawBtn.disabled = false; moptrawBtn.disabled = false;
     phbBtn.disabled = true;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
@@ -778,9 +809,9 @@ phbBtn.addEventListener('click', ()=>{
 
 nagBtn.addEventListener('click', ()=>{
     gammafree = false;
-    israw = false;
+    israw = false; israwm = false;
     freeBtn.disabled = false;
-    rawBtn.disabled = false;    
+    rawBtn.disabled = false;  moptrawBtn.disabled = false;   
     phbBtn.disabled = false;
     nagBtn.disabled = true;
     sfunBtn.disabled = false;
@@ -790,9 +821,9 @@ nagBtn.addEventListener('click', ()=>{
   });
 sfunBtn.addEventListener('click', ()=>{
     gammafree = false;
-    israw = false;
+    israw = false; israwm = false;
     freeBtn.disabled = false;
-    rawBtn.disabled = false;
+    rawBtn.disabled = false; moptrawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = true;    
@@ -802,9 +833,9 @@ sfunBtn.addEventListener('click', ()=>{
   });
 optBtn.addEventListener('click', ()=>{
     gammafree = false;
-    israw = false;
+    israw = false; israwm = false;
     freeBtn.disabled = false;
-    rawBtn.disabled = false;
+    rawBtn.disabled = false; moptrawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;    
@@ -814,9 +845,9 @@ optBtn.addEventListener('click', ()=>{
 
 freeBtn.addEventListener('click', ()=>{
     gammafree = true;
-    israw = false;
+    israw = false; israwm = false;
     freeBtn.disabled = true;
-    rawBtn.disabled = false;
+    rawBtn.disabled = false; moptrawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
@@ -825,9 +856,9 @@ freeBtn.addEventListener('click', ()=>{
 
 rawBtn.addEventListener('click', ()=>{
     gammafree = false;
-    israw = true;
+    israw = true; israwm = false;
     freeBtn.disabled = false;
-    rawBtn.disabled = true;
+    rawBtn.disabled = true; moptrawBtn.disabled = false;
     phbBtn.disabled = false;
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
@@ -835,6 +866,17 @@ rawBtn.addEventListener('click', ()=>{
     updateParamsFromInputs();
   });
 
+moptrawBtn.addEventListener('click', ()=>{
+    gammafree = false;
+    israw = false; israwm = true;
+    freeBtn.disabled = false;
+    rawBtn.disabled = false;  moptrawBtn.disabled = true;
+    phbBtn.disabled = false;
+    nagBtn.disabled = false;
+    sfunBtn.disabled = false;
+    optBtn.disabled = false;
+    updateParamsFromInputs();
+  });
 /* Init */
 betaVal.textContent = params.beta.toFixed(2);
 gammaVal.textContent = params.gamma.toFixed(2);

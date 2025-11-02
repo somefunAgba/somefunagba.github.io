@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=0.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>AutoSGM Quadratic Function Sim.</title>
 
@@ -418,13 +418,13 @@ $$
               
               <h5>Play with the controls </h5>
               <ol>
-                <li>Click on the RAW button. This automatically sets $\alpha = \tfrac{1}{3\lambda}$. </li>
+                <li>Click on the RAW-M button. This automatically sets $\alpha = \tfrac{1}{3\lambda}$. </li>
                 <li>Ensure the Input reads either Step or Impulse </li>
                 <li>Observe, the overall system response. </li>
               </ol>
               
               <ol>
-                <li>Click on the RAW-OPT button. This automatically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
+                <li>Click on the RAW-O button. This automatically sets $\alpha = \tfrac{1}{\sqrt{3}\lambda}$. </li>
                 <li>Ensure the Input reads either Step or Impulse</li>
                 <li>Observe, the overall system response. </li>
               </ol>
@@ -435,7 +435,7 @@ $$
                   The marginal stability choice $\alpha = \tfrac{1}{\sqrt{3}\lambda}$ is tight, if we can tolerate minimal early overshoots.
                 </li>
                 <li>
-                  Using $\alpha = \tfrac{1}{{3}\lambda}$, gives us a tight ripple-free fast behavior, though a little bit slower.
+                  The smaller $\alpha = \tfrac{1}{{3}\lambda}$, gives the same behavior, ripple-free, but a tiny-bit slower.
                 </li>
                 <li>
                   <b>Design Gap</b>. No single $\alpha$ within the stability range achieves our true goal.
@@ -649,13 +649,13 @@ $$
 
             <div class="slider-group">
               <label>$\alpha$ <span id="alphaVal">0.50</span></label>
-              <input id="alpha" type="range" min="0.0" max="2.0" step="0.001" value="0.5">
+              <input id="alpha" type="range" min="0.0" max="1.0" step="0.001" value="0.1">
             </div>
 
             <div class="slider-group">
                 <label>Input</label>
                 <select id="inputType">
-                  <option value="step">Step (unit)</option>
+                  <option value="step">Step</option>
                   <option value="impulse">Impulse</option>
                 </select>
             </div>    
@@ -672,7 +672,8 @@ $$
               <button id="SFUN" class="btn btnalg">MLS</button>
             </div>     
             <div style="display:flex;gap:8px;align-items:center;">  
-              <button id="NOF" class="btn btnalg">RAW</button>   
+              <button id="NOF" class="btn btnalg">RAW-M</button>   
+              <button id="NOF2" class="btn btnalg">RAW-O</button>  
               <button id="OPT" class="btn btnalg">OPT</button>
               <button id="free" class="btn btnalg">Free</button>
             </div>    
