@@ -49,15 +49,32 @@ document.addEventListener('keydown', (e) => {
 
 // Basic swipe (touch)
 let startX = null;
-track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
-track.addEventListener('touchmove', (e) => {}, { passive: true });
+let startY = null;
+
+track.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+}, { passive: true });
+
 track.addEventListener('touchend', (e) => {
-  if (startX === null) return;
+  if (startX === null || startY === null) return;
+
   const dx = e.changedTouches[0].clientX - startX;
-  if (dx < -30) showNote(current + 1);
-  else if (dx > 30) showNote(current - 1);
+  const dy = e.changedTouches[0].clientY - startY;
+
+  // Only treat as horizontal swipe if horizontal movement is larger
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx < -30) {
+      showNote(current + 1); // swipe left → next
+    } else if (dx > 30) {
+      showNote(current - 1); // swipe right → previous
+    }
+  }
+
   startX = null;
-});
+  startY = null;
+}, { passive: true });
+
 
 // Resize handling (if container width changes)
 window.addEventListener('resize', () => showNote(current, { animate: false }));
