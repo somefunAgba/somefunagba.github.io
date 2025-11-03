@@ -48,6 +48,7 @@ html, body {
 .item-foot{
     grid-area: footer;    
     display: grid;
+    font-size: 0.75rem;
 }
 
 .item-head{
