@@ -249,7 +249,7 @@ $$
               Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and so $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$. 
 
               <p>
-              By eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
+              By eigenvalue decomposition of the rank-1 system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
               $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
               </p>
             </section>
@@ -260,7 +260,7 @@ $$
               $$
               \boxed{0 < \alpha < \tfrac{1}{\lambda}},
               $$
-              and the exponential covergence bound
+              and the covergence bound
               $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|},
               $$   
               where we denoted
@@ -494,30 +494,32 @@ $$
               \[ 
               \boxed{
               \begin{aligned}
-              \rqt = \beta \, \rqtm + \gradt\\
-              \gradvt = \eta\,(\rqt - \gamma\,\rqtm)
+              \rqt &= \beta \, \rqtm + \gradt\\
+              \gradvt &= \eta\,(\rqt - \gamma\,\rqtm)
               \end{aligned}}.
               \]
-              <p>
-                Tuning $\gamma$ recovers classic methods, which often use $\eta= \tfrac{1}{1-\gamma}$.
-              </p>
+              <div class="teaser">
+                <p>
+                  Tuning $\gamma$ recovers classic methods, which often use $\eta= \tfrac{1}{1-\gamma}$.
+                </p>
 
-              <ul class="clist1">
-              <li>
-              Heavy-Ball sets $\gamma = 0$, the realization simplifies to
-              $\gradvt = \beta \, \gradvtm + \eta\,\gradt$.            
-              </li>
+                <ul class="clist1">
+                <li>
+                Heavy-Ball sets $\gamma = 0$, the realization simplifies to
+                $\gradvt = \beta \, \gradvtm + \eta\,\gradt$.            
+                </li>
 
-              <li>
-              Nesterov's Accelerated Gradient (NAG) sets $\gamma = \tfrac{\beta}{1+\beta}$, the realization simplifies to
-              \[
-              \begin{aligned}
-              \rqt = \beta \, \rqtm + \,\gradt\\
-              \gradvt = \beta \, \rqt + \gradt.
-              \end{aligned}
-              \]                
-              </li>
-              </ul>
+                <li>
+                Nesterov's Accelerated Gradient (NAG) sets $\gamma = \tfrac{\beta}{1+\beta}$, the realization simplifies to
+                \[
+                \begin{aligned}
+                \rqt &= \beta \, \rqtm + \,\gradt\\
+                \gradvt &= \frac{\eta(\beta \, \rqt + \gradt)}{1+\beta} .
+                \end{aligned}
+                \]                
+                </li>
+                </ul>
+              </div>
 
               The change-level now takes the appearance of a lowpass filter
               \[
@@ -529,63 +531,145 @@ $$
               \]
 
               <div class="teaser">
-                All is now set. Next, we will analyze the mean error dynamics, and see that this lowpass regularizing structure gets us close to our goal. Freeing us from the shackles of old dogma.
+                All is now set. Next, we analyze the mean error dynamics. <strong>We will see that this lowpass regularizing structure gets us to our goal.</strong>
               </div>
 
             </section>
  
             <section class="note">
               <h4 id="note-title-6">AutoSGM: Error Dynamics (Mean Convergence)</h4>
-              <p></p>
+              <p>
+                Recall that $\mgradt = \lambda\,\merrt$, and that $\merrt =  \merrtm +  \mderrt$, so that $\mgradt = \lambda\,\merrtm + \lambda\,\mderrt$, and $\merrtp = \beta \, \mderrt + \alpha\,\eta\,\bigl(\gamma\,\mgradtm - \mgradt \bigr) $.
+                <br/><br/>
+                Denote $\beta_p = \beta - \alpha\,\eta\,\lambda $, and $k_p = - \alpha\,\eta\,\lambda\,(1-\gamma)$, $\rmt = \merrt$, $\rst = \mderrt$, to get
+                $$
+                \begin{equation}              
+                \label{eq:ac1}
+                \begin{aligned} 
+                \rstp &= \beta_p\,\rst + k_p\,\rmtm \\ 
+                \rmt &= \rst + \rmtm.
+                \end{aligned}
+                \end{equation}
+                $$
+              </p>
+                The lowpass filtered change-level system is both asymptotically and exponentially stable if its single pole satisfies $0 < \beta_p < 1$. Since $ 0< \beta < 1 $, and $\alpha > 0$, then $0 < \beta - \alpha\,\eta\,\lambda < \beta $ translates to $0 < \alpha\,\eta\,\lambda  < \beta$, which imply
+    
+                $$\begin{equation}\label{eq:alrwin}
+                  \boxed{0 < \alpha < \tfrac{\beta}{\eta}\,\tfrac{1}{\lambda}}.
+                  \end{equation}
+                $$ 
+                
+                The overall dynamics of the expected error, written in matrix form is
+                $$
+                \begin{equation}
+                \underbrace{
+                \begin{bmatrix}
+                \rstp \\
+                \rmt
+                \end{bmatrix}
+                }_{\rxt}
+                =
+                \underbrace{
+                \begin{bmatrix}
+                \beta_p & k_p \\
+                1 & 1
+                \end{bmatrix}
+                }_{\rA}
+                \underbrace{
+                \begin{bmatrix}
+                \rst \\
+                \rmtm
+                \end{bmatrix}
+                }_{\rxtm}.
+                
+                \label{eq:amsyseq}
+                \end{equation}
+                $$
+                Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$. Notice that since $\beta_p \ne k_p$, <b>the system matrix is now full-rank</b>. <br><br>
+                The characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = 0$ gives $z^2 -(1+\beta_p)\,z + (\beta_p-k_p) = 0 $, where $\beta_p-k_p = \beta_p - \alpha\,\eta\,\lambda\,\gamma$. Let $D = (1+\beta_p)^2 - 4\,(\beta_p-k_p)$, the two system eigenvalues are               
+                $
+                z_{1,2} = \tfrac{1+\beta_p}{2} \pm \tfrac{\sqrt{D}}{2}.
+                $
+                Again, exponential and asymptotic stablility of the system requires $1 > \lvert z_2 \rvert \ge \lvert z_1 \rvert $.
+                <ol>
+                  <li>Repeated, real roots: $\lvert z_1 \rvert = \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2}} < 1$. This translates to $\beta_p < 1$, already satisfied by $\beta_p < \beta$.
+                  </li>
+                  <li>Distinct, real roots: $\lvert z_1 \rvert < \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2} + \tfrac{\sqrt{D}}{2} } < 1$. This translates to $\gamma < 1$, already satisfied by $\gamma \le \beta$.
+                  </li> 
+                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert \le  \textcolor{Mahogany}{\sqrt{\beta_p-k_p}} < 1$. Since $\alpha\,\eta\,\lambda < \beta <  1$, then $\beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma > -(1-\beta)$.
+                  </li>   
+                </ol>
+                $$\begin{equation}\label{eq:azero}
+                \boxed{-\tfrac{(1-\beta)}{\beta} \le \gamma \le \beta}.
+                \end{equation}
+                $$
+                <p>
+                By eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we obtain a certificate for both exponential, and asymptotic convergence in the mean as
+                $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\beta_p} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
+  
+                <!-- $$
+                \begin{aligned}
+                0 < \alpha < \tfrac{\beta}{\eta}\, \tfrac{1}{\lambda},\\
+                -(1-\beta) < \gamma \le \beta,\\
+                0 < \beta < 1.
+                \end{aligned}
+                $$ -->
+                </p>
             </section>
 
             <section class="note">
-              <h4 id="note-title-error-scalar">Step 3 (Scalar): AutoSGM Error Dynamics</h4>
-              <p>
-                Specializing to the scalar quadratic \( f(x) = \tfrac{1}{2}\lambda x^2 \), 
-                the error is \( e_t = x_t - x^\star = x_t \).  
-                The AutoSGM recurrence becomes
-                
-            
-                \[
-                  e_{t+1} = (1 - \alpha_t \eta \lambda) e_t
-                            + \beta (e_t - e_{t-1})
-                            - \alpha_t \eta \gamma \lambda \, e_{t-1}.
-                \]
-            
-            
+              <h4 id="note-title-7">AutoSGM: Reflections </h4>
+              <p> Let $0 < c_1 < 1$, the system analysis leads to
+                  $$
+                  \boxed{
+                    \begin{aligned}
+                    0 < \beta < 1,\\
+                    \gamma = -\frac{(1-\beta)}{\beta},\\
+                    \alpha = c_1\,\frac{\beta}{\eta}\, \frac{1}{\lambda}.
+                    \end{aligned}
+                  }
+                  $$
+              In the simulations, we set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. If we analyze the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$.
               </p>
-              <details>
-                <summary>Show derivation</summary>
-                <p>
-                  Starting from the filtered update
-                  
+
+              <div class="teaser">              
+                Recall our <strong>Goal</strong>: Error converges to <strong>zero</strong> in at most two iterations. 
+              </div>
             
-                  \[
-                    v_t = \beta v_{t-1} + \eta(\lambda e_t - \gamma \lambda e_{t-1}),
-                  \]
+              <h5>Play with the controls </h5>
+              <ol>
+                <li>Click on the OPT button</li>
+                <li>Ensure the Input selector reads Step </li>
+                <li>Slide the $\beta$ controls, and observe the system.</li>
+              </ol>
+              
+              <ol>
+                <li>Click on the PHB button</li>
+                <li>Ensure the Input selector reads Step </li>
+                <li>Slide the $\beta$ controls, and observe the system.</li>
+              </ol>
+              <ol>
+                <li>Repeat the above steps for the NAG button.</li>
+                <li>Repeat the above steps for the MLS button.</li>
+              </ol>
             
-            
-                  and \( x_{t+1} = x_t - \alpha_t v_t \),  
-                  substituting \( e_t = x_t \) yields the second‑order recurrence above.
-                </p>
-                <p>
-                  The characteristic polynomial for this scalar mode is
-                  
-            
-                  \[
-                    z^2 - (1 + \beta - \alpha_t \eta \lambda) z
-                        + (\beta - \alpha_t \eta \gamma \lambda) = 0.
-                  \]
-            
-            
-                  Its roots \( z_{1,2} \) govern stability and convergence.
-                </p>
-              </details>
-              <blockquote>
-                Tip: Convergence requires both roots \( z_{1,2} \) to lie inside the unit circle.  
-                Heavy‑Ball is recovered with \( \gamma = 0 \); Nesterov with \( \gamma > 0 \).
-              </blockquote>
+              <b>Observations </b>
+              <ol>
+                <li> <b>Ours</b> $\gamma = -\tfrac{(1-\beta)}{\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
+                </li>
+                <li> PHB: $\gamma = 0$. Fast convergence met for a wide range of $\beta$, but not for extremely lower values. Design goal met for only higher values of $\beta$.
+                </li>                
+                <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Fast convergence met for only higher values of $\beta > 0.5$. Design goal is not met.
+                </li>
+                <li> MLS: $\gamma = 1-\sqrt{2(1-\beta)}$. Fast convergence met for a wider range of $\beta$, but not for extremely lower and higher values. Design goal is not met.
+                </li>
+              </ol>
+
+
+              <div class="teaser">              
+                It is this type of behavior that motivates the use of the AutoSGM structure in accelerated learning applications. 
+              </div>
+
             </section>
                                     
 

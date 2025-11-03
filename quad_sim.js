@@ -389,7 +389,7 @@ function drawRight(){
   const polemin = sysPole(aMaxhpSafe, params.beta, params.gamma, params.eigval);
   if (!israw){
     const eal = eta*params.alpha*params.eigval;
-    gammaEl.min = 0.9*(params.beta-1)/(eal);
+    gammaEl.min = -(1-params.beta)/(params.beta + 1e-10);
     gammaEl.max = params.beta;
   }
 
@@ -655,13 +655,16 @@ Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, 
 function updateParamsFromInputs(){
   params.input = inputEl.value;
 
+  // const c1 = 2/3.0;
+  const c1 = 0.99;
+
   // if raw
   const israws = israw || israwm;
   if(israws){
     betaEl.value = 0;
     gammaEl.value = 0;
   } 
-  console.log(israws, betaEl.value, params.beta)
+  // console.log(israws, betaEl.value, params.beta)
   params.beta = parseFloat(betaEl.value);
   params.gamma = parseFloat(gammaEl.value);
   params.eigval = parseFloat(lamEl.value);
@@ -677,7 +680,7 @@ function updateParamsFromInputs(){
   if (israw){
     alphaEl.value = 1*aMaxlp;
   } else {
-    alphaEl.value = 0.99*aMaxlp; // close to marginal
+    alphaEl.value = c1*aMaxlp; // close to marginal
   }
 
   params.alpha = parseFloat(alphaEl.value);
@@ -685,21 +688,23 @@ function updateParamsFromInputs(){
   if (!israws) {   
     /* set gamma, using the other parameters */
     const eal = eta*params.alpha*params.eigval;
-    gammaEl.min = -(1-params.beta)/(eal);
+    gammaEl.min = -(1-params.beta)/(params.beta + 1e-10); ///(eal);
     gammaEl.max = params.beta;
     // console.log('eta', eta, 'eal', eal, 'gamma_min', gammaEl.min)
 
     if(optBtn.disabled){
-      const gamma_mopt = -0.9*(1-params.beta)/(eal);
+      // ensure params.beta != 0
+      let gamma_mopt = -(1-params.beta)/(params.beta + 1e-10); // /(eal);
       gammaEl.value = gamma_mopt;
       params.gamma = gamma_mopt;
       // recompute
       ({aMin,aMax, eta, aMaxlp, aMaxhpSafe} = lrstablerng(params.beta, params.gamma, params.eigval, true));
       alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
-      alphaEl.value = 0.99*aMaxlp;
+      alphaEl.value = c1*aMaxlp;
       params.alpha = parseFloat(alphaEl.value);
     }
     // console.log('eta', eta, 'gamma_min', gammaEl.min)
+    // console.log('beta=0, gamma=', params.gamma, params.beta)
   }
 
   drawRight();
