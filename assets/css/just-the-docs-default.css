@@ -7345,6 +7345,10 @@ div.opaque {
   background-color: #fff;
 }
 
+html, body {
+  font-size: small;
+}
+
 .site-header {
   display: flex;
   flex-direction: column;
