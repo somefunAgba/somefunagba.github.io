@@ -305,8 +305,8 @@ function drawSys(){
   const peak = Math.max(...xs.map(Math.abs));
   const ylim = Math.max(1.0, peak*1.2);
 
-  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } ε[t]$'};
-  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\Delta ε[t]$'};
+  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$'};
+  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$'};
 
   const layout = {
     title: { 

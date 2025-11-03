@@ -167,7 +167,7 @@ $$
                   <p>
                     AutoSGM goes further. In this problem setup, it turns momentum (gradient smoothing in the stochastic gradient method) into a <strong>precisely engineered system</strong>, 
                     with system parameters chosen to guarantee mean error convergence across the full parameter range in just two steps. 
-                    Where classic methods trade off speed and stability, AutoSGM delivers a <strong>closed-form certificate</strong> for both.
+                    Where classic methods trade off speed and stability, with AutoSGM we deliver a <strong>closed-form certificate</strong> for both.
                   </p>
               </div>
             </section>
@@ -630,13 +630,13 @@ $$
                 $
                 z_{1,2} = \tfrac{1+\beta_p}{2} \pm \tfrac{\sqrt{D}}{2}.
                 $
-                Again, exponential and asymptotic stablility of the system requires $1 > \lvert z_2 \rvert \ge \lvert z_1 \rvert $.
+                Again, exponential and asymptotic stablility of the system requires $1 > \lvert z_2 \rvert \ge \lvert z_1 \rvert$ (the ordering labels $z_2$ as the maximum eigenvalue).
                 <ol>
                   <li>Repeated, real roots: $\lvert z_1 \rvert = \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2}} < 1$. This translates to $\beta_p < 1$, already satisfied by $\beta_p < \beta$.
                   </li>
                   <li>Distinct, real roots: $\lvert z_1 \rvert < \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2} + \tfrac{\sqrt{D}}{2} } < 1$. This translates to $\gamma < 1$, already satisfied by $\gamma \le \beta$.
                   </li> 
-                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert \le  \textcolor{Mahogany}{\sqrt{\beta_p-k_p}} < 1$. Since $\alpha\,\eta\,\lambda < \beta <  1$, then $\beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma > -(1-\beta)$.
+                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert \le  \textcolor{Mahogany}{\sqrt{\beta_p-k_p}} < 1$. Since $\alpha\,\eta\,\lambda < \beta$, then $\beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma \ge -\tfrac{(1-\beta)}{\beta}$.
                   </li>   
                 </ol>
                 $$\begin{equation}\label{eq:azero}
@@ -660,19 +660,19 @@ $$
             <section class="note">
               <h4 id="note-title-7">AutoSGM: Reflections </h4>
               <div class="teaser">              
-               <b>Goal</b>: Error converges to <strong>zero</strong> in at most two iterations. 
+               <b>Recall</b>: Our holy grail is to get the error to converge to <strong>zero</strong> in at most two iterations. 
               </div>
               <p> Let $0 < c_1 < 1$, the system analysis leads to
                   $$
                   \boxed{
                     \begin{aligned}
                     0 < \beta < 1,\\
-                    \gamma = -\frac{(1-\beta)}{\beta},\\
-                    \alpha = c_1\,\frac{\beta}{\eta}\, \frac{1}{\lambda}.
+                    \gamma = -\tfrac{(1-\beta)}{\beta},\\
+                    \alpha = c_1\,\tfrac{\beta}{\eta}\, \tfrac{1}{\lambda}.
                     \end{aligned}
                   }
                   $$
-              In the simulations, we set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. If we analyze the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$.
+              In the simulations, we set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. Analyzing the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$.
               </p>
 
               <b>Play with the controls </b>
@@ -705,9 +705,13 @@ $$
               </ol>
 
 
-              <div class="teaser">              
-                The analysis above shows that the AutoSGM structure admits a closed-form parameterization that certifies exponential and asymptotic mean convergence, with the striking property that the error can be driven to zero in at most two iterations for any $0 < \beta < 1$. This type of behavior motivates what is called <em>momentum</em> in accelerated learning applications. <br>
-                This stands in contrast to current theory on momentum, and highlights several important themes in linear systems, signal processing and control theory
+              <div class="teaser">      
+                <p>In this setup, published <em>optimal</em> parameter choices for PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method. <b> We saw this is not good</b>, merely using the inverse of the Hessian neither gets us close to stable nor accelerated learning.
+                </p>       
+                In sharp contrast to current momentum theory, <b>the picture changes with AutoSGM</b>. Our AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, with the striking property that the error can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
+                <p>
+                This highlights deeper themes in linear systems, signal processing and control theory. We believe this perspective, better motivates what has long been called <em>momentum</em> in accelerated learning applications, not as an heuristic but as a <b>precisely engineered dynamic system</b>.
+                </p>
               </div>
 
             </section>
