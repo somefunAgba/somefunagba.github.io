@@ -27,7 +27,7 @@ async function showNote(index, {animate = true} = {}) {
   track.style.transitionDuration = animate ? '500ms' : '0ms';
 
   // process index to update global current index
-  index = Math.max(0, index);// Math.min(index, notes.length - 1));
+  index = Math.max(0, index); //Math.min(index, notes.length - 1));
   current = (index % notes.length);
 
   track.style.transform = `translateX(-${current * 100}%)`;
