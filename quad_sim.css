@@ -209,6 +209,9 @@ html, body {
     color: green !important;
 }   
 
+.cgray{
+  color: gray !important;
+}   
 
 .note-container {
   grid-area: note-grid;
@@ -323,6 +326,65 @@ summary { cursor: pointer;
   padding-left: 1rem;
   text-align: justify;
 }
+
+.cover{
+  text-align: justify;
+  /* padding: 6rem 2rem;
+  margin-top: 2rem; */
+}
+
+.hero-banner {
+  /* background: linear-gradient(135deg, #1a1f4d, #0f9ba8); */
+  background: border-box;
+  text-align: center;
+  place-content: center;
+  padding: 1rem 1rem;
+  /* position: relative; */    
+}
+
+.hero-banner h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-banner h2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.hero-banner .highlight {
+  color: #ffb347; /* accent highlight */
+  font-weight: 600;
+}
+
+.hero-banner .tagline {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* .cta-buttons {
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  margin: 0 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #ffb347;
+  color: #1a1f4d;
+}
+
+.btn.secondary {
+  border: 2px solid #fff;
+  color: #fff;
+} */
+
 
 /*mathjax*/
 .mathjax-hidden { visibility: hidden; }

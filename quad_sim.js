@@ -33,8 +33,15 @@ async function showNote(index, {animate = true} = {}) {
   track.style.transform = `translateX(-${current * 100}%)`;
   // track.style.transform = `translateX(-${current * widthPx}px)`;
 
-  // Update  progress
-  progressEl.textContent = `${current + 1} / ${notes.length}`;
+  // Update  progress 
+  // standard page numbering
+  // progressEl.textContent = `${current + 1} / ${notes.length}`;
+  // reflect hidden cover page number in the  page numbering
+  progressEl.textContent = `${current} / ${notes.length-1}`;
+  // Hide numbering on cover-page
+  if (current == 0) {
+    progressEl.textContent = ``;
+  }
 
   // Save to localStorage
   localStorage.setItem('noteIndex', current);

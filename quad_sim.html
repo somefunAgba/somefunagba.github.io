@@ -133,6 +133,46 @@ $$
       
         <div class="note-viewport" aria-live="polite" aria-atomic="true">
           <div class="note-track" id="note-track">
+            <section class="note ">
+              <div class="hero-banner">
+                <div class="hero-content">
+                  <h1> <span class="cgreen"> Auto</span>SGM</h1>
+                  <h2><span class="highlight"> Two Steps. Zero Error.</span></h2>
+                  <p class="tagline">
+                    <span class="cgray"><strong>Momentum</strong> beyond intuition</span>: a principled <strong>signal-processing</strong> framework certifying stable, accelerated learning.
+                  </p>
+                </div>   
+              </div>  
+              <div class="note cover">
+
+                  <p>
+                    The word <strong>momentum</strong> has always promised speed. But, what exactly is momentum?  
+                    Classic explanations give intuition.
+                    Mostly, they show us <strong>why</strong> momentum helps, not <strong>how to design it</strong> for guaranteed performance.
+                  </p>
+                
+                  <p>
+                    <strong>The AutoSGM framework changes that.</strong> Starting with a deceptively simple setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
+                    <em>linear-time invariant system</em>, derive explicit stability certificates, and uncover automatic learning-rate rules for convergence of the learning algorithm. The outcome is a principled recipe that:
+                  </p>
+                
+                  <ul class="key-points">
+                    <li>Provides closed-form formulas for the learning-rate, and other system parameters.</li>
+                    <li>Guarantees exponential convergence in the mean. Error collapses to zero in at most 2 iterations.</li>
+                    <li>Works uniformly across all admissible momentum parameter values, unlike classic methods.</li>
+                    <li>Offers an interpretable lens on learning using signal-processing and control tools.</li>
+                  </ul>
+                
+                  <h3>✨ Why AutoSGM?</h3>
+                  <p>
+                    AutoSGM goes further. It turns momentum (gradient smoothing in stochastic gradient methods) into a <strong>precisely engineered system</strong>, 
+                    with system parameters chosen to guarantee mean error convergence across the full parameter range in just two steps. 
+                    Where classic methods trade off speed and stability, AutoSGM delivers a <strong>closed-form certificate</strong> for both.
+                  </p>
+              </div>
+            </section>
+
+            
 
             <section class="note">
               <h4 id="note-title-0">Problem setup</h4>
@@ -619,6 +659,9 @@ $$
 
             <section class="note">
               <h4 id="note-title-7">AutoSGM: Reflections </h4>
+              <div class="teaser">              
+               <b>Goal</b>: Error converges to <strong>zero</strong> in at most two iterations. 
+              </div>
               <p> Let $0 < c_1 < 1$, the system analysis leads to
                   $$
                   \boxed{
@@ -632,11 +675,7 @@ $$
               In the simulations, we set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. If we analyze the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$.
               </p>
 
-              <div class="teaser">              
-                Recall our <strong>Goal</strong>: Error converges to <strong>zero</strong> in at most two iterations. 
-              </div>
-            
-              <h5>Play with the controls </h5>
+              <b>Play with the controls </b>
               <ol>
                 <li>Click on the OPT button</li>
                 <li>Ensure the Input selector reads Step </li>
@@ -653,7 +692,7 @@ $$
                 <li>Repeat the above steps for the MLS button.</li>
               </ol>
             
-              <b>Observations </b>
+              <b>Observations </b> using the derived learning rate choice.
               <ol>
                 <li> <b>Ours</b> $\gamma = -\tfrac{(1-\beta)}{\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
                 </li>
@@ -667,7 +706,8 @@ $$
 
 
               <div class="teaser">              
-                It is this type of behavior that motivates the use of the AutoSGM structure in accelerated learning applications. 
+                The analysis above shows that the AutoSGM structure admits a closed-form parameterization that certifies exponential and asymptotic mean convergence, with the striking property that the error can be driven to zero in at most two iterations for any $0 < \beta < 1$. This type of behavior motivates what is called <em>momentum</em> in accelerated learning applications. <br>
+                This stands in contrast to current theory on momentum, and highlights several important themes in linear systems, signal processing and control theory
               </div>
 
             </section>
