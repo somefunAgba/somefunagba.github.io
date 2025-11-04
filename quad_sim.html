@@ -624,7 +624,7 @@ $$
                 \end{equation}
                 $$
                 Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$. Notice that since $\beta_p \ne k_p$, <b>the system matrix is now full-rank</b>. <br><br>
-                The characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = 0$ gives $z^2 -(1+\beta_p)\,z + (\beta_p-k_p) = 0 $, where $\beta_p-k_p = \beta_p - \alpha\,\eta\,\lambda\,\gamma$. Let $D = (1+\beta_p)^2 - 4\,(\beta_p-k_p)$, the two system eigenvalues are               
+                The characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = 0$ gives $z^2 -(1+\beta_p)\,z + (\beta_p-k_p) = 0 $, where $\beta_p-k_p = \beta - \alpha\,\eta\,\lambda\,\gamma$. Let $D = (1+\beta_p)^2 - 4\,(\beta_p-k_p)$, the two system eigenvalues are               
                 $
                 z_{1,2} = \tfrac{1+\beta_p}{2} \pm \tfrac{\sqrt{D}}{2}.
                 $
@@ -657,7 +657,7 @@ $$
 
             <section class="note">
               <h4 id="note-title-7">AutoSGM: Reflections </h4>
-              <div class="teaser">              
+              <div class="teaser2">              
                <b>Recall</b>: Our holy grail is to get the error to converge to <strong>zero</strong> in at most two iterations. 
               </div>
               <p> Let $0 < c_1 < 1$, the system analysis leads to
@@ -670,7 +670,8 @@ $$
                     \end{aligned}
                   }
                   $$
-              In the simulations, we set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. Analyzing the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$.
+              We set $c_1 = 0.99 \approx 1$ to operate near the fastest convergence without instability. 
+              <!-- Analyzing the mean-square error convergence, we will get that $\tfrac{2}{3} < c_1 < 1$. -->
               </p>
 
               <b>Play with the controls </b>
@@ -703,8 +704,8 @@ $$
               </ol>
 
 
-              <div class="teaser">      
-                <p>In this setup, published <em>optimal</em> parameter choices for PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method. <b> We saw this is not good</b>, merely using the inverse of the Hessian neither gets us close to stable nor accelerated learning.
+              <div class="teaser2">      
+                <p>In this setup, published <em>optimal</em> parameter choices for PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method. <b> We saw this choice is not good enough</b>, merely using the inverse of the Hessian neither gets us close to stable nor accelerated learning.
                 </p>       
                 In sharp contrast to current momentum theory, <b>the picture changes with AutoSGM</b>. Our AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, with the striking property that the error can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
                 <p>
@@ -730,15 +731,16 @@ $$
         <h3><span class="cgreen">Auto</span>SGM: LTI System Info</h3>
         <dl class="sys-info">
           <dt>Pole (change-level)</dt>
-          <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span></dd>
+          <dd class="cgreen">$ \beta_p = \beta - \eta \alpha \lambda$ = <span class="value" id="poleVal"></span>
+          </dd>
 
           <dt>Gain (change-level)</dt>
           <dd >$ k_p=-\eta\alpha\lambda(1-γ) $ = <span class="value" id="ingainVal"></span></dd>
 
-          <dt><span id="fstate">Lowpass</span> stable $\beta_p$-range</dt>
-          <dd class="cgreen">$({\beta_p}_{\min}, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd>
+          <!-- <dt><span id="fstate">Lowpass</span> stable $\beta_p$-range</dt>
+          <dd class="cgreen">$({\beta_p}_{\min}, {\beta_p}_{\max})$ = <span class="value" id="poleLimits"></span></dd> -->
       
-          <dt><span id="fstate">Lowpass</span> stable $\alpha$-range</dt>
+          <dt> Stable $\alpha$-range</dt>
           <dd class="cgreen">$(\alpha_{\min}, \alpha_{\max})$ = <span class="value" id="alphaLimits"></span></dd>
         </dl>
 
@@ -755,7 +757,7 @@ $$
 
             <div class="slider-group">
               <label>$\lambda$ <span id="lamVal">1.00</span></label>
-              <input id="eigval" type="range" min="0.01" max="10.0" step="0.01" value="1.0">
+              <input id="eigval" type="range" min="0.01" max="100.0" step="0.01" value="1.0">
             </div>
 
             <div class="slider-group">
@@ -786,7 +788,7 @@ $$
               <button id="NOF" class="btn btnalg">RAW-M</button>   
               <button id="NOF2" class="btn btnalg">RAW-L</button>  
               <button id="OPT" class="btn btnalg">OPT</button>
-              <button id="free" class="btn btnalg">Free</button>
+              <button id="free" class="btn btnalg">Free $\gamma$</button>
             </div>    
         </div>  
       </aside>
@@ -810,7 +812,7 @@ $$
       <li>Second plot shows <em>two roots of the overall error behavior</em>.
       <li>Third plot shows <em>change-level pole position</em>.</li> 
       </ol>
-      <span> Highlighted in the second and third plots are <span class="cgreen">stable</span>, <span class="cred">oscillatory</span> and <span class="cred">unstable</span> (outside the unit-circle) ranges.</span>
+      <span> Highlighted in the second and third plots are <span class="cgreen">stable</span>, possibly <span class="cred">oscillatory</span> and actual <span class="cred">unstable</span> (outside the unit-circle) locations.</span>
       </section>
       
     </div>

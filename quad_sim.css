@@ -157,6 +157,7 @@ html, body {
   
   .status {
     font-weight: 500;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 0.75rem;
     margin-left: 8px;
     color: #188038; /* green for stable */
@@ -312,6 +313,14 @@ summary { cursor: pointer;
   padding-left: 0.25rem;
   /* padding-right: 50px; */
   margin-top: 15px;
+  margin-left: 2px;
+  background-color: rgb(255, 255, 255);
+}
+
+.teaser2{
+  border-left: 2px solid #4CAF50;
+  padding-left: 0.25rem;
+  margin-top: 5px;
   margin-left: 2px;
   background-color: rgb(255, 255, 255);
 }

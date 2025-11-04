@@ -140,13 +140,14 @@ function lrstablerng(beta, gamma, eigval, nonnegative=true){
   let aMin = 1e-10;
   let aMaxlp = beta / (eta * eigval);
   if (israw){
-    aMaxlp = 1 / (3*eigval);
+    // aMaxlp = 1 / (3*eigval);
+    aMaxlp = 1 / (Math.sqrt(3)*eigval);
     // aMax = 1/eigval;
   }
   if (israwm) {
     aMaxlp = 1 / (Math.sqrt(3)*eigval);
   }
-  let aMax = (1+beta)/(eta*eigval);
+  const aMax = (1+beta)/(eta*eigval);
   const aMaxhpSafe = 0.99*aMax;
   if(Math.abs(aMax - aMin) < 1e-8) aMax = aMin + 1.0;
   return {aMin,aMax,eta, aMaxlp, aMaxhpSafe};
@@ -305,16 +306,27 @@ function drawSys(){
   const peak = Math.max(...xs.map(Math.abs));
   const ylim = Math.max(1.0, peak*1.2);
 
-  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$'};
-  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$'};
+  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$' };
+  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$' };
 
   const layout = {
     title: { 
       text: `$\\text{iteration-domain (${params.input})}$`,
-      font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
+      font: { size: 10, family: 'Arial, sans-serif', color: 'black' } 
     },
-    xaxis: { title: { text: '$t$' }, range: [0, maxIter] },
-    yaxis: { title: { text: '$\\hbox{signals}$' }, range: [-ylim, ylim] },
+    xaxis: { 
+      title: { text: '$t$', font: { size: 10,} }, 
+      range: [0, maxIter], automargin: true 
+    },
+    yaxis: { 
+      title: { text: '$\\hbox{signals}$', font: { size: 10,} }, 
+      range: [-ylim, ylim], automargin: true 
+    },
+    margin: { l: 30, r: 10, t: 30, b: 30 },
+    legend: {
+      orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center',
+      font: { size: 10, family: 'Arial, sans-serif', color: 'black' }
+    },
     showlegend: true,
     autosize: true,
   };
@@ -403,11 +415,11 @@ function drawRight(){
   // Update info panel
   // recompute α bounds and clamp alpha slider range/position
   alphaLimitsEl.textContent = `(0, ${aMaxlp.toFixed(3)})`;
-  if (!israw || !israwm){
-    poleLimitsEl.textContent = `(0, ${params.beta.toFixed(3)})`;
-  } else {
-    poleLimitsEl.textContent = `(-0.5, 0)`;
-  }
+  // if (!israw || !israwm){
+  //   poleLimitsEl.textContent = `(0, ${params.beta.toFixed(3)})`;
+  // } else {
+  //   poleLimitsEl.textContent = `(-0.5, 0)`;
+  // }
   
   if (highpass) {
     poleValEl.style.color = "crimson";
@@ -548,7 +560,7 @@ const a0fx = israws ? 0 : 3;
 const layouta = {
   title: { 
     text: '$\\hbox{overall system dynamics}$',
-    font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
+    font: { size: 10, family: 'Arial, sans-serif', color: 'black' } 
   },
   annotations: [
     {
@@ -557,8 +569,10 @@ const layouta = {
       x: 0.5, y: 1.15,
       showarrow: false
   },],
-  xaxis: { title: { text: '$\\Re(z)$' }, zeroline: true, range: [-1,1] },
-  yaxis: { title: { text: '$\\Im(z)$' }, zeroline: true, range: [-1.2,1.2], scaleanchor: 'x' },
+  xaxis: { title: { text: '$\\Re(z)$' }, zeroline: true, range: [-1,1],automargin: false  },
+  yaxis: { title: { text: '$\\Im(z)$' }, zeroline: true, range: [-1.2,1.2], scaleanchor: 'x', automargin: false},
+  // margin: { l: 30, r: 10, t: 30, b: 30 },
+  // legend: { orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' },
   showlegend: false,
   autosize: true,
 };
@@ -612,26 +626,29 @@ const traceEnd = {
 
 const layoutb = {
     title: { text: '$\\hbox{change-level\'s single-pole dynamics}$', 
-    font: { size: 12, family: 'Arial, sans-serif', color: 'black' } 
+    font: { size: 10, family: 'Arial, sans-serif', color: 'black' } 
   },    
   xaxis:{
-    range:[-2,2], 
+    range:[-1.2,1.2], 
     title: { 
       text: 'real axis',     
       font: { size: 12,  color: 'darkgray'}, 
-    }, 
+    }, zeroline: true,
+    automargin: false 
   }, 
   yaxis:{
     range:[-1,1], 
     title: { 
       text: 'imaginary axis', 
       font: { size: 12, color: 'darkgray' }, 
-    }, 
-    scaleanchor: 'x'
+    }, zeroline: true,
+    scaleanchor: 'x', automargin: false
   },
   annotations: [
       { text: "", xref: "paper", yref: "paper", x: 0.5, y: 1.1, showarrow: false }
   ],
+  margin: { l: 80, r: 80,  t: 30, b: 30 },
+  // legend: { orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' },
   // width:520, height:250, 
   showlegend:false,
   autosize: true
@@ -684,8 +701,11 @@ function updateParamsFromInputs(){
   alphaEl.min = aMin; alphaEl.max = aMaxhpSafe;
 
   /* stable + fast */
-  if (israw){
+  if (israws){
     alphaEl.value = 1*aMaxlp;
+    if (israw){
+      alphaEl.value = Math.pow(aMaxlp,2);
+    }
   } else {
     alphaEl.value = c1*aMaxlp; // close to marginal
   }
