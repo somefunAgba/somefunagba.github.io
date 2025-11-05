@@ -238,6 +238,7 @@ rawBtn = document.getElementById('NOF');
 moptrawBtn = document.getElementById('NOF2');
 // Flag: is gamma locked to beta?
 let gammafree= true;
+let lrfree = true;
 let israw = false;
 let israwm = false;
 rawBtn.disabled = false;
@@ -677,6 +678,7 @@ Plotly.newPlot('rightPlotcbottom',[traceCircle, traceTraj, traceTrajhp, moving, 
 
 /* Wire controls */
 function updateParamsFromInputs(){
+
   params.input = inputEl.value;
 
   // const c1 = 2/3.0;
@@ -745,10 +747,13 @@ function updateParamsFromInputs(){
   });
 });
 alphaEl.addEventListener('input', ()=>{
-  params.alpha = parseFloat(alphaEl.value);
-  alphaVal.textContent = params.alpha.toFixed(3);
-  drawRight();  
-  drawSys();
+  if (lrfree){
+    params.alpha = parseFloat(alphaEl.value);
+    alphaVal.textContent = params.alpha.toFixed(3);
+    drawRight();  
+    drawSys();
+  }
+
 });
 inputEl.addEventListener('change', ()=>{
   params.input = inputEl.value;
@@ -915,6 +920,7 @@ optBtn.addEventListener('click', ()=>{
     nagBtn.disabled = false;
     sfunBtn.disabled = false;    
     optBtn.disabled = true;
+    lrfree = false;
     updateParamsFromInputs();
   });
 
@@ -927,6 +933,7 @@ freeBtn.addEventListener('click', ()=>{
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
     optBtn.disabled = false;
+    lrfree = true;
   });
 
 rawBtn.addEventListener('click', ()=>{
@@ -938,6 +945,7 @@ rawBtn.addEventListener('click', ()=>{
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
     optBtn.disabled = false;
+    lrfree = false;
     updateParamsFromInputs();
   });
 
@@ -950,6 +958,7 @@ moptrawBtn.addEventListener('click', ()=>{
     nagBtn.disabled = false;
     sfunBtn.disabled = false;
     optBtn.disabled = false;
+    lrfree = false;
     updateParamsFromInputs();
   });
 /* Init */
