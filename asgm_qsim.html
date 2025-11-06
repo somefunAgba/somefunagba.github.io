@@ -176,7 +176,9 @@ $$
                   <div class="coverteaser">
                     The results for this setup hold exactly under a quadratic loss, diagonal Hessian setting. 
                     <p>
-                     Outside such setting, there is no literal guarantee of a two-step convergence. But our system-theoretic perspective continues to offer valuable intuition towards principled parameter choices. 
+                     Outside such setting, there is no literal guarantee of a two-step convergence, and exact parameter choices for the system may deviate from optimal values in this ideal setting.                     
+                    </p>                    
+                    <p>Nevertheless, our system-theoretic perspective continues to offer valuable intuition towards principled parameter choices. 
                     </p>
                   </div>
               </div>
@@ -294,7 +296,7 @@ $$
               \end{equation}
               $$
               Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$.
-              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and therefore $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$. 
+              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and therefore $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$, and more stricter $0 < \alpha \le \tfrac{1}{\lambda}$.
 
               <p>
               By eigenvalue decomposition of the rank-1 system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
