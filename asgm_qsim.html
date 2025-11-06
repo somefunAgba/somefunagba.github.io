@@ -229,22 +229,22 @@ $$
               <h4 id="note-title-1"> Error Dynamics (Mean Convergence)</h4>
 
               <p>
-              Recall that $\gradt = u_t^2\cdot \errt$, we can write the error equation as $\errtp =  \errt +  \derrtp$, where $\derrtp = -\alpha \, \gradt$,
-              from which we get $\gradt = u_t^2\cdot \errtm + u_t^2\cdot \derrt$, and the dynamics
+              Recall that $\mean{u_t^2} = \lambda$, and $\mgradt = \lambda\,\merrt$, we can write the error equation as $\errtp =  \errt +  \derrtp$, where $\mderrtp = -\alpha \, \mgradt$.
+              From which we get $\mgradt = \lambda\,\merrtm + \lambda\, \mderrt$, and the dynamics
               </p>
 
               $$
               \begin{equation}              
               \label{eq:smc1}
               \begin{aligned} 
-              \derrtp &= -\alpha u_t^2 \cdot \derrt -\alpha u_t^2 \cdot \errtm \\ 
-              \errt &= \derrt + \errtm.
+              \mderrtp &= -\alpha\,\lambda\,\derrt -\alpha\,\lambda\, \merrtm \\ 
+              \merrt &= \mderrt + \merrtm.
               \end{aligned}
               \end{equation}
 
               $$
 
-              Note that $\mean{u_t^2} = \lambda$. Taking expectation of the terms in ($\ref{eq:smc1}$), and denote $\rmt = \merrt$, $\rst = \mderrt$, $\beta_p = -\alpha \lambda$, and $k_p = -\alpha \lambda$, the expected error dynamics is
+              Denote $\rmt = \merrt$, $\rst = \mderrt$, $\beta_p = -\alpha \lambda$, and $k_p = -\alpha \lambda$, the expected error dynamics is
 
               $$
               \begin{equation}\label{eq:smeq}
@@ -294,7 +294,7 @@ $$
               \end{equation}
               $$
               Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$.
-              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and so $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$. 
+              Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and therefore $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$. 
 
               <p>
               By eigenvalue decomposition of the rank-1 system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
@@ -304,40 +304,31 @@ $$
       
             <section class="note">
               <h4 id="note-title-2">Reflections: Mean Convergence</h4>
-              The main results from the error convergence in the mean-sense are the stricter range
+              The system analysis led to
               $$
-              \boxed{0 < \alpha < \tfrac{1}{\lambda}},
+              \boxed{\alpha = \frac{1}{\lambda}}.
               $$
-              and the covergence bound
-              $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\lvert\beta_p\rvert} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|},
-              $$   
-              where we denoted
-              $\rxt$ as the two-state vector       
-              $\mean{\begin{bmatrix}
-              \derrtp\quad\errt
-              \end{bmatrix}}^{\top}
-              $.
               
               <h5>Play with the controls </h5>
               <ol>
                 <li>Click on the RAW button</li>
                 <li>Ensure the Input selector reads Step </li>
-                <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{1}{\lambda}$</li>
+                <li>Click Play, to watch the sweep $0 < \alpha \le \tfrac{1}{\lambda}$</li>
               </ol>
               
               <ol>
                 <li>Click on the Pause button</li>
                 <li>Change the Input selector to read Impulse</li>
-                <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{1}{\lambda}$. Pause. </li>
+                <li>Click Play, to watch the sweep $0 < \alpha \le \tfrac{1}{\lambda}$. Pause. </li>
               </ol>
             
               <b>Observations </b>
               <ol>
                 <li> <b>Coupling</b>. Once, the change-level error diverges, the actual error also diverges.
                 </li>
-                <li>
+                <!-- <li>
                   The sweep of all choices in $0 < \alpha < \tfrac{1}{\lambda}$ is sufficient to stabilize the error's impulse response.
-                </li>
+                </li> -->
                 <!-- <li>
                   However, the same cannot be said for the error's step response, which is what we care about the most. It appears we need a tighter range to certify an error response that converges quickly.
                 </li>  -->
@@ -365,12 +356,22 @@ $$
               $$
               \boxed{\alpha = \tfrac{1}{3}\cdot\tfrac{1}{\lambda}}.
               $$  -->
+              <p>
+                If we analyze convergence of the error in the mean-square sense, we get a tighter range
+                $$
+                \boxed{0 < \tfrac{1}{\sqrt{3}}\cdot\tfrac{1}{\lambda} \le \alpha \le \tfrac{1}{\lambda}} 
+                $$ 
+                </p>
+                and further, matching the mean-square convergence rate to the mean convergence rate, that is $\lvert 1 - 3\,\alpha^2\lambda^2 \rvert = \lvert 1 - \alpha \lambda \rvert$, so that approximately, both converge to $0$ at the same rate, leads to the choice
+                $$
+                \boxed{\alpha = \tfrac{1}{3}\cdot\tfrac{1}{\lambda}}.
+              $$  
               <div class="teaser">
                 <!-- The better news, is that we can still achieve our goal. In fact, we can do that with a much lesser effort and less stress than we have just gone through.-->
                 <p>
                 In the next page, we will introduce the <b>AutoSGM</b> structure that involves smoothing the raw gradient input to the SGM via the means of a LTI lowpass filter.
                 </p>
-                This has been called <b>momentum</b> in classic optimization and mainstream machine learning.
+                This has been popularly referred to as <b>momentum</b>.
                 <p>
                 In other words, the SGM algorithm now uses a smooth version of the gradient, replace $\gradt$ with a smooth version $\gradvt$, and the error recursion becomes
                 $$ \errtp = \errt - \alpha \, \gradvt.$$ 
@@ -591,7 +592,8 @@ $$
               \]
 
               <div class="teaser">
-                All is now set. Next, we analyze the mean error dynamics. <strong>We will see that this lowpass regularizing structure gets us to our goal.</strong>
+                All is now set. Next, we analyze the mean error dynamics. 
+                <!-- <strong>We will see that this lowpass regularizing structure does not affect our goal.</strong> -->
               </div>
 
             </section>
@@ -648,7 +650,7 @@ $$
                 Compactly, the two-state LTI system is $\rxt = \rA^{t}\,\rxi$. 
                 <!-- Notice that since $\beta_p \ne k_p$, <b>the system matrix is now full-rank</b>.  -->
                 <br><br>
-                The characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = 0$ gives $z^2 -(1+\beta_p)\,z + (\beta_p-k_p) = 0 $, where $\beta_p-k_p = \beta - \alpha\,\eta\,\lambda\,\gamma$. Let discriminant $D = (1+\beta_p)^2 - 4\,(\beta_p-k_p)$, the two system eigenvalues are               
+                The characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = 0$ gives $z^2 -(1+\beta_p)\,z + (\beta_p-k_p) = 0 $, where $\textcolor{Mahogany}{\beta_p-k_p = \beta - \alpha\,\eta\,\lambda\,\gamma}$. Let discriminant $D = (1+\beta_p)^2 - 4\,(\beta_p-k_p)$, the two system eigenvalues are               
                 $
                 z_{1,2} = \tfrac{1+\beta_p}{2} \pm \tfrac{\sqrt{D}}{2}.
                 $
@@ -658,7 +660,7 @@ $$
                   </li>
                   <li>Distinct, real roots: $\lvert z_1 \rvert < \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2} + \tfrac{\sqrt{D}}{2} } < 1$. This translates to $\gamma < 1$, already satisfied by $\gamma \le \beta$.
                   </li> 
-                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert \le  \lvert \textcolor{Mahogany}{\sqrt{\beta_p-k_p}}\rvert < 1$. Since $-(1-\beta) < \alpha\,\eta\,\lambda < 1+\beta$, then $-1<\beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma \ge -\tfrac{(1-\beta)}{1+\beta}$, and $\gamma < 1$. Matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$ leads to $\gamma = \tfrac{\beta}{1+\beta}$,
+                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert = \textcolor{Mahogany}{\sqrt{\beta_p-k_p}}< 1$. Since $-(1-\beta) < \alpha\,\eta\,\lambda < 1+\beta$, then $0 \le \beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma \ge -\tfrac{(1-\beta)}{1+\beta}$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$ leads to $\gamma = \tfrac{\beta}{1+\beta}$,
                   </li>   
                 </ol>
                 $$\begin{equation}\label{eq:azero}
@@ -731,9 +733,9 @@ $$
               <div class="teaser2">      
                 <p>In this setup, published <em>optimal</em> parameter choices for PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method.
                 </p>       
-                The AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, such that the error can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
+                The AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, such that the error in this setup can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
                 <p>
-                This highlights deeper themes in linear systems, signal processing and control theory. We believe this perspective, better motivates what has long been called <em>momentum</em> in accelerated learning applications, not as an heuristic but as a <b>precisely engineered dynamic system</b>.
+                This analysis highlights fundamental themes in linear systems, signal processing and control theory. We believe this perspective, better motivates what has long been called <em>momentum</em> in accelerated learning applications, not as an heuristic but as a <b>precisely engineered dynamic system</b>.
                 </p>
               </div>
 
@@ -801,7 +803,7 @@ $$
               <button id="play" class="btn">Play</button>
               <button id="pause" class="btn" disabled>Pause</button>
               <button id="reset" class="btn">Reset</button>
-              <span class="status" id="stability">Stable</span>
+              <span class="status" id="stability" style="display: none;">Stable</span>
             </div>
             <div style="display:flex;gap:8px;align-items:center;">   
               <button id="PHB" class="btn btnalg">PHB</button>

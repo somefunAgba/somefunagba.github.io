@@ -424,7 +424,7 @@ function drawRight(){
   //   poleLimitsEl.textContent = `(-0.5, 0)`;
   // }
   
-  if (highpass) {
+  if (! stable) {
     poleValEl.style.color = "crimson";
   } else {
     poleValEl.style.color = "yellowgreen";
@@ -589,7 +589,7 @@ const traceCircle = {
 
 const moving = {
     x:[pole], y:[0], mode:'markers+text', 
-    marker: {symbol:'x',size:5, color: stable && !highpass? 'green':'red'}, 
+    marker: {symbol:'x',size:5, color: stable ? 'green':'red'}, 
     text:['$\\beta_p$'], textposition:'top center',
     textfont: {size:8,},
     xaxis : 'x', yaxis: 'y',
