@@ -137,18 +137,19 @@ function sysPole(alpha, beta, gamma, eigval){
 
 function lrstablerng(beta, gamma, eigval, nonnegative=true){
   const eta = etafcn(beta,gamma);
-  let aMin = 1e-10;
-  let aMaxlp = beta / (eta * eigval);
+  let aMin = 0;
+  let aMaxlp = (1+beta) / (eta * eigval);
   if (israw){
     // aMaxlp = 1 / (3*eigval);
-    aMaxlp = 1 / (Math.sqrt(3)*eigval);
+    // aMaxlp = 1 / (Math.sqrt(3)*eigval);
+    aMaxlp = 1 / (eigval);
     // aMax = 1/eigval;
   }
   if (israwm) {
     aMaxlp = 1 / (Math.sqrt(3)*eigval);
   }
   const aMax = (1+beta)/(eta*eigval);
-  const aMaxhpSafe = 0.99*aMax;
+  const aMaxhpSafe = aMax;
   if(Math.abs(aMax - aMin) < 1e-8) aMax = aMin + 1.0;
   return {aMin,aMax,eta, aMaxlp, aMaxhpSafe};
 }
@@ -200,9 +201,10 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     // For this simplified error dynamics, consider x_t is system output accumulating s_t and r is external reference added to x.
     // Equivalent discrete update:
     // s_t = a*s_{t-1} - b * x_{t-1}
-    const n_t = 0; // addGaussianNoise(std=0)
+    const n_t = 0; 
+    // const n_t = addGaussianNoise(std=0);
     const s_t = a * s_prev + b * (x_prev + n_t); // add a noise-term to x_prev 
-    const x_t = s_t + x_prev; // include reference directly (so error w.r.t 0)
+    const x_t = s_prev + x_prev; // include reference directly (so error w.r.t 0)
     xs.push(x_t);
     ss.push(s_t);
     s_prev = s_t;
@@ -409,7 +411,7 @@ function drawRight(){
   const polemin = sysPole(aMaxhpSafe, params.beta, params.gamma, params.eigval);
   if (!israw){
     const eal = eta*params.alpha*params.eigval;
-    gammaEl.min = -(1-params.beta)/(params.beta + 1e-10);
+    gammaEl.min = -(1 - params.beta)/(1 + params.beta);
     gammaEl.max = params.beta;
   }
 
@@ -682,7 +684,7 @@ function updateParamsFromInputs(){
   params.input = inputEl.value;
 
   // const c1 = 2/3.0;
-  const c1 = 0.99;
+  const c1 = 1;
 
   // if raw
   const israws = israw || israwm;
@@ -705,9 +707,6 @@ function updateParamsFromInputs(){
   /* stable + fast */
   if (israws){
     alphaEl.value = 1*aMaxlp;
-    if (israw){
-      alphaEl.value = Math.pow(aMaxlp,2);
-    }
   } else {
     alphaEl.value = c1*aMaxlp; // close to marginal
   }
@@ -717,13 +716,14 @@ function updateParamsFromInputs(){
   if (!israws) {   
     /* set gamma, using the other parameters */
     const eal = eta*params.alpha*params.eigval;
-    gammaEl.min = -(1-params.beta)/(params.beta + 1e-10); ///(eal);
+    const gamma_mopt = (params.beta)/(1+params.beta)
+    gammaEl.min = -(1- params.beta)/(1+params.beta); ///(eal);
     gammaEl.max = params.beta;
     // console.log('eta', eta, 'eal', eal, 'gamma_min', gammaEl.min)
 
     if(optBtn.disabled){
       // ensure params.beta != 0
-      let gamma_mopt = -(1-params.beta)/(params.beta + 1e-10); // /(eal);
+      // let gamma_mopt = -(1-params.beta)/(params.beta + 1e-10); // /(eal);
       gammaEl.value = gamma_mopt;
       params.gamma = gamma_mopt;
       // recompute
