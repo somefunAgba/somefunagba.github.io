@@ -299,7 +299,7 @@ $$
               Again, exponential and asymptotic stablility of the two-state  system requires its eigenvalues, $z_1 = 0$, and $\textcolor{Mahogany}{z_2 =1-\alpha\lambda}$ roots of the characteristic polynomial $\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\alpha\lambda)) = 0 $ to be distinct and have a magnitude strictly less than 1. The maximum system eigenvalue $\lvert z_2 \rvert < 1$, implies $-1 < 1-\alpha\lambda < 1$, and therefore $2>\alpha\lambda$, and $\alpha\lambda > 0$, meaning  $0 < \alpha < \tfrac{2}{\lambda}$, and more stricter $0 < \alpha \le \tfrac{1}{\lambda}$.
 
               <p>
-              By eigenvalue decomposition of the rank-1 system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we can obtain a certificate on the exponential convergence of the expected error states as
+              By exploiting the rank-1 system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of both sides, with the corresponding induced matrix norm, we can obtain a certificate on the exponential convergence of the expected error states, for $t\ge 1$ as
               $$ \boxed{\| \rxt \| \le 2 \cdot |\textcolor{Mahogany}{z_2}|^{t-1}\, \|\rxi\|}.$$
               </p>
             </section>
@@ -670,8 +670,8 @@ $$
                 \end{equation}
                 $$
                 <p>
-                By eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any consistent norm $\|\cdot\|$ of both sides, we obtain a certificate for both exponential, and asymptotic convergence in the mean as
-                $$ \boxed{\| \rxt \| \le \tfrac{2}{1+\lvert\beta_p\rvert} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
+                For distinct roots, by eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of both sides, with the corresponding induced matrix norm,  we can obtain a certificate for both exponential, and asymptotic convergence in the mean as
+                $$ \boxed{\| \rxt \| \le \tfrac{8}{\lvert\sqrt{D}\rvert} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
   
                 <!-- $$
                 \begin{aligned}
