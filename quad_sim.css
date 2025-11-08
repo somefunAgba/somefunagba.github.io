@@ -404,6 +404,64 @@ summary { cursor: pointer;
   color: #fff;
 } */
 
+/* TOC container */
+#toc {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  /* max-width: 280px; */
+  font-family: system-ui, sans-serif;
+  /* font-size: 0.95rem; */
+  /* line-height: 1.4;
+  border-radius: 6px;
+  position: sticky; /* stays visible while scrolling */
+  /* top: 1rem;  */
+}
+
+/* TOC heading */
+#toc::before {
+  content: "Contents";
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* TOC list */
+#toc ul {
+  list-style: decimal;
+  margin: 0;
+  padding: 0;
+}
+
+/* TOC items */
+#toc li {
+  margin: 0.25rem 0;
+}
+
+/* TOC links */
+#toc a {
+  text-decoration: none;
+  color: #0366d6;
+  padding: 0.2rem 0.4rem;
+  display: block;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Hover/active states */
+#toc a:hover {
+  background: #e6f0ff;
+  color: #024ea2;
+}
+
+/* Indentation for nested levels */
+#toc li {
+  margin-left: 0px;
+}
+#toc li[data-level="2"] { margin-left: 0px; }
+#toc li[data-level="3"] { margin-left: 0px; }
+#toc li[data-level="4"] { margin-left: 0px !important; }
 
 /*mathjax*/
 .mathjax-hidden { visibility: hidden; }

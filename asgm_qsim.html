@@ -182,6 +182,8 @@ $$
                     </p>
                   </div>
               </div>
+              <!-- Place this where you want the TOC to appear -->
+              <nav id="toc"></nav>
             </section>
 
             <section class="note">
@@ -569,7 +571,7 @@ $$
                 <ul class="clist1">
                 <li>
                 Heavy-Ball sets $\gamma = 0$, the realization simplifies to
-                $\gradvt = \beta \, \gradvtm + \eta\,\gradt$.            
+                $$\gradvt = \beta \, \gradvtm + \eta\,\gradt$$.            
                 </li>
 
                 <li>
@@ -594,7 +596,7 @@ $$
               \]
 
               <div class="teaser">
-                All is now set. Next, we analyze the mean error dynamics. 
+                Next, we analyze the mean error dynamics. 
                 <!-- <strong>We will see that this lowpass regularizing structure does not affect our goal.</strong> -->
               </div>
 
@@ -662,7 +664,7 @@ $$
                   </li>
                   <li>Distinct, real roots: $\lvert z_1 \rvert < \lvert z_2 \rvert = \textcolor{Mahogany}{\tfrac{1+\beta_p}{2} + \tfrac{\sqrt{D}}{2} } < 1$. This translates to $\gamma < 1$, already satisfied by $\gamma \le \beta$.
                   </li> 
-                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert = \textcolor{Mahogany}{\sqrt{\beta_p-k_p}}< 1$. Since $-(1-\beta) < \alpha\,\eta\,\lambda < 1+\beta$, then $0 \le \beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma \ge -\tfrac{(1-\beta)}{1+\beta}$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$ leads to $\gamma = \tfrac{\beta}{1+\beta}$,
+                  <li>Distinct, complex-conjugate roots: $\lvert z_1 \rvert = \lvert z_2 \rvert = \textcolor{Mahogany}{\sqrt{\beta_p-k_p}}< 1$. Since $-(1-\beta) < \alpha\,\eta\,\lambda < 1+\beta$, then $0 \le \beta - \alpha\,\eta\,\lambda\,\gamma < 1$ translates to $\gamma \ge -\tfrac{(1-\beta)}{1+\beta}$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$ leads to the choice $\gamma = \tfrac{\beta}{1+\beta}$,
                   </li>   
                 </ol>
                 $$\begin{equation}\label{eq:azero}
@@ -672,6 +674,8 @@ $$
                 <p>
                 For distinct roots, by eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of both sides, with the corresponding induced matrix norm,  we can obtain a certificate for both exponential, and asymptotic convergence in the mean as
                 $$ \boxed{\| \rxt \| \le \tfrac{8}{\lvert\sqrt{D}\rvert} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
+
+                Observe that, in this setup, selecting $\gamma = 0$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$  implies  $\beta=0$ for the fastest convergence.
   
                 <!-- $$
                 \begin{aligned}
@@ -716,16 +720,16 @@ $$
               </ol>
               <ol>
                 <li>Repeat the above steps for the NAG button.</li>
-                <li>Repeat the above steps for the MLS button.</li>
+                <!-- <li>Repeat the above steps for the MLS button.</li> -->
               </ol>
             
               <b>Observations </b> using the derived learning rate choice.
               <ol>
-                <li> <b>Ours</b> $\gamma = \tfrac{\beta}{1+\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
+                <li> <b>Optimal</b> $\gamma = \tfrac{\beta}{1+\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
                 </li>
-                <li> PHB: $\gamma = 0$. Fast convergence met for small $\beta$, but not for higher values. Design goal met for $\beta \approxeq 0$.
+                <li> PHB: $\gamma = 0$. Optimal if $\beta = 0$. Design goal met for $\beta \approxeq 0$, but not for higher values. 
                 </li>                
-                <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Same as Ours. Design goal met.
+                <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Same as the Optimal in this setup. Design goal met.
                 </li>
                 <!-- <li> MLS: $\gamma = 1-\sqrt{2(1-\beta)}$. Fast convergence met for a wider range of $\beta$, but not for extremely lower and higher values. Design goal is not met.
                 </li> -->
@@ -733,7 +737,7 @@ $$
 
 
               <div class="teaser2">      
-                <p>In this setup, published <em>optimal</em> parameter choices for PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method.
+                <p>In this setup, published <em>optimal</em> parameter choices for both PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method.
                 </p>       
                 The AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, such that the error in this setup can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
                 <p>

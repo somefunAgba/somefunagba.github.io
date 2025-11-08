@@ -2,7 +2,7 @@
 if (window.innerWidth < 1024) { // only on mobile widths
   const meta = document.querySelector('meta[name=viewport]');
   if (meta) {
-    meta.setAttribute('content', 'width=device-width, initial-scale=0.9');
+    meta.setAttribute('content', 'width=device-width, initial-scale=1');
   }
 }
 
@@ -18,7 +18,7 @@ const nextBtn = document.getElementById('next');
 const prevBtn = document.getElementById('prev');
 
 let current = 0;
-// const widthPx = track.querySelector('.note').getBoundingClientRect().width;
+const widthPx = track.querySelector('.note').getBoundingClientRect().width;
 
 // Update UI to a given index
 async function showNote(index, {animate = true} = {}) {
@@ -27,11 +27,12 @@ async function showNote(index, {animate = true} = {}) {
   track.style.transitionDuration = animate ? '500ms' : '0ms';
 
   // process index to update global current index
-  index = Math.max(0, index); //Math.min(index, notes.length - 1));
+  index = Math.max(0, Math.min(index, notes.length - 1));
   current = (index % notes.length);
+  // console.log('in', current)
 
-  track.style.transform = `translateX(-${current * 100}%)`;
-  // track.style.transform = `translateX(-${current * widthPx}px)`;
+  // track.style.transform = `translateX(-${current * 100}%)`;
+  track.style.transform = `translateX(-${current * widthPx}px)`;
 
   // Update  progress 
   // standard page numbering
@@ -45,6 +46,7 @@ async function showNote(index, {animate = true} = {}) {
 
   // Save to localStorage
   localStorage.setItem('noteIndex', current);
+  // console.log(index, current)
 
   // Dispatch a custom event for plot sync
   const evt = new CustomEvent('notechange', { detail: { index: current } });
@@ -971,7 +973,62 @@ drawRight();
 drawSys();
 
 
+async function tocCreator() {
+  const tocContainer = document.getElementById("toc");
+  if (!tocContainer) return;
 
+  // Find all sections with class="note"
+  const noteSections = document.querySelectorAll(".note");
+
+  const tocList = document.createElement("ul");
+
+  noteSections.forEach((section, sIndex) => {
+    // Collect headings inside this section
+    const headings = section.querySelectorAll("h4");
+
+    headings.forEach((heading, hIndex) => {
+      // Ensure each heading has an id
+      if (!heading.id) {
+        heading.id = `note-${sIndex}-heading-${hIndex}`;
+      }
+
+      // Create list item
+      const li = document.createElement("li");
+      const level = parseInt(heading.tagName.substring(1));
+      li.setAttribute("data-level", level);
+      li.style.marginLeft = (level - 1) * 20 + "px";
+
+      // Create link
+      const link = document.createElement("a");
+      link.href = "#";//  + heading.id;   // anchor to the heading
+      link.textContent = heading.textContent;
+
+      // When link is clicked, call showNote(hIndex) and scroll smoothly
+      link.addEventListener("click", (evt) => {
+        evt.preventDefault(); // prevent default jump
+
+        // Call your custom function with the index
+        // console.log('toc', sIndex)
+        showNote(sIndex);
+        // Scroll the heading into view, centered in the viewport
+        // document.getElementById(heading.id).scrollIntoView({
+        //   behavior: "smooth",
+        //   block: "center",   // vertical alignment
+        //   inline: "center"   // horizontal alignment
+        // });
+      });
+
+      li.appendChild(link);
+      tocList.appendChild(li);
+    });
+  });
+
+  tocContainer.appendChild(tocList);
+}
+
+// Call it once DOM is ready
+// document.addEventListener("DOMContentLoaded", tocCreator);
+tocCreator();
 
 // window.addEventListener('DOMContentLoaded', () => {
 //     mathbox = MathBox.mathBox({
