@@ -152,7 +152,7 @@ $$
                 
                   <p>
                     <strong>The AutoSGM framework goes further.</strong> In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
-                    <em>linear-time invariant system</em>, introduce AutoSGM, derive explicit stability certificates, and uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence in the mean of the learning algorithm. 
+                    <em>linear-time invariant system</em>, introduce AutoSGM, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence in the mean of the learning algorithm. 
                     <!-- The outcome is a principled framework that: -->
                   </p>
                 
@@ -213,7 +213,7 @@ $$
               We will further assume that the system dynamics are linear time-invariant (LTI). This means $\alpha_t = \alpha, \forall t$, a constant learning rate across iterations, and so
               $$ \errtp = \errt - \alpha \, \gradt.$$ 
               
-              <strong>Goal</strong>. In this controlled and interpretable setting, we desire that the algorithm drives its error, starting from any initial non-zero value $\errti$, to converge to its optimum value of <strong>zero</strong> in approximately one or two iterations. 
+              <strong>Goal</strong>. In this controlled and interpretable setting, we desire that the algorithm drives its mean error, starting from an initial non-zero value $\errti$, to converge to its optimum value of <strong>zero</strong> in approximately one or two iterations. 
               </p>
 
               <div class="teaser">
@@ -675,7 +675,7 @@ $$
                 For distinct roots, by eigenvalue decomposition of the system matrix in $\rxt = \rA^{t}\,\rxi$, and taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of both sides, with the corresponding induced matrix norm,  we can obtain a certificate for both exponential, and asymptotic convergence in the mean as
                 $$ \boxed{\| \rxt \| \le \tfrac{8}{\lvert\sqrt{D}\rvert} \cdot |\textcolor{Mahogany}{z_2}|^{t}\, \|\rxi\|}.$$
 
-                Observe that, in this setup, selecting $\gamma = 0$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$  implies  $\beta=0$ for the fastest convergence.
+                Observe that, alternatively, in this setup, freely selecting $\gamma = 0$, and matching $\beta - \alpha\,\eta\,\lambda\,\gamma = 0$  implies  $\beta=0$ for the fastest convergence.
   
                 <!-- $$
                 \begin{aligned}
@@ -690,7 +690,7 @@ $$
             <section class="note">
               <h4 id="note-title-7">AutoSGM: Reflections </h4>
               <div class="teaser2">              
-               <b>Recall</b>: Our holy grail is to get the error to converge to <strong>zero</strong> in at most two iterations. 
+               <b>Recall</b>: Our holy grail is to get the mean error to converge to <strong>zero</strong> in at most two iterations. 
               </div>
               <p> The system analysis leads to
                   $$
@@ -727,7 +727,7 @@ $$
               <ol>
                 <li> <b>Optimal</b> $\gamma = \tfrac{\beta}{1+\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
                 </li>
-                <li> PHB: $\gamma = 0$. Optimal if $\beta = 0$, but not for higher values. 
+                <li> PHB: $\gamma = 0$. Optimal if $\beta = 0$, and the learning rate simplifies to $\alpha = \tfrac{1}{\lambda}$. 
                 </li>                
                 <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Optimal in this setup, if $\alpha = \tfrac{1+\beta}{\eta}\tfrac{1}{\lambda}$.
                 </li>
