@@ -139,35 +139,34 @@ $$
                   <h1> <span class="cgreen"> Auto</span>SGM</h1>
                   <!-- <h2><span class="highlight"> Two Steps. Zero Error.</span></h2> -->
                   <p class="tagline">
-                    <span class="cgray"><strong>Momentum</strong> beyond intuition</span>: a principled <strong>signal-processing</strong> framework certifying stable, accelerated learning.
+                    <span class="cgray"><strong>Momentum</strong> beyond intuition</span>: a principled <strong>signal-processing</strong> framework.
                   </p>
                 </div>   
               </div>  
               <div class="cover">
 
                   <p>
-                    The word <strong>momentum</strong> has always promised speed. But, what exactly is momentum?  
-                    Classic explanations give intuition.
-                    Mostly, they show us <strong>why</strong> momentum helps, not <strong>how to fully design it</strong> for guaranteed performance.
+                    The word <strong>momentum</strong> has a physical meaning defined as mass times velocity. But, what exactly does momentum represent in the context of stochastic gradient learning?  
+                    Typical explanations lean on this physical analogy to describe a set of mathematical transformations on the gradient that often help <strong>accelerate</strong> gradient descent. Yet, they rarely addresss the deeper question: <strong>what exactly are these set of operations and how do we design them</strong>.
                   </p>
                 
                   <p>
-                    <strong>The AutoSGM framework changes that.</strong> In this notes, using a deceptively simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
-                    <em>linear-time invariant system</em>, derive explicit stability certificates, and uncover automatic learning-rate rules for convergence of the learning algorithm. The outcome is a principled recipe that:
+                    <strong>The AutoSGM framework goes further.</strong> In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
+                    <em>linear-time invariant system</em>, introduce AutoSGM, derive explicit stability certificates, and uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence in the mean of the learning algorithm. 
+                    <!-- The outcome is a principled framework that: -->
                   </p>
                 
-                  <ul class="key-points">
-                    <li>Provides closed-form formulas for the learning-rate, and other system parameters.</li>
+                  <!-- <ul class="key-points">
+                    <li>Provides closed-form formulas for the learning-rate, and other linear system parameters.</li>
                     <li>Guarantees exponential convergence in the mean,
                       across all admissible `momentum` parameter values.
-                      <!-- Error collapses to zero in at most 2 iterations. -->
                     </li>
                     <li>Offers an interpretable lens on learning using signal-processing and control tools.</li>
-                  </ul>
+                  </ul> -->
                 
                   <h3>✨ Why AutoSGM?</h3>
                   <p>
-                   In this problem setup, the AutoSGM framework goes further. It unifies `momentum` (gradient smoothing in the stochastic gradient method), turning it into a <strong>precisely engineered system</strong>. 
+                   The AutoSGM framework unifies `momentum` (gradient smoothing in the stochastic gradient method), turning it into a <strong>precisely engineered system</strong>. 
 
                     <!-- with parameters chosen to guarantee mean error convergence across the admissible 'momentum' parameter range in just two steps.  -->
 
@@ -178,7 +177,7 @@ $$
                     <p>
                      Outside such setting, there is no literal guarantee of a two-step convergence, and exact parameter choices for the system may deviate from optimal values in this ideal setting.                     
                     </p>                    
-                    <p>Nevertheless, our system-theoretic perspective continues to offer valuable intuition towards principled parameter choices. 
+                    <p>Nevertheless, our system-theoretic perspective continues to offer a interpretable lens and valuable intuition towards principled parameter choices. 
                     </p>
                   </div>
               </div>
@@ -207,7 +206,7 @@ $$
               <strong>Stochastic Gradient Method</strong> (SGM). The simplest form of this algorithm is an iterative update rule of the form 
               $$ \rwtp = \rwt - \alpha_t \, \gradt.$$ 
               
-              At each iteration, the update rule receives an $\alpha_t > 0$ from a <strong>learning rate</strong> oracle and $\gradt$ from a gradient-generating oracle. Although, the algorithm updates $\rwt$ by taking a step in the direction of the gradient, it does not strictly assume its input is either <strong>exact</strong> or <strong>stochastic</strong>, nor does it guarantee a  <strong>descent</strong> of $f(\rwt)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
+              At each iteration, the update rule receives an $\alpha_t > 0$ from a <strong>learning rate</strong> oracle and $\gradt$ from a gradient-generating oracle. Although, the algorithm updates $\rwt$ by taking a step in the direction of the negative gradient, it does not strictly assume its input is either the <strong>exact</strong> gradient or <strong>stochastic</strong>, nor does it guarantee a <strong>descent</strong> of $f(\rwt)$ per iteration. Nonetheless, the notions of stochasticity and descent have become commonly associated with the update rule, even if they are not required for it to function.
 
               $$ \errtp = \errt - \alpha_t \, \gradt.$$ 
               <p>
@@ -316,16 +315,17 @@ $$
               <h5>Play with the controls </h5>
               <ol>
                 <li>Click on the RAW button</li>
-                <li>Ensure the Input selector reads Step </li>
+                <li>Ensure the Input selector reads Step or Impulse </li>
                 <li>Click Play, to watch the sweep $0 < \alpha \le \tfrac{1}{\lambda}$</li>
               </ol>
               
               <ol>
                 <li>Click on the Pause button</li>
-                <li>Change the Input selector to read Impulse</li>
-                <li>Click Play, to watch the sweep $0 < \alpha \le \tfrac{1}{\lambda}$. Pause. </li>
+                <li>Click on the RAWx2 button</li>
+                <li>Ensure the Input selector reads Step or Impulse </li>
+                <li>Click Play, to watch the sweep $0 < \alpha < \tfrac{2}{\lambda}$</li>
               </ol>
-            
+
               <b>Observations </b>
               <ol>
                 <li> <b>Coupling</b>. Once, the change-level error diverges, the actual error also diverges.
@@ -727,9 +727,9 @@ $$
               <ol>
                 <li> <b>Optimal</b> $\gamma = \tfrac{\beta}{1+\beta}$. <b>Design goal met </b> for any $0 < \beta < 1$.
                 </li>
-                <li> PHB: $\gamma = 0$. Optimal if $\beta = 0$. Design goal met for $\beta \approxeq 0$, but not for higher values. 
+                <li> PHB: $\gamma = 0$. Optimal if $\beta = 0$, but not for higher values. 
                 </li>                
-                <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Same as the Optimal in this setup. Design goal met.
+                <li> NAG: $\gamma = \tfrac{\beta}{1+\beta}$. Optimal in this setup, if $\alpha = \tfrac{1+\beta}{\eta}\tfrac{1}{\lambda}$.
                 </li>
                 <!-- <li> MLS: $\gamma = 1-\sqrt{2(1-\beta)}$. Fast convergence met for a wider range of $\beta$, but not for extremely lower and higher values. Design goal is not met.
                 </li> -->
@@ -737,9 +737,9 @@ $$
 
 
               <div class="teaser2">      
-                <p>In this setup, published <em>optimal</em> parameter choices for both PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$, which is just the plain method.
+                <p>In this setup, published <em>optimal</em> parameter choices for both PHB and NAG collapse to $\alpha=\tfrac{1}{\lambda}, \beta=\gamma=0$.
                 </p>       
-                The AutoSGM structure, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic mean convergence, such that the error in this setup can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
+                The AutoSGM framework, exposes a closed-form parameterization of the learning algorithm that certifies exponential, asymptotic convergence, such that the mean error in this setup can be driven to zero in at most two iterations for any $0 < \beta < 1$. 
                 <p>
                 This analysis highlights fundamental themes in linear systems, signal processing and control theory. We believe this perspective, better motivates what has long been called <em>momentum</em> in accelerated learning applications, not as an heuristic but as a <b>precisely engineered dynamic system</b>.
                 </p>
@@ -814,11 +814,11 @@ $$
             <div style="display:flex;gap:8px;align-items:center;">   
               <button id="PHB" class="btn btnalg">PHB</button>
               <button id="NAG" class="btn btnalg">NAG</button>
-              <button id="SFUN" class="btn btnalg">MLS</button>
+              <button id="SFUN" class="btn btnalg" style="display: none;">MLS</button>
             </div>     
             <div style="display:flex;gap:8px;align-items:center;">  
               <button id="NOF" class="btn btnalg">RAW</button>   
-              <button id="NOF2" class="btn btnalg" style="display: none;">RAW-L</button>  
+              <button id="NOF2" class="btn btnalg">RAWx2</button>  
               <button id="OPT" class="btn btnalg">OPT</button>
               <button id="free" class="btn btnalg">Free Mode</button>
             </div>    

@@ -148,9 +148,12 @@ function lrstablerng(beta, gamma, eigval, nonnegative=true){
     // aMax = 1/eigval;
   }
   if (israwm) {
-    aMaxlp = 1 / (Math.sqrt(3)*eigval);
+    aMaxlp = 1 / (eigval);
   }
-  const aMax = (1+beta)/(eta*eigval);
+  let aMax = (1+beta)/(eta*eigval);
+  if (israwm) {
+    aMax = 2 / (eigval);
+  }
   const aMaxhpSafe = aMax;
   if(Math.abs(aMax - aMin) < 1e-8) aMax = aMin + 1.0;
   return {aMin,aMax,eta, aMaxlp, aMaxhpSafe};
@@ -174,7 +177,28 @@ function randn_bm() {
 function addGaussianNoise(mean = 0, std = 0.01) {
     return randn_bm() * std + mean;
 }
-  
+// Box–Muller for pairs of N(0,1)
+function gaussianPair() {
+  let u1 = 0, u2 = 0;
+  while (u1 === 0) u1 = Math.random();
+  while (u2 === 0) u2 = Math.random();
+  const r = Math.sqrt(-2 * Math.log(u1));
+  const th = 2 * Math.PI * u2;
+  return [r * Math.cos(th), r * Math.sin(th)];
+}
+
+// Generate an independent Gaussian vector of length T, N(0, sigma^2)
+function wssIID(T, sigma = 0.1) {
+  const x = new Array(T);
+  let i = 0;
+  while (i < T) {
+    const [g1, g2] = gaussianPair();
+    x[i++] = sigma * g1;
+    if (i < T) x[i++] = sigma * g2;
+  }
+  return x; // E[x_t]=0, Var[x_t]=sigma^2, independent across t
+}
+
 function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
   const eta = etafcn(beta,gamma);
   const eal = eta*alpha*lam;
@@ -186,12 +210,21 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     a = beta - eal;
     b = -eal*(1 - gamma);
   }
-
+  
+  const wss = wssIID(T+1, Math.sqrt(lam));
+ 
+  
   let s_prev = 0.0;
+  let s2_prev = 0.0;
+  let q_prev = 0.0;
   let w_star = 1;
   let x_prev = -w_star;
+  let x2_prev = -w_star;
+  let aold = 0.0;
   const xs = [];
   const ss = [];
+  const xsraw = [];
+  const ssraw = [];
   for(let t=0;t<T;t++){
     // input to x_{t-1} (we model external desired reference r_t; system tries to track; here use r constant)
     let r_prev = 0.0;
@@ -203,16 +236,51 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     // For this simplified error dynamics, consider x_t is system output accumulating s_t and r is external reference added to x.
     // Equivalent discrete update:
     // s_t = a*s_{t-1} - b * x_{t-1}
-    const n_t = 0; 
+    // const n_t = 0; 
     // const n_t = addGaussianNoise(std=0);
-    const s_t = a * s_prev + b * (x_prev + n_t); // add a noise-term to x_prev 
+    const s_t = a * s_prev + b * x_prev; // add a noise-term to x_prev 
     const x_t = s_prev + x_prev; // include reference directly (so error w.r.t 0)
     xs.push(x_t);
     ss.push(s_t);
     s_prev = s_t;
     x_prev = x_t;
+
+
+    // ealraw=eta*alpha*u_t[t]*u_t[t];
+    // a2 = beta - ealraw;
+    // b2 = -ealraw*(1 - gamma);
+    const usqt = Math.pow(wss[t+1],2);
+    const usqtold = Math.pow(wss[t],2);
+
+    const lam_t = 0.999999*aold + usqt;
+    const alpha_t = 0.5/lam_t;
+    const s2_t = (beta-alpha_t*eta*usqt)*s2_prev - alpha_t*eta*(usqt- gamma*usqtold)*x2_prev;
+    const x2_t = s2_prev + x2_prev; 
+
+    // const gprev = lam*x2_prev;
+    // const g_t = gprev; // + (lam*s2_prev);
+    // const q_t = beta*q_prev + g_t - gamma*q_prev;
+    // const s2_t = -alpha*eta*(q_t - gamma*q_prev - gamma*q_t);
+    // const x2_t = x2_prev + s2_t;
+
+    // const g_t = usqt*x2_prev; // + (lam*s2_prev);
+    // const v_t = (q_prev + eta*g_t);
+    // const s2_t = -alpha_t*v_t
+    // const q_t = beta*v_t - eta*gamma*g_t;
+    // const x2_t = x2_prev + s2_t;
+
+    console.log(t, s_t, s2_t, alpha_t, '|', beta, gamma, lam )
+
+    xsraw.push(x2_t);
+    ssraw.push(s2_t);
+    // q_prev = q_t;
+    x2_prev = x2_t;
+    s2_prev = s2_t;
+    aold = 1*lam_t;
+
+
   }
-  return {xs, ss, a, b};
+  return {xs, ss, a, b, xsraw, ssraw};
 }
 
 
@@ -291,6 +359,8 @@ function drawSys(){
 
   const xs = sim.xs;
   const ss = sim.ss;
+  const xs2 = sim.xsraw;
+  const ss2 = sim.ssraw;
 
   // --- find where error "settles" ---
   const ctol = 1e-3; // tolerance for "settled"
@@ -314,6 +384,9 @@ function drawSys(){
   const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$' };
   const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$' };
 
+  // const traceX2 = {x:t, y:xs2.slice(0, n+1), mode:'lines', line:{color:'blue', width:1}, name:'$\\hbox{raw error, } ε[t]$' };
+  // const traceS2 = {x:t, y:ss2.slice(0, n+1), mode:'lines', line:{color:'black', dash:'dot', width:1}, name:'$\\hbox{raw change, } \\Delta ε[t]$' };
+
   const layout = {
     title: { 
       text: `$\\text{iteration-domain (${params.input})}$`,
@@ -336,7 +409,7 @@ function drawSys(){
     autosize: true,
   };
   
-  Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
+  Plotly.react('leftPlotc',[traceX, traceS,], layout, {displayModeBar:false, responsive:true});
 }
     
 
