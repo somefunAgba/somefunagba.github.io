@@ -252,8 +252,8 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     const usqt = Math.pow(wss[t+1],2);
     const usqtold = Math.pow(wss[t],2);
 
-    const lam_t = 0.999999*aold + usqt;
-    const alpha_t = 0.5/lam_t;
+    const lam_t = 0.999*aold + usqt;
+    const alpha_t = 1/(lam_t);
     const s2_t = (beta-alpha_t*eta*usqt)*s2_prev - alpha_t*eta*(usqt- gamma*usqtold)*x2_prev;
     const x2_t = s2_prev + x2_prev; 
 
@@ -276,7 +276,7 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     // q_prev = q_t;
     x2_prev = x2_t;
     s2_prev = s2_t;
-    aold = 1*lam_t;
+    aold = lam_t;
 
 
   }
@@ -384,8 +384,8 @@ function drawSys(){
   const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$' };
   const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$' };
 
-  // const traceX2 = {x:t, y:xs2.slice(0, n+1), mode:'lines', line:{color:'blue', width:1}, name:'$\\hbox{raw error, } ε[t]$' };
-  // const traceS2 = {x:t, y:ss2.slice(0, n+1), mode:'lines', line:{color:'black', dash:'dot', width:1}, name:'$\\hbox{raw change, } \\Delta ε[t]$' };
+  const traceX2 = {x:t, y:xs2.slice(0, n+1), mode:'lines', line:{color:'blue', width:1}, name:'$\\hbox{raw error, } ε[t]$' };
+  const traceS2 = {x:t, y:ss2.slice(0, n+1), mode:'lines', line:{color:'black', dash:'dot', width:1}, name:'$\\hbox{raw change, } \\Delta ε[t]$' };
 
   const layout = {
     title: { 
@@ -409,7 +409,9 @@ function drawSys(){
     autosize: true,
   };
   
-  Plotly.react('leftPlotc',[traceX, traceS,], layout, {displayModeBar:false, responsive:true});
+  // Plotly.react('leftPlotc',[traceX, traceS, traceX2, traceS2], layout, {displayModeBar:false, responsive:true});
+  Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
+
 }
     
 
@@ -759,7 +761,7 @@ function updateParamsFromInputs(){
   params.input = inputEl.value;
 
   // const c1 = 2/3.0;
-  const c1 = 1;
+  const c1 = 0.99;
 
   // if raw
   const israws = israw || israwm;
@@ -781,7 +783,7 @@ function updateParamsFromInputs(){
 
   /* stable + fast */
   if (israws){
-    alphaEl.value = 1*aMaxlp;
+    alphaEl.value = c1*aMaxlp;
   } else {
     alphaEl.value = c1*aMaxlp; // close to marginal
   }

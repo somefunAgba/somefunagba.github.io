@@ -143,16 +143,33 @@ $$
                   </p>
                 </div>   
               </div>  
+
               <div class="cover">
 
+                  <fieldset class="audiofield">
+                    <legend class="audioleg">
+                      Too Long Can't Read 🎧
+                    </legend>
+                    
+                    <!-- Compact audio controls -->
+                    <audio controls class="audioel">
+                      <!-- <source src="coverpod_asgm.m4a" type="audio/mpeg"> -->
+                      Your browser does not support the audio element.
+                    </audio>
+                  </fieldset>
+                  
+                                  
                   <p>
                     The word <strong>momentum</strong> has a physical meaning defined as mass times velocity. But, what exactly does momentum represent in the context of stochastic gradient learning?  
                     Typical explanations lean on this physical analogy to describe a set of mathematical transformations on the gradient that often help <strong>accelerate</strong> gradient descent. Yet, they rarely addresss the deeper question: <strong>what exactly are these set of operations and how do we design them</strong>.
                   </p>
                 
                   <p>
-                    <strong>The AutoSGM framework goes further.</strong> In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
-                    <em>linear-time invariant system</em>, introduce AutoSGM, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence in the mean of the learning algorithm. 
+                    <strong>This is where the AutoSGM framework comes in.</strong>  
+                  </p>
+                  <p>
+                    In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
+                    <em><a href="https://en.wikipedia.org/wiki/Linear_time-invariant_system" class="no-underline">linear-time invariant system</a></em>, introduce AutoSGM, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence (in the mean) of the learning algorithm. 
                     <!-- The outcome is a principled framework that: -->
                   </p>
                 
@@ -184,6 +201,10 @@ $$
               <!-- Place this where you want the TOC to appear -->
               <nav id="toc"></nav>
             </section>
+
+            <!-- <section class="note">
+              <h4 id="note-title-i">Primer</h4>
+            </section> -->
 
             <section class="note">
               <h4 id="note-title-0">Problem setup</h4>
@@ -746,7 +767,21 @@ $$
               </div>
 
             </section>
-                                    
+
+            <section class="note">
+              <h4 id="note-title-7">Bibliography</h4>
+
+              <ol>
+                <li>Polyak, B. T. (1964). Some methods of speeding up the convergence of iteration methods. <em>USSR Computational Mathematics and Mathematical Physics</em>, 4(5), 1-17.</li>
+                <li>Nesterov, Y. (1983). A method for solving the convex programming problem with convergence rate O(1/k²). <em>Soviet Mathematics Doklady</em>, 27(2), 372-376.</li>                <li>Feuer, A., &amp; Weinstein, E. (1985). Convergence analysis of LMS filters with uncorrelated Gaussian data. <em>IEEE Transactions on Acoustics, Speech, and Signal Processing</em>, 33(1), 222-230. <a href="https://doi.org/10.1109/TASSP.1985.1164493">https://doi.org/10.1109/TASSP.1985.1164493</a></li>
+                <li>Feuer, A., &amp; Berman, N. (1986). Performance analysis of the smoothed least mean square (SLMS) algorithm. <em>Signal Processing</em>, 11(3), 265-276. <a href="https://doi.org/10.1016/0165-1684(86)90036-8">https://doi.org/10.1016/0165-1684(86)90036-8</a></li>
+                <li>Rugh, W. J. (1996). <em>Linear System Theory</em> (2nd ed.). Prentice Hall.</li>
+                <li>Proakis, J. G., &amp; Manolakis, D. G. (2006). <em>Digital Signal Processing: Principles, Algorithms, and Applications</em> (4th ed.). Upper Saddle River, NJ: Pearson Prentice Hall.</li>
+                <li>Lessard, L., Recht, B., &amp; Packard, A. (2016). Analysis and design of optimization algorithms via integral quadratic constraints. <em>SIAM Journal on Optimization</em>, 26(1), 57-95. <a href="https://doi137/15M1009597">https://doi.org/10.1137/15M1009597</a></li>
+              </ol>
+
+            </section>
+            
           </div>
         </div>
       
@@ -784,17 +819,17 @@ $$
 
             <div class="slider-group">
               <label>$\gamma$ <span id="gammaVal">0.00</span></label>
-              <input id="gamma" type="range" min="-1" max="1" step="0.01" value="0.0">
+              <input id="gamma" type="range" min="-1" max="1" step="0.001" value="0.0">
             </div>
 
             <div class="slider-group">
               <label>$\lambda$ <span id="lamVal">1.00</span></label>
-              <input id="eigval" type="range" min="0.01" max="100.0" step="0.01" value="1.0">
+              <input id="eigval" type="range" min="0.01" max="1000.0" step="0.01" value="50.00">
             </div>
 
             <div class="slider-group">
               <label>$\alpha$ <span id="alphaVal">0.50</span></label>
-              <input id="alpha" type="range" min="0.0" max="1.0" step="0.001" value="0.1">
+              <input id="alpha" type="range" min="0.0" max="1.0" step="0.000001" value="0.1">
             </div>
 
             <div class="slider-group">
