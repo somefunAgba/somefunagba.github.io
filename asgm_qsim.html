@@ -169,7 +169,7 @@ $$
                   </p>
                   <p>
                     In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
-                    <em><a href="https://en.wikipedia.org/wiki/Linear_time-invariant_system" class="no-underline">linear-time invariant system</a></em>, introduce AutoSGM, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence (in the mean) of the learning algorithm. 
+                    <em><a href="https://en.wikipedia.org/wiki/Linear_time-invariant_system" class="no-underline">linear-time invariant system</a></em>, introduce the AutoSGM framework, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence (in the mean) of the learning algorithm. 
                     <!-- The outcome is a principled framework that: -->
                   </p>
                 
@@ -212,7 +212,7 @@ $$
 
               $$f(\rwt) = \tfrac{1}{2} u_t^2 \cdot \errt^2,$$
 
-              where the model is a 1-dimensional parameter-vector $\rwt$, the error relative to an optimum value $\rw^*$ is $\errt = \rwt - \rw^* $, and the weighting variable $u_t$ is modeled as a wide-sense stationary, zero-mean Gaussian data process, statistically independent of the error. 
+              where the model is a 1-dimensional parameter-vector $\rwt$, the error relative to an optimum value $\rw^*$ is $\errt = \rwt - \rw^* $, and the weighting variable $u_t$ is modeled as a <a href="https://en.wikipedia.org/wiki/Stationary_process#Weak_or_wide-sense_stationarity" class="no-underline">wide-sense stationary</a>, zero-mean Gaussian data process, statistically independent of the error. 
               
               <p>This implies $u_t$ has a mean $\mean{u_t} = 0$, a finite second-moment (or variance) $\mean{u_t^2} = λ$, with $0<\lambda<\infty$, and uncorrelated values across time $\mean{u_t\,u_k} = 0, \hbox{for } t\ne k$. Independence further implies that for any powers $i,j$, the joint moment $\mean{u_t^i \errt^j} = \mean{u_t^i}\mean{\errt^j}$.</p>
 

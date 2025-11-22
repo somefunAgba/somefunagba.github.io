@@ -2,7 +2,7 @@
 if (window.innerWidth < 1024) { // only on mobile widths
   const meta = document.querySelector('meta[name=viewport]');
   if (meta) {
-    meta.setAttribute('content', 'width=device-width, initial-scale=1');
+    meta.setAttribute('content', 'width=device-width, initial-scale=1.5');
   }
 }
 
