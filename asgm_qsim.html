@@ -139,7 +139,7 @@ $$
                   <h1> <span class="cgreen"> Auto</span>SGM</h1>
                   <!-- <h2><span class="highlight"> Two Steps. Zero Error.</span></h2> -->
                   <p class="tagline">
-                    <span class="cgray"><strong>Momentum</strong> beyond intuition</span>: a principled <strong>signal-processing</strong> framework.
+                    <span class="cgray"><strong>Momentum</strong></span>: a principled <strong>signal-processing</strong> framework.
                   </p>
                 </div>   
               </div>  
@@ -168,7 +168,7 @@ $$
                     <strong>This is where the AutoSGM framework comes in.</strong>  
                   </p>
                   <p>
-                    In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient dynamics as a 
+                    In this notes, using a simple problem setup that captures the essence of more complex scenarios, we recast the stochastic gradient learning dynamics as a 
                     <em><a href="https://en.wikipedia.org/wiki/Linear_time-invariant_system" class="no-underline">linear-time invariant system</a></em>, introduce the AutoSGM framework, derive explicit stability certificates, uncover automatic learning-rate rules and admissible system parameter values for the exponential convergence (in the mean) of the learning algorithm. 
                     <!-- The outcome is a principled framework that: -->
                   </p>
@@ -183,7 +183,8 @@ $$
                 
                   <h3>✨ Why AutoSGM?</h3>
                   <p>
-                   The AutoSGM framework unifies `momentum` (gradient smoothing in the stochastic gradient method), turning it into a <strong>precisely engineered system</strong>. 
+                   The AutoSGM framework unifies `momentum` as <strong>gradient smoothing</strong> via a first-order linear filter in the <strong>stochastic gradient method</strong>. <em>As we certify accelerated convergence for this simple problem setup</em>, at the end of these notes, we will see that the AutoSGM framework allows us to discover Nesterov's Accelerated Gradient (NAG) as a <strong>precisely engineered system</strong> from <strong>first-principles</strong>. 
+                   
 
                     <!-- with parameters chosen to guarantee mean error convergence across the admissible 'momentum' parameter range in just two steps.  -->
 
@@ -764,6 +765,31 @@ $$
                 <p>
                 This analysis highlights fundamental themes in linear systems, signal processing and control theory. We believe this perspective, better motivates what has long been called <em>momentum</em> in accelerated learning applications, not as an heuristic but as a <b>precisely engineered dynamic system</b>.
                 </p>
+                Notice that the overall LTI system dynamics, written in matrix form, both  before smoothing the gradient, Equation $(\ref{eq:smeq})$ and after smoothing the gradient, Equation $(\ref{eq:amsyseq})$ are both of the same form:
+                $$
+                \begin{equation*}
+                \underbrace{
+                \begin{bmatrix}
+                \rstp \\
+                \rmt
+                \end{bmatrix}
+                }_{\rxt}
+                =
+                \underbrace{
+                \begin{bmatrix}
+                \beta_p & k_p \\
+                1 & 1
+                \end{bmatrix}
+                }_{\rA}
+                \underbrace{
+                \begin{bmatrix}
+                \rst \\
+                \rmtm
+                \end{bmatrix}
+                }_{\rxtm}.
+                \end{equation*}
+                $$
+                Compactly, $\rxt = \rA^{t}\,\rxi$. However, after gradient smoothing was introduced, the system matrix $\rA$ transitioned from a <em>rank-1 structure to a full rank matrix</em>, with $\beta_p \ne k_p$. This transformation <em>expands the admissible parameter space</em>, allowing $\beta_p$ and $k_p$ to operate over a relatively wider dynamic range. In effect, the act of modifying a rank-deficient matrix to full-rank serves as regularizing the matrix. We refer to this effect of gradient smoothing as a <strong>Lowpass regularization</strong> of the overall system dynamics.
               </div>
 
             </section>
