@@ -43,7 +43,7 @@
   },"6": {
     "doc": "AutoSGM: Unifying Momentum Methods",
     "title": "📊 Key Empirical Findings",
-    "content": "Using Adam as a fixed-numerator baseline for the learning rate, we tested the AutoSGM framework using our iteration-dependent learning-rate realization on CIFAR-10 image classification (ViT, ResNet) and language modeling (GPT-2 on WikiText and Shakespeare): . | Tuning the filter’s zero \\(\\gamma\\) improved performance in most cases. | Iteration-dependent learning rate numerator (circled dots) outperformed fixed numerator (squared dots). | . 1. GPT-2 on Shakespeare-char: . ~32% lower test loss over fixed-numerator baseline. | | . 2. VIT on CIFAR10. | | . 3. ResNet18 on CIFAR10. | | . 4. GPT-2 on WikiText-103. | | . ",
+    "content": "Using Adam as a fixed-numerator baseline for the learning rate, we tested the AutoSGM framework using our iteration-dependent learning-rate realization on CIFAR-10 image classification (ViT, ResNet) and language modeling (GPT-2 on WikiText and Shakespeare): . | Tuning the filter’s zero \\(\\gamma\\) improved performance in most cases. | Iteration-dependent learning rate numerator (circled dots) outperformed fixed numerator (squared dots). | . 1. GPT-2 on Shakespeare-char: . | | . 2. VIT on CIFAR10. | | . 3. ResNet18 on CIFAR10. | | . 4. GPT-2 on WikiText-103. | | . ",
     "url": "/asgm.html#-key-empirical-findings",
     
     "relUrl": "/asgm.html#-key-empirical-findings"
