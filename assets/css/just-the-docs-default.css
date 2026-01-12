@@ -7386,4 +7386,50 @@ html, body {
   text-align: left;
 }
 
+.hideide {
+  visibility: hidden;
+}
+
+.bbox {
+  border: 1.25px solid rgb(0, 132, 255);
+  align-items: center;
+  vertical-align: middle;
+  place-self: center;
+  place-items: center;
+  padding: 0px 4px;
+  margin: 0px 0px;
+  width: max-content;
+  height: max-content;
+}
+
+.rbox {
+  border: 1.25px solid rgb(255, 162, 0);
+  align-items: center;
+  vertical-align: middle;
+  place-self: center;
+  place-items: center;
+  padding: 0px 4px;
+  margin: 0px 0px;
+  width: max-content;
+  height: max-content;
+}
+
+.mrbox {
+  border: 1.25px solid rgb(223, 68, 21);
+  align-items: center;
+  vertical-align: middle;
+  place-self: center;
+  place-items: center;
+  padding: 0px 4px;
+  margin: 0px 0px;
+  width: max-content;
+  height: max-content;
+}
+
+mjx-container[jax=CHTML][display=true] {
+  display: block;
+  text-align: center;
+  margin: 0.5em 0 !important;
+}
+
 /*# sourceMappingURL=just-the-docs-default.css.map */

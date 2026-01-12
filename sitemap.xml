@@ -13,7 +13,7 @@
 <loc>http://localhost:4000/learning_dynamics</loc>
 </url>
 <url>
-<loc>http://localhost:4000/asgm_cjg</loc>
+<loc>http://localhost:4000/asgm_trolrs</loc>
 </url>
 <url>
 <loc>http://localhost:4000/</loc>
@@ -22,10 +22,7 @@
 <loc>http://localhost:4000/lpf_not_ema</loc>
 </url>
 <url>
-<loc>http://localhost:4000/lrwinds.html</loc>
-</url>
-<url>
-<loc>http://localhost:4000/summary</loc>
+<loc>http://localhost:4000/asgm_lrwinds</loc>
 </url>
 <url>
 <loc>http://localhost:4000/asgm_qsim.html</loc>
