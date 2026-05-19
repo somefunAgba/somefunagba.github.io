@@ -7350,7 +7350,7 @@ html, body {
 }
 
 .site-header {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: flex-start;
   padding: 1rem;
@@ -7430,6 +7430,11 @@ mjx-container[jax=CHTML][display=true] {
   display: block;
   text-align: center;
   margin: 0.5em 0 !important;
+}
+
+.side-bar {
+  width: 0px !important;
+  min-width: 0px !important;
 }
 
 /*# sourceMappingURL=just-the-docs-default.css.map */

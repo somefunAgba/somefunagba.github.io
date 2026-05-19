@@ -269,7 +269,7 @@ function simulateResponse(beta,gamma,lam,alpha, input='step', T=220){
     // const q_t = beta*v_t - eta*gamma*g_t;
     // const x2_t = x2_prev + s2_t;
 
-    console.log(t, s_t, s2_t, alpha_t, '|', beta, gamma, lam )
+    // console.log(t, s_t, s2_t, alpha_t, '|', beta, gamma, lam )
 
     xsraw.push(x2_t);
     ssraw.push(s2_t);
@@ -381,11 +381,23 @@ function drawSys(){
   const peak = Math.max(...xs.map(Math.abs));
   const ylim = Math.max(1.0, peak*1.2);
 
-  const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$' };
-  const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$' };
+  const xsSlice = xs.slice(0, n+1);
+  const ssSlice = ss.slice(0, n+1);
+  const enorm = xsSlice.map((x,i) => Math.hypot(x, (ssSlice[i] !== undefined ? ssSlice[i] : 0)));
 
-  const traceX2 = {x:t, y:xs2.slice(0, n+1), mode:'lines', line:{color:'blue', width:1}, name:'$\\hbox{raw error, } ε[t]$' };
-  const traceS2 = {x:t, y:ss2.slice(0, n+1), mode:'lines', line:{color:'black', dash:'dot', width:1}, name:'$\\hbox{raw change, } \\Delta ε[t]$' };
+  const traceS = {
+    x: t,
+    y: enorm,
+    mode: 'lines',
+    line: { color: 'chocolate', width: 1 },
+    name: '$\\|[ε(t),\\,\\Delta ε(t)]\\|_2$'
+  };
+
+  // const traceX = {x:t, y:xs.slice(0, n+1), mode:'lines', line:{color:'chocolate', width:1}, name:'$\\hbox{error, } \\mathbb{E}[ε[t]]$' };
+  // const traceS = {x:t, y:ss.slice(0, n+1), mode:'lines', line:{color:'coral', dash:'dot', width:1}, name:'$\\hbox{change, } \\mathbb{E}[\\Delta ε[t]]$' };
+
+  // const traceX2 = {x:t, y:xs2.slice(0, n+1), mode:'lines', line:{color:'blue', width:1}, name:'$\\hbox{raw error, } ε[t]$' };
+  // const traceS2 = {x:t, y:ss2.slice(0, n+1), mode:'lines', line:{color:'black', dash:'dot', width:1}, name:'$\\hbox{raw change, } \\Delta ε[t]$' };
 
   const layout = {
     title: { 
@@ -397,8 +409,8 @@ function drawSys(){
       range: [0, maxIter], automargin: true 
     },
     yaxis: { 
-      title: { text: '$\\hbox{signals}$', font: { size: 10,} }, 
-      range: [-ylim, ylim], automargin: true 
+      title: { text: '$\\|x(t)\\|$', font: { size: 10,} }, 
+      range: [0, ylim], automargin: true 
     },
     margin: { l: 30, r: 10, t: 30, b: 30 },
     legend: {
@@ -410,7 +422,8 @@ function drawSys(){
   };
   
   // Plotly.react('leftPlotc',[traceX, traceS, traceX2, traceS2], layout, {displayModeBar:false, responsive:true});
-  Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
+  // Plotly.react('leftPlotc',[traceX, traceS], layout, {displayModeBar:false, responsive:true});
+  Plotly.react('leftPlotc',[traceS], layout, {displayModeBar:false, responsive:true});
 
 }
     
@@ -1048,62 +1061,62 @@ drawRight();
 drawSys();
 
 
-async function tocCreator() {
-  const tocContainer = document.getElementById("toc");
-  if (!tocContainer) return;
+// async function tocCreator() {
+//   const tocContainer = document.getElementById("toc");
+//   if (!tocContainer) return;
 
-  // Find all sections with class="note"
-  const noteSections = document.querySelectorAll(".note");
+//   // Find all sections with class="note"
+//   const noteSections = document.querySelectorAll(".note");
 
-  const tocList = document.createElement("ul");
+//   const tocList = document.createElement("ul");
 
-  noteSections.forEach((section, sIndex) => {
-    // Collect headings inside this section
-    const headings = section.querySelectorAll("h4");
+//   noteSections.forEach((section, sIndex) => {
+//     // Collect headings inside this section
+//     const headings = section.querySelectorAll("h4");
 
-    headings.forEach((heading, hIndex) => {
-      // Ensure each heading has an id
-      if (!heading.id) {
-        heading.id = `note-${sIndex}-heading-${hIndex}`;
-      }
+//     headings.forEach((heading, hIndex) => {
+//       // Ensure each heading has an id
+//       if (!heading.id) {
+//         heading.id = `note-${sIndex}-heading-${hIndex}`;
+//       }
 
-      // Create list item
-      const li = document.createElement("li");
-      const level = parseInt(heading.tagName.substring(1));
-      li.setAttribute("data-level", level);
-      li.style.marginLeft = (level - 1) * 20 + "px";
+//       // Create list item
+//       const li = document.createElement("li");
+//       const level = parseInt(heading.tagName.substring(1));
+//       li.setAttribute("data-level", level);
+//       li.style.marginLeft = (level - 1) * 20 + "px";
 
-      // Create link
-      const link = document.createElement("a");
-      link.href = "#";//  + heading.id;   // anchor to the heading
-      link.textContent = heading.textContent;
+//       // Create link
+//       const link = document.createElement("a");
+//       link.href = "#";//  + heading.id;   // anchor to the heading
+//       link.textContent = heading.textContent;
 
-      // When link is clicked, call showNote(hIndex) and scroll smoothly
-      link.addEventListener("click", (evt) => {
-        evt.preventDefault(); // prevent default jump
+//       // When link is clicked, call showNote(hIndex) and scroll smoothly
+//       link.addEventListener("click", (evt) => {
+//         evt.preventDefault(); // prevent default jump
 
-        // Call your custom function with the index
-        // console.log('toc', sIndex)
-        showNote(sIndex);
-        // Scroll the heading into view, centered in the viewport
-        // document.getElementById(heading.id).scrollIntoView({
-        //   behavior: "smooth",
-        //   block: "center",   // vertical alignment
-        //   inline: "center"   // horizontal alignment
-        // });
-      });
+//         // Call your custom function with the index
+//         // console.log('toc', sIndex)
+//         showNote(sIndex);
+//         // Scroll the heading into view, centered in the viewport
+//         // document.getElementById(heading.id).scrollIntoView({
+//         //   behavior: "smooth",
+//         //   block: "center",   // vertical alignment
+//         //   inline: "center"   // horizontal alignment
+//         // });
+//       });
 
-      li.appendChild(link);
-      tocList.appendChild(li);
-    });
-  });
+//       li.appendChild(link);
+//       tocList.appendChild(li);
+//     });
+//   });
 
-  tocContainer.appendChild(tocList);
-}
+//   tocContainer.appendChild(tocList);
+// }
 
 // Call it once DOM is ready
 // document.addEventListener("DOMContentLoaded", tocCreator);
-tocCreator();
+// tocCreator();
 
 // window.addEventListener('DOMContentLoaded', () => {
 //     mathbox = MathBox.mathBox({

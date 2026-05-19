@@ -24,8 +24,6 @@ footer {
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
-
-
 /* Fluid scaling on ultra-wide monitors */
  
 @media (min-width: 1600px) {
