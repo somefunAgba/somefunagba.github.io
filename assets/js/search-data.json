@@ -316,7 +316,7 @@
   },"45": {
     "doc": "Home",
     "title": "A Peek into the Learning Algorithms Behind Artificial Intelligence",
-    "content": "In my research, I aim to unify fundamental tools from systems theory, control, signal processing, and optimization to better understand the behavior of key algorithms used in artificial intelligence, particularly those used to train deep neural networks. More broadly, my goal is to demystify the black-box, heuristic nature of modern learning algorithms by developing principled interpretations that improve transparency, stability, and interpretability. ",
+    "content": "Welcome! . In my research, I aim to unify fundamental tools from systems theory, control, signal processing, and optimization to better understand the behavior of key algorithms used in artificial intelligence, particularly those used to train deep neural networks. More broadly, my goal is to demystify the black-box, heuristic nature of modern learning algorithms by developing principled interpretations that improve transparency, stability, and interpretability. ",
     "url": "/#a-peek-into-the-learning-algorithms-behind-artificial-intelligence",
     
     "relUrl": "/#a-peek-into-the-learning-algorithms-behind-artificial-intelligence"
