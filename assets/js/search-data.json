@@ -323,7 +323,7 @@
   },"46": {
     "doc": "Home",
     "title": "Doctoral Research (Artificial Intelligence)",
-    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics? . Momentum as Lowpass Filter Design . Trust-Region Optimal Learning Rate Principle . Lowpass Regularization . Annealing as a Variational Trust-Region Window Problem . A Memoryless Proxy for Lowpass Regularization . A True AutoSGM: Conjugate Gradient Method . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
+    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics? . Part 1: Momentum as Lowpass Filter Design . Part 2: Trust-Region Optimal Learning Rate Principle . Part 3: Lowpass Regularization . A True AutoSGM: Conjugate Gradient Method . A Memoryless Proxy for Lowpass Filtering . Annealing as a Variational Trust-Region Window Problem . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
     "url": "/#doctoral-research-artificial-intelligence",
     
     "relUrl": "/#doctoral-research-artificial-intelligence"
