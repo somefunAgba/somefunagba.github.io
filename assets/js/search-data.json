@@ -337,14 +337,14 @@
   },"48": {
     "doc": "Home",
     "title": "Doctoral Research (Artificial Intelligence)",
-    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics? . Part 1: Momentum as Lowpass Filter Design . Part 2: Learning Rate Design as Trust-Region Normalization . Part 3: Lowpass Regularization . A Variational Trust-Region Foundation for Learning Rate Annealing . A True AutoSGM: Conjugate Gradient Method . A Memoryless Proxy for the Lowpass Filter . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
+    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics? . Part 1: Momentum as Lowpass Filter Design . Part 2: Learning Rate Design as Trust-Region Normalization . Part 3: Lowpass Regularization . A Variational Trust-Region Foundation for Learning Rate Annealing . A True AutoSGM: Conjugate Gradient Method . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
     "url": "/#doctoral-research-artificial-intelligence",
     
     "relUrl": "/#doctoral-research-artificial-intelligence"
   },"49": {
     "doc": "Home",
     "title": "In Progress",
-    "content": "Generative AI: A Simplified View of Diffusion . Simplifying the Foundations of Reinforcement Learning . ",
+    "content": "A Memoryless Proxy for the Lowpass Filter . Generative AI: A Simplified View of Diffusion . Simplifying the Foundations of Reinforcement Learning . ",
     "url": "/#in-progress",
     
     "relUrl": "/#in-progress"
