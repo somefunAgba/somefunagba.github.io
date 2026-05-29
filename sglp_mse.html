@@ -13,10 +13,26 @@
 
   <style id="jtd-nav-activation">
   
-    .site-nav ul li a {
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(5)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
       background-image: none;
     }
 
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(5) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(5) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(5) > ul.nav-list {
+      display: block;
+    }
   </style>
 
   
@@ -34,20 +50,21 @@
 
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Home | Research Notes</title>
+<title>Momentum is Lowpass Regularization | Research Notes</title>
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Momentum is Lowpass Regularization" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Learning Algorithms." />
-<meta property="og:description" content="Learning Algorithms." />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<meta name="description" content="Momentum as Lowpass Regularization Fastest mean-square convergence can be achieved without Momentum." />
+<meta property="og:description" content="Momentum as Lowpass Regularization Fastest mean-square convergence can be achieved without Momentum." />
+<link rel="canonical" href="http://localhost:4000/sglp_mse" />
+<meta property="og:url" content="http://localhost:4000/sglp_mse" />
 <meta property="og:site_name" content="Research Notes" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-09-11T00:00:00-07:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Home" />
+<meta property="twitter:title" content="Momentum is Lowpass Regularization" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"Learning Algorithms.","headline":"Home","name":"Research Notes","url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-11T00:00:00-07:00","datePublished":"2025-09-11T00:00:00-07:00","description":"Momentum as Lowpass Regularization Fastest mean-square convergence can be achieved without Momentum.","headline":"Momentum is Lowpass Regularization","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sglp_mse"},"url":"http://localhost:4000/sglp_mse"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -463,102 +480,94 @@ src="/assets/js/mathjax-script-type.js">
       <div id="main-content" class="main-content">
         <main>
           
-            <h1 class="fs-6" id="a-peek-into-the-learning-algorithms-behind-artificial-intelligence">
+            <h1 class="fs-9" id="momentum-as-lowpass-regularization">
   
   
-    <a href="#a-peek-into-the-learning-algorithms-behind-artificial-intelligence" class="anchor-heading" aria-labelledby="a-peek-into-the-learning-algorithms-behind-artificial-intelligence"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> A Peek into the Learning Algorithms Behind Artificial Intelligence
+    <a href="#momentum-as-lowpass-regularization" class="anchor-heading" aria-labelledby="momentum-as-lowpass-regularization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Momentum as Lowpass Regularization
   
   
 </h1>
-    <hr />
+    
+<p class="fs-6 fw-300">Fastest mean-square convergence can be achieved without Momentum.</p>
 
-<p class="fs-6">Hello!</p>
+<div class="d-flex mt-2">
+<p class="text-small text-grey-dk-000 mb-0 mr-2">Sep 11 2025 </p>
+</div>
+<p><strong>Please cite this page</strong> if you use information from these notes for your work, research, or anything that requires academic or formal citation. <em>Oluwasegun Somefun</em>. “<a href="https://somefunagba.github.io/sglp_mse.html">Momentum as Lowpass Regularization</a>.”  2025.</p><hr />
 
-<p>In my research, I aim to unify fundamental tools from systems theory, control, signal processing, and optimization to better understand the behavior of key algorithms used in artificial intelligence, particularly those used to train deep neural networks.</p>
+<details>
+  <summary class="text-delta">
+    Table of contents
+  </summary>
+<ol id="markdown-toc">
+  <li><a href="#momentum-as-lowpass-regularization" id="markdown-toc-momentum-as-lowpass-regularization">Momentum as Lowpass Regularization</a>    <ol>
+      <li><a href="#understanding-momentum-as-lowpass-regularization" id="markdown-toc-understanding-momentum-as-lowpass-regularization">Understanding Momentum as Lowpass Regularization</a></li>
+      <li><a href="#setup-a-minimalist-stochastic-error-model" id="markdown-toc-setup-a-minimalist-stochastic-error-model">Setup: A Minimalist Stochastic Error Model</a></li>
+    </ol>
+  </li>
+</ol>
 
-<p>More broadly, my goal is to <em>demystify</em> the black-box, heuristic nature of modern learning algorithms by developing principled interpretations that improve transparency, stability, and interpretability.
-<!-- {: .fs-6 .fw-300 } --></p><hr />
-<h2 id="doctoral-research-artificial-intelligence">
+</details><hr />
+
+<p><em>Momentum</em> <a class="citation" href="#polyakConjugateGradientMethod1969">(Polyak, 1969)</a> is a <em>lowpass regularized</em> stochastic gradient algorithm. One that applies a <strong>first-order lowpass filter</strong> to its stochastic gradient, before multiplying by a possibly <strong>optimal</strong> iteration-dependent <strong>learning rate</strong>. For analytic purpose, we study a minimal stochastic system, for which the algorithm’s hyperparameters are assumed time-invariant. More specifically, we show how <strong>momentum</strong> cannot improve over the fastest mean-square error convergence of the <strong>Plain</strong> stochastic gradient method in this setup.</p><hr />
+<h2 id="understanding-momentum-as-lowpass-regularization">
   
   
-    <a href="#doctoral-research-artificial-intelligence" class="anchor-heading" aria-labelledby="doctoral-research-artificial-intelligence"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Doctoral Research (Artificial Intelligence)
+    <a href="#understanding-momentum-as-lowpass-regularization" class="anchor-heading" aria-labelledby="understanding-momentum-as-lowpass-regularization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Understanding Momentum as Lowpass Regularization
   
   
 </h2>
     
+<p>Traditionally, the way we talk about training neural networks is often rooted in classical mechanics. We describe <em>momentum</em> as a ball rolling down a hilly landscape, gaining <em>inertia</em> to carry it over local bumps. Alternatively, another popular interpretation is that momentum estimates the <em>first moment</em> of a gradient. While these physical analogies are often intuitive, they obscure the underlying discrete, iteration-level mechanics of the learning algorithm.</p>
 
-<p>My work focuses on stochastic gradient-based learning for training deep neural networks.</p>
+<p><strong>Our central claim is that a literal mathematical interpretation already exists via classical signal processing tools related to first-order lowpass filters.</strong> Momentum is mathematically equivalent to passing stochastic gradients through a first-order linear lowpass filter.</p>
 
-<p>A central question is:</p>
-
-<p><strong>How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics?</strong></p><hr />
-
-<p><a href="/sglp_mean" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 1: Momentum as Lowpass Filter Design</a></p>
-
-<p><a href="/sglp_trolr" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 2: Learning Rate Design as Trust-Region Normalization</a></p>
-
-<p><a href="/#sglp_mse" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 3: Momentum is Lowpass Regularization</a></p>
-
-<p><a href="/sglp_vlra" class="btn fs-5 mb-4 mb-md-0 mr-2">A Variational Trust-Region Foundation for Learning Rate Annealing</a></p>
-
-<p><a href="/sglp_cjg" class="btn fs-5 mb-4 mb-md-0 mr-2">A True AutoSGM: Conjugate Gradient Method</a></p>
-
-<p><a href="https://ir.library.oregonstate.edu/concern/graduate_thesis_or_dissertations/bn999g58p" class="btn btn-primary fs-5 mb-4 mb-md-0" target="_blank">Dissertation: Fundamental Signal Processing Elements in Accelerated Learning</a></p><hr />
-<h2 id="in-progress">
+<p>The filter, denoted \(\filter{\sH_{\beta,\gamma}}\) is configured via two variables, its pole \(\filter{\beta}\) and zero \(\filter{\gamma}\). By shifting the pole and zero locations of the filter, <strong>we can create different flavors of momentum</strong>.</p>
+<blockquote>
+  <p>We will soon see that this filter design interpretation provides a principled dynamical regularization perspective into the behavior of classic momentum variants, and can improve the way we design stochastic gradient learning algorithms for training AI models.</p>
+</blockquote><hr />
+<h2 id="setup-a-minimalist-stochastic-error-model">
   
   
-    <a href="#in-progress" class="anchor-heading" aria-labelledby="in-progress"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> In Progress
+    <a href="#setup-a-minimalist-stochastic-error-model" class="anchor-heading" aria-labelledby="setup-a-minimalist-stochastic-error-model"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setup: A Minimalist Stochastic Error Model
   
   
 </h2>
     
+<p>To understand what fundamentally drives learning dynamics, it helps to strip the system down to its bare essentials. To make our position concrete and analytically transparent, we deliberately adopt a minimalist setting. By stripping away the tensor algebra of high-dimensional neural networks, we expose the error dynamics and underlying structure of stochastic gradient learning in its simplest form.</p>
 
-<p> </p>
+<p>Consider a single parameter model defined by the twice-differentiable weighted quadratic function</p>
 
-<p><a href="/#" class="btn fs-5 mb-4 mb-md-0 mr-2">A Memoryless Proxy for the Lowpass Filter</a></p>
+\[f(\rw[t]) = \tfrac{1}{2}\,\psi^2[t]\,\varepsilon^2[t],\]
 
-<p><a href="/#" class="btn fs-5 mb-4 mb-md-0 mr-2">Generative AI: A Simplified View of Diffusion</a></p>
+<p>where</p>
 
-<p><a href="/#" class="btn fs-5 mb-4 mb-md-0 mr-2">Simplifying the Foundations of Reinforcement Learning</a></p><hr />
-<h2 id="masters-research-control-theory">
-  
-  
-    <a href="#masters-research-control-theory" class="anchor-heading" aria-labelledby="masters-research-control-theory"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Master’s Research (Control Theory)
-  
-  
-</h2>
-    
-
-<p>This work focused on the <em>dilemma</em> of tuning proportional–integral–derivative (PID) controllers.</p>
-
-<p><strong>Future direction:</strong><br />
-How can we develop a unified framework that bridges optimization and control theory for algorithm design?</p><hr />
-
-<p><a href="https://doi.org/10.1016/j.arcontrol.2021.05.002" class="btn fs-5 mb-4 mb-md-0" target="_blank">Dillema of PID Tuning</a>
-<a href="https://somefunagba.github.io/ModernPIDControlSS/" class="btn btn-primary fs-5 mb-4 mb-md-0 mr-2" target="_blank">PID Project</a>
-<a href="https://somefunagba.github.io/ModernPIDControlSS/" class="btn fs-5 mb-4 mb-md-0" target="_blank">View on GitHub</a></p><hr />
-
-<p><a href="/about" class="btn btn-primary fs-5 mb-4 mb-md-0 mr-2">About Me</a></p>
-
-<!-- [AutoSGM](/asgm){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } -->
-
-<!-- 
 <ul>
-  
-    <li>
-      <a href="/about">About Me</a>
-    </li>
-<h2 id="about-me">
-  
-  
-    <a href="#about-me" class="anchor-heading" aria-labelledby="about-me"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> About Me
-  
-  
-</h2>
-    
+  <li>\(\rw[t] \in \sR^{1}\) (<strong>Parameter</strong>) denotes the model parameter at a current iteration \(t\).</li>
+  <li>\(\varepsilon[t]\) (<strong>Error</strong>) defined as \(\varepsilon[t]=\rw[t] - \rw^\star\) represents distance of the current parameter value from its optimum value, \(\rw^\star\). The current error change due to a parameter update is defined as \(\Delta[t+1]=\varepsilon[t+1]- \varepsilon[t]\).</li>
+  <li>\(\psi[t] \in \sR^{1}\) (<strong>Data Process</strong>) is a realization of a zero-mean, wide-sense stationary stochastic data process for which its kurtosis, \(\kappa\ge1\) exists. We also assume that \(\psi[t]\) is statistically independent of both \(\varepsilon[t]\) and \(\psi[l]\), $l \neq t$.</li>
+  <li>\(\lambda\) (<strong>Scale</strong>) denotes the second moment of the stochastic process, defined by \(\mathbb{E}[\psi^2[t]]=\lambda\), and \(\mathbb{E}[\psi^4[t]]=\kappa\,\lambda^2\), \(\lambda&gt;0\).
+<!-- The assumption that the kurtosis exists ensures the finiteness of fourth-order moments of the driving process, which is necessary for the variance of the gradient to be well-defined, rendering second-order stability analysis of the learning dynamics to be well-posed. --></li>
+</ul>
 
-  
-</ul> -->
+<p>Differentiating \(f(\rw[t])\) with respect to \(\rw[t]\) reveals a key structural insight. The gradient and Hessian take the form</p>
+
+\[\rg[t] = \psi^2[t]\,\varepsilon[t], \qquad 
+\rmH[t] = \psi^2[t].\]
+
+<p>In expectation,</p>
+
+\[\E[\rg[t]] = \lambda\,\E[\varepsilon[t]], 
+\qquad 
+\E[\rmH[t]] = \lambda.\]
+
+<p>Our primary objective in this analysis, is to drive the expected objective-function to converge the fastest to its optimum value of zero, starting from any initial non-zero value.</p>
+
+<!-- > Now that the environment is set, we start with the classic algorithm, the plain stochastic gradient method. -->
+
+<!-- #### Mean-square Error Dynamics --><hr />
+
+<ol class="bibliography"><li><span id="polyakConjugateGradientMethod1969">Polyak, B. T. (1969). The Conjugate Gradient Method in Extremal Problems. <i>USSR Computational Mathematics and Mathematical Physics</i>, <i>9</i>(4), 94–112. https://doi.org/10.1016/0041-5553(69)90035-4</span></li></ol><hr />
 
           
 
@@ -578,6 +587,10 @@ How can we develop a unified framework that bridges optimization and control the
 
     
       <div class="d-flex mt-2">
+        
+          <p class="text-small text-grey-dk-000 mb-0 mr-2">
+            Page last modified: <span class="d-inline-block">May 22 2026</span>.
+          </p>
         
         
       </div>

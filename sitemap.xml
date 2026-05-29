@@ -22,6 +22,9 @@
 <loc>http://localhost:4000/sglp_mean</loc>
 </url>
 <url>
+<loc>http://localhost:4000/sglp_mse</loc>
+</url>
+<url>
 <loc>http://localhost:4000/sglp_trolr</loc>
 </url>
 <url>

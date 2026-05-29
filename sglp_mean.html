@@ -1,1 +1,1131 @@
-<!DOCTYPE html> <html lang="en-US"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <link rel="stylesheet" href="/assets/css/just-the-docs-default.css"> <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet"> <style id="jtd-nav-activation"> .site-nav > ul.nav-list:first-child > li:not(:nth-child(3)) > a, .site-nav > ul.nav-list:first-child > li > ul > li a { background-image: none; } .site-nav > ul.nav-list:not(:first-child) a, .site-nav li.external a { background-image: none; } .site-nav > ul.nav-list:first-child > li:nth-child(3) > a { font-weight: 600; text-decoration: none; }.site-nav > ul.nav-list:first-child > li:nth-child(3) > button svg { transform: rotate(-90deg); }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list { display: block; } </style> <script src="/assets/js/vendor/lunr.min.js"></script> <script src="/assets/js/just-the-docs.js"></script> <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Begin Jekyll SEO tag v2.8.0 --> <title>Momentum as Lowpass Filter Design | Research Notes</title> <meta name="generator" content="Jekyll v4.4.1" /> <meta property="og:title" content="Momentum as Lowpass Filter Design" /> <meta property="og:locale" content="en_US" /> <meta name="description" content="Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum." /> <meta property="og:description" content="Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum." /> <link rel="canonical" href="http://localhost:4000/sglp_mean" /> <meta property="og:url" content="http://localhost:4000/sglp_mean" /> <meta property="og:site_name" content="Research Notes" /> <meta property="og:type" content="article" /> <meta property="article:published_time" content="2025-09-11T00:00:00-07:00" /> <meta name="twitter:card" content="summary" /> <meta property="twitter:title" content="Momentum as Lowpass Filter Design" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-11T00:00:00-07:00","datePublished":"2025-09-11T00:00:00-07:00","description":"Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum.","headline":"Momentum as Lowpass Filter Design","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sglp_mean"},"url":"http://localhost:4000/sglp_mean"}</script> <!-- End Jekyll SEO tag --> <!-- <script> window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true, tags: 'ams' }, options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] } }; </script> --> <!--Macros--> <script> window.MathJax = { loader: {load: ['[tex]/color']}, tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], packages: { '[+]': ['color']}, processEscapes: true, tags: 'ams', macros: { absv : ["\\lvert #1 \\rvert", 1], newterm: ["\\mathbf{#1}", 1], eps: "\\epsilon", ceil: ["\\lceil #1 \\rceil", 1], floor: ["\\lfloor #1 \\rfloor", 1], one: "\\bm{1}", train: "\\mathcal{D}", valid: "\\mathcal{D_{\\mathrm{valid}}}", test: "\\mathcal{D_{\\mathrm{test}}}", reta: "\\textnormal{\\eta}", ra: "\\textnormal{a}", rb: "\\textnormal{b}", rc: "\\textnormal{c}", rd: "\\textnormal{d}", re: "\\textnormal{e}", rf: "\\textnormal{f}", rg: "\\textnormal{g}", rh: "\\textnormal{h}", ri: "\\textnormal{i}", rj: "\\textnormal{j}", rk: "\\textnormal{k}", rl: "\\textnormal{l}", rn: "\\textnormal{n}", ro: "\\textnormal{o}", rp: "\\textnormal{p}", rq: "\\textnormal{q}", rr: "\\textnormal{r}", rs: "\\textnormal{s}", rt: "\\textnormal{t}", ru: "\\textnormal{u}", rv: "\\textnormal{v}", rw: "\\textnormal{w}", rx: "\\textnormal{x}", ry: "\\textnormal{y}", rz: "\\textnormal{z}", rvepsilon: "\\mathbf{\\epsilon}", rvtheta: "\\mathbf{\\theta}", rva: "\\mathbf{a}", rvb: "\\mathbf{b}", rvc: "\\mathbf{c}", rvd: "\\mathbf{d}", rve: "\\mathbf{e}", rvf: "\\mathbf{f}", rvg: "\\mathbf{g}", rvh: "\\mathbf{h}", rvi: "\\mathbf{i}", rvj: "\\mathbf{j}", rvk: "\\mathbf{k}", rvl: "\\mathbf{l}", rvm: "\\mathbf{m}", rvn: "\\mathbf{n}", rvo: "\\mathbf{o}", rvp: "\\mathbf{p}", rvq: "\\mathbf{q}", rvr: "\\mathbf{r}", rvs: "\\mathbf{s}", rvt: "\\mathbf{t}", rvu: "\\mathbf{u}", rvv: "\\mathbf{v}", rvw: "\\mathbf{w}", rvx: "\\mathbf{x}", rvy: "\\mathbf{y}", rvz: "\\mathbf{z}", erva: "\\textnormal{a}", ervb: "\\textnormal{b}", ervc: "\\textnormal{c}", ervd: "\\textnormal{d}", erve: "\\textnormal{e}", ervf: "\\textnormal{f}", ervg: "\\textnormal{g}", ervh: "\\textnormal{h}", ervi: "\\textnormal{i}", ervj: "\\textnormal{j}", ervk: "\\textnormal{k}", ervl: "\\textnormal{l}", ervm: "\\textnormal{m}", ervn: "\\textnormal{n}", ervo: "\\textnormal{o}", ervp: "\\textnormal{p}", ervq: "\\textnormal{q}", ervr: "\\textnormal{r}", ervs: "\\textnormal{s}", ervt: "\\textnormal{t}", ervu: "\\textnormal{u}", ervv: "\\textnormal{v}", ervw: "\\textnormal{w}", ervx: "\\textnormal{x}", ervy: "\\textnormal{y}", ervz: "\\textnormal{z}", rmA: "\\mathbf{A}", rmB: "\\mathbf{B}", rmC: "\\mathbf{C}", rmD: "\\mathbf{D}", rmE: "\\mathbf{E}", rmF: "\\mathbf{F}", rmG: "\\mathbf{G}", rmH: "\\mathbf{H}", rmI: "\\mathbf{I}", rmJ: "\\mathbf{J}", rmK: "\\mathbf{K}", rmL: "\\mathbf{L}", rmM: "\\mathbf{M}", rmN: "\\mathbf{N}", rmO: "\\mathbf{O}", rmP: "\\mathbf{P}", rmQ: "\\mathbf{Q}", rmR: "\\mathbf{R}", rmS: "\\mathbf{S}", rmT: "\\mathbf{T}", rmU: "\\mathbf{U}", rmV: "\\mathbf{V}", rmW: "\\mathbf{W}", rmX: "\\mathbf{X}", rmY: "\\mathbf{Y}", rmZ: "\\mathbf{Z}", vzero: "\\bm{0}", vone: "\\bm{1}", vmu: "\\bm{\\mu}", vtheta: "\\bm{\\theta}", va: "\\bm{a}", vb: "\\bm{b}", vc: "\\bm{c}", vd: "\\bm{d}", ve: "\\bm{e}", vf: "\\bm{f}", vg: "\\bm{g}", vh: "\\bm{h}", vi: "\\bm{i}", vj: "\\bm{j}", vk: "\\bm{k}", vl: "\\bm{l}", vm: "\\bm{m}", vn: "\\bm{n}", vo: "\\bm{o}", vp: "\\bm{p}", vq: "\\bm{q}", vr: "\\bm{r}", vs: "\\bm{s}", vt: "\\bm{t}", vu: "\\bm{u}", vv: "\\bm{v}", vw: "\\bm{w}", vx: "\\bm{x}", vy: "\\bm{y}", vz: "\\bm{z}", mA: "\\bm{A}", mB: "\\bm{B}", mC: "\\bm{C}", mD: "\\bm{D}", mE: "\\bm{E}", mF: "\\bm{F}", mG: "\\bm{G}", mH: "\\bm{H}", mI: "\\bm{I}", mJ: "\\bm{J}", mK: "\\bm{K}", mL: "\\bm{L}", mM: "\\bm{M}", mN: "\\bm{N}", mO: "\\bm{O}", mP: "\\bm{P}", mQ: "\\bm{Q}", mR: "\\bm{R}", mS: "\\bm{S}", mT: "\\bm{T}", mU: "\\bm{U}", mV: "\\bm{V}", mW: "\\bm{W}", mX: "\\bm{X}", mY: "\\bm{Y}", mZ: "\\bm{Z}", mBeta: "\\bm{\\beta}", mPhi: "\\bm{\\Phi}", mLambda: "\\bm{\\Lambda}", mSigma: "\\bm{\\Sigma}", tens: ["\\bm{\\mathsfit{#1}}", 1], tA: "\\tens{A}", tB: "\\tens{B}", tC: "\\tens{C}", tD: "\\tens{D}", tE: "\\tens{E}", tF: "\\tens{F}", tG: "\\tens{G}", tH: "\\tens{H}", tI: "\\tens{I}", tJ: "\\tens{J}", tK: "\\tens{K}", tL: "\\tens{L}", tM: "\\tens{M}", tN: "\\tens{N}", tO: "\\tens{O}", tP: "\\tens{P}", tQ: "\\tens{Q}", tR: "\\tens{R}", tS: "\\tens{S}", tT: "\\tens{T}", tU: "\\tens{U}", tV: "\\tens{V}", tW: "\\tens{W}", tX: "\\tens{X}", tY: "\\tens{Y}", tZ: "\\tens{Z}", gA: "\\mathcal{A}", gB: "\\mathcal{B}", gC: "\\mathcal{C}", gD: "\\mathcal{D}", gE: "\\mathcal{E}", gF: "\\mathcal{F}", gG: "\\mathcal{G}", gH: "\\mathcal{H}", gI: "\\mathcal{I}", gJ: "\\mathcal{J}", gK: "\\mathcal{K}", gL: "\\mathcal{L}", gM: "\\mathcal{M}", gN: "\\mathcal{N}", gO: "\\mathcal{O}", gP: "\\mathcal{P}", gQ: "\\mathcal{Q}", gR: "\\mathcal{R}", gS: "\\mathcal{S}", gT: "\\mathcal{T}", gU: "\\mathcal{U}", gV: "\\mathcal{V}", gW: "\\mathcal{W}", gX: "\\mathcal{X}", gY: "\\mathcal{Y}", gZ: "\\mathcal{Z}", sA: "\\mathbb{A}", sB: "\\mathbb{B}", sC: "\\mathbb{C}", sD: "\\mathbb{D}", sF: "\\mathbb{F}", sG: "\\mathbb{G}", sH: "\\mathbb{H}", sI: "\\mathbb{I}", sJ: "\\mathbb{J}", sK: "\\mathbb{K}", sL: "\\mathbb{L}", sM: "\\mathbb{M}", sN: "\\mathbb{N}", sO: "\\mathbb{O}", sP: "\\mathbb{P}", sQ: "\\mathbb{Q}", sR: "\\mathbb{R}", sS: "\\mathbb{S}", sT: "\\mathbb{T}", sU: "\\mathbb{U}", sV: "\\mathbb{V}", sW: "\\mathbb{W}", sX: "\\mathbb{X}", sY: "\\mathbb{Y}", sZ: "\\mathbb{Z}", pdata: "p_{\\rm{data}}", ptrain: "\\hat{p}_{\\rm{data}}", Ptrain: "\\hat{P}_{\\rm{data}}", pmodel: "p_{\\rm{model}}", Pmodel: "P_{\\rm{model}}", ptildemodel: "\\tilde{p}_{\\rm{model}}", pencode: "p_{\\rm{encoder}}", pdecode: "p_{\\rm{decoder}}", precons: "p_{\\rm{reconstruct}}", E: "\\mathbb{E}", Ls: "\\mathcal{L}", R: "\\mathbb{R}", emp: "\\tilde{p}", lr: "\\alpha", reg: "\\lambda", rect: "\\mathrm{rectifier}", softmax: "\\mathrm{softmax}", sigmoid: "\\sigma", softplus: "\\zeta", KL: "D_{\\mathrm{KL}}", Var: "\\mathrm{Var}", standarderror: "\\mathrm{SE}", Cov: "\\mathrm{Cov}", normlzero: "L^0", normlone: "L^1", normltwo: "L^2", normlp: "L^p", normmax: "L^\\infty", argmax: "\\operatorname*{arg\\,max}", argmin: "\\operatorname*{arg\\,min}", sign: "\\operatorname{sign}", Tr: "\\operatorname{Tr}", ab: "\\allowbreak", sca: ["\\langle #1 \\rangle", 1], scalong: ["(#1_1,\\dots,#1_k)", 1], red: ["\\textcolor{OrangeRed}{#1}", 1], blue: ["\\textcolor{blue}{#1}", 1], green: ["\\textcolor{Green}{#1}", 1], orange: ["\\textcolor{orange}{#1}", 1], purple: ["\\textcolor{purple}{#1}", 1], gray: ["\\textcolor{gray}{#1}", 1], teal: ["\\textcolor{teal}{#1}", 1], gold: ["\\textcolor{gold}{#1}", 1], bluea: ["\\textcolor{RoyalBlue}{#1}", 1], reda: ["\\textcolor{Red}{#1}", 1], redb: ["\\textcolor{RubineRed}{#1}", 1], greena: ["\\textcolor{LimeGreen}{#1}", 1], golden: ["\\textcolor{GoldenRod}{#1}", 1], filter: ["\\green{#1}", 1], param: ["\\textcolor{purple}{#1}", 1], state: ["\\textcolor{blue}{#1}", 1], statex: ["\\textcolor{RoyalBlue}{#1}", 1], stateu: ["\\textcolor{LimeGreen}{#1}", 1], statez: ["\\textcolor{GoldenRod}{#1}", 1], input: ["\\textcolor{gray}{#1}", 1], gain: ["\\textcolor{OrangeRed}{#1}", 1], gainx: ["\\textcolor{Red}{#1}", 1], trust: ["\\textcolor{teal}{#1}", 1], schedule: ["\\textcolor{gold}{#1}", 1], } }, options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }, }; </script> <div style="display: none"> <!-- TROLRS --> $$ \newcommand{\trobjsca}{\mathcal{D}[t,i]} \newcommand{\trobjmat}{\mathcal{D}[t]} \newcommand{\Tr}{\mathrm{Tr}} \newcommand{\step}{\Delta[t+1, i] = -\alpha[t,i]\,\mathbf{g}[t,i]} \newcommand{\stepv}{\Delta[t+1, i] = -\alpha[t,i]\,\mathbf{v}[t,i]} \newcommand{\matstep}{\Delta[t+1] = -\alpha[t]\,\mathbf{g}[t]} \newcommand{\matstepv}{\Delta[t+1] = -\alpha[t]\,\mathbf{v}[t]} \newcommand{\ngrad}{\bar{\mathbf{g}}[t,i]} \newcommand{\ngradv}{\bar{\mathbf{v}}[t,i]} \newcommand{\ngradsq}{\bar{\mathbf{g}}^2[t,i]} \newcommand{\ngradvsq}{\bar{\mathbf{v}}^2[t,i]} \newcommand{\nmatgrad}{\bar{\mathbf{g}}[t]} \newcommand{\nmatgradv}{\bar{\mathbf{v}}[t]} \newcommand{\fof}{\mathbb{H}_{\beta,\,\gamma}} \newcommand{\expg}{\mathbb{E}\big[\mathbf{g}[t,i]\big]} \newcommand{\expv}{\mathbb{E}\big[\mathbf{v}[t,i]\big]} $$ $$ \newcommand{\stepmom}{\mathbb{E}\big[{\Delta}^2[t+1, i]\big]} \newcommand{\matstepmom}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\Delta[t+1]\big]} \newcommand{\gmatstepmom}{\mathbb{E}\big[\Tr\big(\left<{\Delta[t+1],\Delta[t+1]}\right>\big)\big]} $$ $$ \newcommand{\stepcorrng}{\mathbb{E}\big[\Delta[t+1, i]\,\ngrad\big]} \newcommand{\stepcorrngv}{\mathbb{E}\big[\Delta[t+1, i]\,\ngradv\big]} \newcommand{\matstepcorrng}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\nmatgrad \big) \big]} \newcommand{\matstepcorrngv}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\nmatgradv \big) \big]} \newcommand{\gmatstepcorrng}{\mathbb{E}\big[\Tr\big(\left\langle{\Delta[t+1],\nmatgrad}\right\rangle \big)\big]} \newcommand{\gmatstepcorrngv}{\mathbb{E}\big[\Tr\big(\left\langle{\Delta[t+1],\nmatgradv}\right\rangle \big)\big]} $$ $$ \newcommand{\stepcorru}{\mathbb{E}\big[\Delta[t+1, i]\,\mathbf{u}[t,i]\big]} \newcommand{\matstepcorru}{\mathbb{E}\big[\Delta^\intercal[t+1]\,\mathbf{u}[t]\big]} $$ $$ \newcommand{\numngradcorr}{\mathbb{E}\big[\ngradsq\big]} \newcommand{\numwgcorr}{\mathbb{E}\big[\mathbf{w}[t,i]\,\ngrad\big]} \newcommand{\numngradvcorr}{\mathbb{E}\big[\ngradvsq\big]} \newcommand{\numwvcorr}{\mathbb{E}\big[\mathbf{w}[t,i]\,\ngradv\big]} \newcommand{\dengmom}{\mathbb{E}\big[\mathbf{g}^2[t,i]\big]} \newcommand{\dengmomv}{\mathbb{E}\big[\mathbf{v}^2[t,i]\big]} \newcommand{\matdengmom}{\mathbb{E}\big[\mathbf{g}[t]\mathbf{g}^\intercal[t]\big]} \newcommand{\matdengmomv}{\mathbb{E}\big[\mathbf{v}[t]\mathbf{v}^\intercal[t]\big]} \newcommand{\dengmomsqrt}{\sqrt{\mathbb{E}\big[\mathbf{g}^2[t,i]\big]}} \newcommand{\matdengmomsqrt}{\mathbb{E}\big[\mathbf{g}[t]\mathbf{g}^\intercal[t]\big]^{\text{-}\frac{1}{2}}} \newcommand{\matdenvmomsqrt}{\mathbb{E}\big[\mathbf{v}[t]\mathbf{v}^\intercal[t]\big]^{\text{-}\frac{1}{2}}} \newcommand{\matngradcorr}{\mathbb{E}\big[\nmatgrad\nmatgrad^{\intercal}\big]} \newcommand{\matngradvcorr}{\mathbb{E}\big[\nmatgradv\nmatgradv^{\intercal}\big]} \newcommand{\matwngradcorr}{\mathbb{E}\big[\mathbf{w}[t]\nmatgrad^{\intercal}\big]} \newcommand{\matwngradvcorr}{\mathbb{E}\big[\mathbf{w}[t]\nmatgradv^{\intercal}\big]} $$ </div> <!-- Load Google Fonts --> <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Copied from https://docs.mathjax.org/en/latest/web/components/combined.html --> <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"> </script> <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"> </script> <!-- Automatically display code inside script tags with type=math/tex using MathJax --> <!-- <script type="text/javascript" defer src="/assets/js/mathjax-script-type.js"> </script> --> </head> <body> <a class="skip-to-main" href="#main-content">Skip to main content</a> <svg xmlns="http://www.w3.org/2000/svg" class="d-none"> <symbol id="svg-link" viewBox="0 0 24 24"> <title>Link</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"> <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path> </svg> </symbol> <symbol id="svg-menu" viewBox="0 0 24 24"> <title>Menu</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"> <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line> </svg> </symbol> <symbol id="svg-arrow-right" viewBox="0 0 24 24"> <title>Expand</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"> <polyline points="9 18 15 12 9 6"></polyline> </svg> </symbol> <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE --> <symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"> <title id="svg-external-link-title">(external link)</title> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line> </symbol> <symbol id="svg-doc" viewBox="0 0 24 24"> <title>Document</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"> <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline> </svg> </symbol> <symbol id="svg-search" viewBox="0 0 24 24"> <title>Search</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> </symbol> <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md --> <symbol id="svg-copy" viewBox="0 0 16 16"> <title>Copy</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/> </svg> </symbol> <symbol id="svg-copied" viewBox="0 0 16 16"> <title>Copied</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/> </svg> </symbol> </svg> <div class="side-bar"> <div class="site-header" role="banner"> <a href="/" class="site-title lh-tight"><div class="site-branding"> <span class="site-title ">Research Notes</span> <span class="site-description">Learning Algorithms in AI.</span> </div> </a> <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false"> <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg> </button> </div> <nav aria-label="Main" id="site-nav" class="site-nav"> <ul class="nav-list"><li class="nav-list-item"><a href="/sglp_vlra" class="nav-list-link">A Variational Trust-Region Foundation for Learning Rate Annealing</a></li><li class="nav-list-item"><a href="/sglp_trolr" class="nav-list-link">Trust-Region Optimal Learning Rate Principle</a></li><li class="nav-list-item"><a href="/sglp_mean" class="nav-list-link">Momentum as Lowpass Filter Design</a></li><li class="nav-list-item"><a href="/sglp_trolr" class="nav-list-link">Trust-Region Optimal Learning Rate Principle</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in AutoSGM: Unifying Momentum Methods category" aria-pressed="false"> <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg> </button><a href="/asgm.html" class="nav-list-link">AutoSGM: Unifying Momentum Methods</a><ul class="nav-list"><li class="nav-list-item"><a href="/learning_dynamics" class="nav-list-link">Smooth Learning Dynamics</a></li><li class="nav-list-item"><a href="/asgm_trolrs" class="nav-list-link">Trust-region Optimal Learning rates</a></li><li class="nav-list-item"><a href="/lpf_not_ema" class="nav-list-link">Momentum is not an EMA</a></li><li class="nav-list-item"><a href="/asgm_lrwinds" class="nav-list-link">Learning-Rate Annealing</a></li></ul></li><li class="nav-list-item"><a href="/sglp_cjg" class="nav-list-link">A True AutoSGM: Conjugate Gradient Method</a></li><li class="nav-list-item"><a href="/about" class="nav-list-link">About Me</a></li></ul> </nav> <footer class="site-footer"> © 2026. <a href="/about">Oluwasegun Somefun</a> </footer> </div> <div class="main" id="top"> <div id="main-header" class="main-header"> <div class="search" role="search"> <div class="search-input-wrap"> <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search Research Notes" aria-label="Search Research Notes" autocomplete="off"> <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label> </div> <div id="search-results" class="search-results"></div> </div> </div> <div class="main-content-wrap"> <div id="main-content" class="main-content"> <main> <h1 class="fs-9" id="momentum-as-lowpass-filter-design"> <a href="#momentum-as-lowpass-filter-design" class="anchor-heading" aria-labelledby="momentum-as-lowpass-filter-design"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Momentum as Lowpass Filter Design </h1> <p class="fs-6 fw-300">Fastest mean convergence can be achieved without Momentum.</p> <div class="d-flex mt-2"> <p class="text-small text-grey-dk-000 mb-0 mr-2">Sep 11 2025 </p> </div> <p><strong>Please cite this page</strong> if you use information from these notes for your work, research, or anything that requires academic or formal citation. <em>Oluwasegun Somefun</em>. “<a href="https://somefunagba.github.io/sglp_mean.html">Momentum as Lowpass Filter Design</a>.” 2025.</p><hr /> <details> <summary class="text-delta"> Table of contents </summary> <ol id="markdown-toc"> <li><a href="#momentum-as-lowpass-filter-design" id="markdown-toc-momentum-as-lowpass-filter-design">Momentum as Lowpass Filter Design</a> <ol> <li><a href="#understanding-momentum-as-lowpass-regularization" id="markdown-toc-understanding-momentum-as-lowpass-regularization">Understanding Momentum as Lowpass Regularization</a></li> <li><a href="#setup-a-minimalist-stochastic-error-model" id="markdown-toc-setup-a-minimalist-stochastic-error-model">Setup: A Minimalist Stochastic Error Model</a> <ol> <li><a href="#baseline-plain-stochastic-gradient-method" id="markdown-toc-baseline-plain-stochastic-gradient-method">Baseline: <strong>Plain Stochastic Gradient Method</strong></a></li> </ol> </li> <li><a href="#expected-error-dynamics" id="markdown-toc-expected-error-dynamics">Expected Error Dynamics</a> <ol> <li><a href="#structural-insight" id="markdown-toc-structural-insight"><strong>Structural</strong> Insight</a></li> </ol> </li> <li><a href="#the-first-order-lowpass-filter" id="markdown-toc-the-first-order-lowpass-filter">The First-order Lowpass Filter</a> <ol> <li><a href="#transfer-function" id="markdown-toc-transfer-function">Transfer Function</a></li> <li><a href="#lowpass-configuration" id="markdown-toc-lowpass-configuration">Lowpass Configuration</a></li> <li><a href="#direct-realization" id="markdown-toc-direct-realization">Direct Realization</a></li> <li><a href="#direct-canonical-realization" id="markdown-toc-direct-canonical-realization">Direct Canonical Realization</a></li> <li><a href="#regularized-form" id="markdown-toc-regularized-form">Regularized Form</a></li> <li><a href="#non-expansive-power-gain-property" id="markdown-toc-non-expansive-power-gain-property">Non-Expansive Power Gain Property</a></li> </ol> </li> <li><a href="#full-rank-regularization-of-the-expected-error-dynamics" id="markdown-toc-full-rank-regularization-of-the-expected-error-dynamics">Full-Rank Regularization of the Expected Error Dynamics</a> <ol> <li><a href="#stability-certificate" id="markdown-toc-stability-certificate">Stability Certificate</a></li> <li><a href="#fastest-convergence" id="markdown-toc-fastest-convergence">Fastest Convergence</a></li> <li><a href="#result-nesterov-momentum-nag" id="markdown-toc-result-nesterov-momentum-nag">Result: <strong>Nesterov Momentum (NAG)</strong></a> <ol> <li><a href="#stability-region" id="markdown-toc-stability-region">Stability Region</a></li> </ol> </li> <li><a href="#compare-heavy-ball-momentum-hb" id="markdown-toc-compare-heavy-ball-momentum-hb">Compare: <strong>Heavy-Ball Momentum (HB)</strong></a> <ol> <li><a href="#stability-region-1" id="markdown-toc-stability-region-1">Stability Region</a></li> </ol> </li> </ol> </li> <li><a href="#takeaways" id="markdown-toc-takeaways">Takeaways</a> <ol> <li><a href="#acceleration-isnt-always-the-point" id="markdown-toc-acceleration-isnt-always-the-point">Acceleration Isn’t Always the Point</a></li> <li><a href="#open-question" id="markdown-toc-open-question">Open Question</a></li> <li><a href="#reality-check" id="markdown-toc-reality-check">Reality Check</a></li> </ol> </li> </ol> </li> </ol> </details><hr /> <p>Here we introduce the concept of <em>momentum</em> <a class="citation" href="#polyakConjugateGradientMethod1969">(Polyak, 1969)</a> as a <em>lowpass regularized</em> stochastic gradient algorithm. One that applies a <strong>first-order lowpass filter</strong> to its stochastic gradient, before multiplying by a possibly <strong>optimal</strong> iteration-dependent <strong>learning rate</strong>. For analytic purpose, we will study a minimal stochastic system, for which the algorithm’s hyperparameters are assumed time-invariant. More specifically, we show how <strong>Nesterov’s momentum</strong> arise as the solution to the fastest mean error convergence of this problem. More importantly, we show that structurally, the <strong>Plain</strong> stochastic gradient method, <strong>Heavy-Ball momentum</strong>, and <strong>Nesterov’s momentum</strong> correspond fundamentally to <strong>different filter designs</strong> of the same algorithm.</p><hr /> <h2 id="understanding-momentum-as-lowpass-regularization"> <a href="#understanding-momentum-as-lowpass-regularization" class="anchor-heading" aria-labelledby="understanding-momentum-as-lowpass-regularization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Understanding Momentum as Lowpass Regularization </h2> <p>Traditionally, the way we talk about training neural networks is often rooted in classical mechanics. We describe <em>momentum</em> as a ball rolling down a hilly landscape, gaining <em>inertia</em> to carry it over local bumps. Alternatively, another popular interpretation is that momentum estimates the <em>first moment</em> of a gradient. While these physical analogies are often intuitive, they obscure the underlying discrete, iteration-level mechanics of the learning algorithm.</p> <p><strong>Our central claim is that a literal mathematical interpretation already exists via classical signal processing tools related to first-order lowpass filters.</strong> Momentum is mathematically equivalent to passing stochastic gradients through a first-order linear lowpass filter.</p> <p>The filter, denoted \(\filter{\sH_{\beta,\gamma}}\) is configured via two variables, its pole \(\filter{\beta}\) and zero \(\filter{\gamma}\). By shifting the pole and zero locations of the filter, <strong>we can create different flavors of momentum</strong>.</p> <blockquote> <p>We will soon see that this filter design interpretation provides a principled dynamical regularization perspective into the behavior of classic momentum variants, and can improve the way we design stochastic gradient learning algorithms for training AI models.</p> </blockquote><hr /> <h2 id="setup-a-minimalist-stochastic-error-model"> <a href="#setup-a-minimalist-stochastic-error-model" class="anchor-heading" aria-labelledby="setup-a-minimalist-stochastic-error-model"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setup: A Minimalist Stochastic Error Model </h2> <p>To understand what fundamentally drives learning dynamics, it helps to strip the system down to its bare essentials. To make our position concrete and analytically transparent, we deliberately adopt a minimalist setting. By stripping away the tensor algebra of high-dimensional neural networks, we expose the error dynamics and underlying structure of stochastic gradient learning in its simplest form.</p> <p>Consider a single parameter model defined by the twice-differentiable weighted quadratic function</p> \[f(\rw[t]) = \tfrac{1}{2}\,\psi^2[t]\,\varepsilon^2[t],\] <p>where</p> <ul> <li>\(\rw[t] \in \sR^{1}\) (<strong>Parameter</strong>) denotes the model parameter at a current iteration \(t\).</li> <li>\(\varepsilon[t]\) (<strong>Error</strong>) defined as \(\varepsilon[t]=\rw[t] - \rw^\star\) represents distance of the current parameter value from its optimum value, \(\rw^\star\). The current error change due to a parameter update is defined as \(\Delta[t+1]=\varepsilon[t+1]- \varepsilon[t]\).</li> <li>\(\psi[t] \in \sR^{1}\) (<strong>Data Process</strong>) is a realization of a zero-mean, wide-sense stationary stochastic data process for which its kurtosis, \(\kappa\ge1\) exists. We also assume that \(\psi[t]\) is statistically independent of both \(\varepsilon[t]\) and \(\psi[l]\), $l \neq t$.</li> <li>\(\lambda\) (<strong>Scale</strong>) denotes the second moment of the stochastic process, defined by \(\mathbb{E}[\psi^2[t]]=\lambda\), and \(\mathbb{E}[\psi^4[t]]=\kappa\,\lambda^2\), \(\lambda&gt;0\). <!-- The assumption that the kurtosis exists ensures the finiteness of fourth-order moments of the driving process, which is necessary for the variance of the gradient to be well-defined, rendering second-order stability analysis of the learning dynamics to be well-posed. --></li> </ul> <p>Differentiating \(f(\rw[t])\) with respect to \(\rw[t]\) reveals a key structural insight. The gradient and Hessian take the form</p> \[\rg[t] = \psi^2[t]\,\varepsilon[t], \qquad \rmH[t] = \psi^2[t].\] <p>In expectation,</p> \[\E[\rg[t]] = \lambda\,\E[\varepsilon[t]], \qquad \E[\rmH[t]] = \lambda.\] <p>Our primary objective in this analysis, is to drive the expected error \(\E[\varepsilon[t]]\) to converge the fastest to its optimum value of zero, starting from any initial non-zero value.</p> <blockquote> <p>Now that the environment is set, we start with the classic algorithm, the plain stochastic gradient method.</p> </blockquote> <h4 id="baseline-plain-stochastic-gradient-method"> <a href="#baseline-plain-stochastic-gradient-method" class="anchor-heading" aria-labelledby="baseline-plain-stochastic-gradient-method"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Baseline: <strong>Plain Stochastic Gradient Method</strong> </h4> <p>At iteration $t$, this update rule</p> \[\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha[t]}\,\rg[t]\] <p>receives a learning-rate estimate $\gain{\alpha[t]}$ from a learning-rate oracle and a gradient estimate $\rg[t]$ from a gradient-generating oracle. We will further assume that $\gain{\alpha[t]}=\gain{\alpha} &gt; 0, \forall\, t$. Therefore</p> \[\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha}\,\rg[t].\] <blockquote> <p>Next, we will see that ensuring mean convergence in this problem setup is equivalent to certifying the stability conditions of a linear iteration-invariant system.</p> </blockquote> <h2 id="expected-error-dynamics"> <a href="#expected-error-dynamics" class="anchor-heading" aria-labelledby="expected-error-dynamics"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Expected Error Dynamics </h2> <p>The expected error and expected error change for the plain SGM, forms a two-state dynamical system</p> \[\underbrace{ \begin{bmatrix} \E[\varepsilon[t]]\\ \E[\Delta[t+1]] \end{bmatrix}}_{\rvx[t]} = \underbrace{ \begin{bmatrix} 1 &amp; 1 \\ k_p &amp; a_p \end{bmatrix} }_{\rmA} \, \underbrace{ \begin{bmatrix} \E[\varepsilon[t-1]]\\ \E[\Delta[t]] \end{bmatrix}}_{\rvx[t-1]}\] <p>where \(a_p = -\gain{\alpha}\,\lambda\), and \(k_p = -\gain{\alpha}\,\lambda\). Reasons for separately naming the coefficients will soon become clear. The system can also be compactly written as</p> \[\rvx[t] = \rmA^t\,\rvx[0],\quad t \ge 0,\] <p>and is a rank-1 system because \(a_p = k_p\,\). The exponential stability and asymptotic decay to zero of the mean error variable and mean error change variable requires that the two eigenvalues of \(\rmA\) given by $z_1 = 0$, and \({z_2 =1-\gain{\alpha}\,\lambda}\) (which can be obtained via \(\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\gain{\alpha}\,\lambda)) = 0\)) to have a magnitude strictly less than 1 <a class="citation" href="#rughLinearSystemTheory1996">(Rugh, 1996)</a>. This stability condition is satisfied if and only if</p> \[0 &lt; \gain{\alpha}\,\lambda &lt; 2.\] <p>By taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of $\rx[t]$, with the corresponding induced matrix norm, and then exploiting the rank-1 non-symmetric structure of \(\rmA\), a certificate on the exponential convergence of the expected error states, for \(t\ge 0\), can be obtained as</p> \[\begin{align} {\| \rvx[t+1] \| \le c \cdot |{z_2}|^{t}\, \|\rvx[0]\|}, \end{align}\] <p>where $c\ge 1$ is a positive constant determined by the left and right eigenvectors corresponding to the dominant (nonzero) eigenvalue \(z_2\), as well as on the chosen induced matrix norm of \(\rmA\).</p> <h4 id="structural-insight"> <a href="#structural-insight" class="anchor-heading" aria-labelledby="structural-insight"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Structural</strong> Insight </h4> <p>The fastest possible mode of convergence, $z_2 = 0$, is achieved by choosing</p> \[\gain{\alpha} = \tfrac{1}{\lambda}.\] <p>This yields <em>deadbeat</em> behavior (the expected error converges in a single iteration). However, deadbeat behavior of the expected error dynamics is generally undesirable in practice, and not ideal due to its high sensitivity to variability of the stochastic gradient.</p> <p>Instead, directly minimizing the mean-squared error at the cost of a slower mean error contraction per iteration would result in</p> \[\gain{\alpha} = \mu\,\tfrac{1}{\lambda}, \qquad \mu = \tfrac{1}{\kappa}.\] <blockquote> <p>The <strong>fundamental limitation</strong> here is structural. The mean error dynamics is inherently rank-1 for any choice of learning rate. To remove this limitation, we now regularize the gradient using a lowpass filter. By treating the gradient as a signal, we can transition to a much general algorithmic framework.</p> </blockquote> <blockquote> <p>In signal processing, a lowpass filter attenuates high-frequency components of its input signal while preserving its low-frequency behavior. We will refer to this spectral shaping of the gradient as <em>lowpass regularization</em>.</p> </blockquote> <h2 id="the-first-order-lowpass-filter"> <a href="#the-first-order-lowpass-filter" class="anchor-heading" aria-labelledby="the-first-order-lowpass-filter"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> The First-order Lowpass Filter </h2> <p>Now, instead of using gradient \(\rg[t]\), we replace it with a filtered version $\rv[t] = \filter{\sH_{\beta,\gamma}}\{\rg[t]\}$.</p> <h4 id="transfer-function"> <a href="#transfer-function" class="anchor-heading" aria-labelledby="transfer-function"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Transfer Function </h4> <p>The behavior of the filtered gradient is governed by the transfer-function</p> \[\filter{\sH_{\beta,\gamma}}(z) = \eta \frac{1-\filter{\gamma}\,z^{-1}}{1-\filter{\beta}\,z^{-1}}.\] <p>where \(z^{-1}\) denotes a one-step delay operator.</p> <h4 id="lowpass-configuration"> <a href="#lowpass-configuration" class="anchor-heading" aria-labelledby="lowpass-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Lowpass Configuration </h4> <p>The filter has a single pole location $\beta$, zero location $\gamma$, and positive gain constant $\eta$ satisfying</p> \[\absv{\filter{\beta}} &lt; 1, \quad \filter{\gamma} &lt; \filter{\beta}, \quad \eta = \tfrac{1-\filter{\beta}}{1-\filter{\gamma}}\] <p>ensuring bounded-input, bounded-output (BIBO) stability, and a unit steady-state (or zero-frequency) gain.</p> <h4 id="direct-realization"> <a href="#direct-realization" class="anchor-heading" aria-labelledby="direct-realization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Direct Realization </h4> <p>A direct difference equation realization of the first-order filter with input \(\rg[t]\) is</p> \[\begin{align*} \begin{aligned} \rv[t] &amp;= \filter{\beta} \, \rv[t-1] + \eta\,\big(\rg[t] - \filter{\gamma} \, \rg[t-1] \big). \end{aligned} \end{align*}\] <p>The update rule in terms of the parameter error is now</p> \[\begin{align*} \begin{aligned} \varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\rv[t]. \end{aligned} \end{align*}\] <p>However, note that this is an inefficient realization, since there are two states kept.</p> <h4 id="direct-canonical-realization"> <a href="#direct-canonical-realization" class="anchor-heading" aria-labelledby="direct-canonical-realization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Direct Canonical Realization </h4> <p>For any choice of \((\filter{\beta}, \filter{\gamma})\), the direct minimal state canonical realization of the filter, where \(\rq[t]\) is the filter’s state is</p> \[\begin{align*} \begin{aligned} \rq[t] &amp;= \filter{\beta}\,\rq[t-1] + \rg[t]\\ \rv[t] &amp;= \filter{\eta}\bigl(\rq[t] - \filter{\gamma}\,q[t-1]\bigr)\\ \varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\rv[t]. \end{aligned} \end{align*}\] <p>Note that $\eta$ can also be absorbed into the learning-rate.</p> <h4 id="regularized-form"> <a href="#regularized-form" class="anchor-heading" aria-labelledby="regularized-form"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Regularized Form </h4> <p>Compactly, for any appropriate initialization of \(\rq[-1]\), and denoting \(\delta=\filter{\beta}-\filter{\gamma}\), we have</p> \[\begin{align*} \begin{aligned} \varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\filter{\eta}\,\Bigl(\rg[t] + \delta\,\filter{\beta}^{t}\rq[-1] + \delta\sum_{i=0}^{t-1}\filter{\beta}^{i}\,\rg[t-1-i]\Bigr),\quad t \ge 0. \end{aligned} \end{align*}\] <h4 id="non-expansive-power-gain-property"> <a href="#non-expansive-power-gain-property" class="anchor-heading" aria-labelledby="non-expansive-power-gain-property"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Non-Expansive Power Gain Property </h4> <p>Mathematically, this lowpass filter’s energy is <strong>non-expansive</strong> because its power gain</p> \[|\filter{\sH_{\beta,\gamma}}(e^{j\,\omega})|^2 \le 1,\] <p>for all frequencies \(\omega=[-\pi, \pi]\). This ensures that the filter’s output never contains more energy or variance than its input. Therefore</p> \[\E[\rv^2[t]] \le \E[\rg^2[t]].\] <blockquote> <p>The gradient filter spectrally regulates how gradient information is attenuated or amplified over iterations. With the filter smoothing the gradient input, we must now peek into how it reshapes the mean-error dynamics.</p> </blockquote> <h2 id="full-rank-regularization-of-the-expected-error-dynamics"> <a href="#full-rank-regularization-of-the-expected-error-dynamics" class="anchor-heading" aria-labelledby="full-rank-regularization-of-the-expected-error-dynamics"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Full-Rank Regularization of the Expected Error Dynamics </h2> <p>With the lowpass filter, the system matrix \(\rmA\) still retains its two-state form, \(\rmA = \begin{bmatrix} 1 &amp; 1 \\ k_p &amp; a_p \end{bmatrix}.\)</p> <p>However, the constants \(k_p\neq a_p\), indicating that the introduction of gradient filtering transforms \(\rmA\) into a full-rank system, where</p> \[a_p = \filter{\beta}-\gain{\alpha}\eta\lambda, \quad k_p = -\gain{\alpha}\eta\lambda(1-\filter{\gamma}).\] <p>The characteristic polynomial is \(z^2 - (1+a_p)z + (a_p - k_p) = 0.\) The stability of this system is determined by the eigenvalues or roots \((z_1, z_2)\) of \(\rmA\). Since this is a quadratic equation, the discriminant: \(D = (1 + a_p)^2 - 4(a_p - k_p)\) can either be:</p> <ul> <li><strong>$D = 0$: (two real, repeated roots)</strong>,</li> <li><strong>$D &gt; 0$: (two real, distinct roots)</strong>, or</li> <li><strong>$D &lt; 0$: (two complex, conjugate roots)</strong>.</li> </ul> <h4 id="stability-certificate"> <a href="#stability-certificate" class="anchor-heading" aria-labelledby="stability-certificate"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Certificate </h4> <p>For stability, the eigenvalues must remain within the unit circle: \(|z_1| \le |z_2| &lt; 1.\)</p> <h4 id="fastest-convergence"> <a href="#fastest-convergence" class="anchor-heading" aria-labelledby="fastest-convergence"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fastest Convergence </h4> <p>The fastest mode of convergence (\(z_1 = z_2 = 0\)) of the expected error dynamics occurs if and only if both \(1+a_p =0\) and \(a_p-k_p=0.\) This leads to the following configuration.</p> <p>Choose the of the zero location of the filter as</p> \[\filter{\gamma} = \frac{\filter{\beta}}{1+\filter{\beta}}\] <p>and the learning rate such that:</p> \[\gain{\alpha} \eta \lambda = 1 + \filter{\beta}\] <p>for any choice of the filter pole $\absv{\filter{\beta}} &lt; 1$.</p> <blockquote> <p>To see the realization of this mean-error optimal filter zero configuration in action</p> </blockquote><hr /> <h4 id="result-nesterov-momentum-nag"> <a href="#result-nesterov-momentum-nag" class="anchor-heading" aria-labelledby="result-nesterov-momentum-nag"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Result: <strong>Nesterov Momentum (NAG)</strong> </h4> <p>Plugging \(\filter{\gamma}=\frac{\filter{\beta}}{1+\filter{\beta}}\) into the canonical filter realization yields</p> \[\begin{aligned} &amp;\rq[t] = \filter{\beta} \, \rq[t-1] + (1-\filter{\beta})\,\rg[t]\\ &amp;\rv[t] = \filter{\beta}\,\rq[t] + (1-\filter{\beta})\,\rg[t]\\ &amp;\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha} \, \rv[t]. \end{aligned}\] <p>Equivalently, the \(1-\filter{\beta}\) factor can be absorbed into the learning-rate yielding \(\bar{\gain{\alpha}}=\gain{\alpha}(1-\filter{\beta})\) for any choice of $\gain{\alpha}$. The canonical realization then becomes</p> \[\begin{aligned} &amp;\rq[t] = \filter{\beta} \, \rq[t-1] + \rg[t]\\ &amp;\rv[t] = \filter{\beta}\,\rq[t] + \rg[t]\\ &amp;\varepsilon[t+1] = \varepsilon[t] - \bar{\gain{\alpha}} \, \rv[t], \end{aligned}\] <p>These realizations of the first-order lowpass filter \(\sH_{\filter{\beta},\filter{\gamma}}\) acting on \(\rg[t]\) have been called Nesterov Accelerated Gradient (NAG). Therefore, the popular Nesterov momentum realization of the parameter update is exactly recovered when \(\filter{\gamma}=\frac{\filter{\beta}}{1+\filter{\beta}}\).</p> <p>Using the deadbeat learning-rate, \(\bar{\gain{\alpha}}\) simplifies to \(\bar{\gain{\alpha}} = \frac{1}{\lambda}\).</p> <h5 id="stability-region"> <a href="#stability-region" class="anchor-heading" aria-labelledby="stability-region"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Region </h5> <p>We can analyze the characteristic polynomial using Jury stability conditions, to get that for \(0 \le \filter{\beta} &lt; 1\):</p> \[0 &lt; \gain{\alpha} \eta \lambda &lt; \frac{2(1+\filter{\beta})^2}{1+2\filter{\beta}}\] <blockquote> <p>We now compare a trivial configuration of the zero location of the filter, $\filter{\gamma} = 0$.</p> </blockquote> <h4 id="compare-heavy-ball-momentum-hb"> <a href="#compare-heavy-ball-momentum-hb" class="anchor-heading" aria-labelledby="compare-heavy-ball-momentum-hb"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Compare: <strong>Heavy-Ball Momentum (HB)</strong> </h4> <p>Now consider the filter design corresponding to $\filter{\gamma}=0$ and $0\le\filter{\beta}&lt;1$. This leads to $a_p-k_p=\filter{\beta}$, and the characteristic polynomial $z^2 -(1+a_p)\,z + (a_p-k_p) = 0 $ simplifies to $z^2 - (1+a_p)\,z + \filter{\beta} = 0 $ with discriminant $D = (1+a_p)^2 - 4\,\filter{\beta}$. Setting $1+a_p =1+\filter{\beta}-\gain{\alpha}\eta\lambda=0$ gives $\gain{\alpha}\eta\lambda={1+\filter{\beta}}$, the characteristic polynomial becomes $z^2 + \filter{\beta} = 0 $ and the discriminant is minimized as $D =-4\filter{\beta}$.</p> <p>With this choice, the two system eigenvalues of \(\rmA\) satisfy a common magnitude \(\lvert z_1 \rvert = \lvert z_2 \rvert = \sqrt{\absv{\filter{\beta}}}&lt; 1,\) which ensures exponential stability with decay rate $\sqrt{\absv{\filter{\beta}}}&lt;1$.</p> <p>For the lowpass filter case $0&lt;\filter{\beta}&lt;1$, the eigenvalues form a complex‑conjugate pair $z_{1,2}=\pm\,j\sqrt{\filter{\beta}}$, corresponding to $D=-4\filter{\beta}&lt;0$.</p> <p>For the no filtering case $\filter{\beta}=0$, the eigenvalues degenerate to repeated values $\lvert z_1 \rvert = \lvert z_2 \rvert= 0$ yielding the fastest possible expected error decay and so $D=-4\filter{\beta}=0$.</p> <p>Generally, the characteristic polynomial $z^2 - (1+a_p)\,z + \beta=0$ satisfies $z_1+z_2 = 1+a_p$ and $z_1\,z_2=\filter{\beta}$. Solving the discriminant $D\le 0$ for $\gain{\alpha}$ leads to the learning-rate interval</p> \[\tfrac{(1-\sqrt{\absv{\filter{\beta}}})^2}{\eta}\, \tfrac{1}{\lambda} \le \gain{\alpha} \le \tfrac{(1+\sqrt{\absv{\filter{\beta}}})^2}{\eta}\, \tfrac{1}{\lambda}.\] <p>The midpoint of this interval $\gain{\alpha} = \frac{1+\filter{\beta}}{\eta}\, \frac{1}{\lambda}= \frac{1+\filter{\beta}}{1-\filter{\beta}}\,\frac{1}{\lambda}$ corresponds to $1+a_p=0$.</p> <p>Consequently, as $\filter{\beta} \to 0$, and $\gain{\alpha} \to \frac{1}{\lambda}$ then both the plain SGM update form and the fastest possible mean convergence mode is recovered in the limit.</p> <p>In summary, the filter design choice $\filter{\gamma}=0$ and $0\le\filter{\beta}&lt;1$ induces a mean error dynamics whose exponential stability or decay rate depends solely on the pole location ${\filter{\beta}}$.</p> <p>To implement this filter design of the parameter update, the canonical realization yields</p> \[\begin{aligned} &amp;\rv[t] = \filter{\beta}\,\rv[t-1] + (1-\filter{\beta})\,\rg[t]\\ &amp;\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha} \, \rv[t], \end{aligned}\] <p>which recovers the Heavy-Ball (HB) momentum form of the parameter update. Equivalently</p> \[\begin{aligned} &amp;\rv[t] = \filter{\beta}\,\rv[t-1] + \rg[t]\\ &amp;\varepsilon[t+1] = \varepsilon[t] - \bar{\gain{\alpha}} \, \rv[t], \end{aligned}\] <p>where $\bar{\gain{\alpha}}=\gain{\alpha}(1-\filter{\beta})$.</p> <blockquote> <p>Recall that here, the first moment of the gradient is $\E[\rg[t]] = \lambda\,\E[\varepsilon[t]]$.</p> </blockquote> <blockquote> <p>The output of momentum, being the result of a lowpass filter applied to the gradient sequence, is in general neither equal nor pointwise close to the gradient nor to its expectation at any iteration, except in the degenerate case of exact pole-zero cancellation: $\gamma=\beta$, under which $\filter{\sH_{\beta,\gamma}}(z)$ reduces to an effective all-pass filter response.</p> </blockquote> <blockquote> <p>The <strong>statistical interpretation</strong> of the filter as a first-moment estimator arises only by replacing the exponentially weighted convolution in the iteration-domain with an ensemble expectation. This action explicitly requires an <strong>ergodicity assumption</strong> so that a weighted time-average along a single realization of the stochastic process can be identified with an ensemble mean.</p> </blockquote> <blockquote> <p>Therefore, in general and especially in non-stationary stochastic gradient regimes, ergodic assumptions are not valid. Consequently, the first moment estimation interpretation breaks down mathematically, while the lowpass filtering characterization of momentum always remains exact and assumption-free.</p> </blockquote> <h5 id="stability-region-1"> <a href="#stability-region-1" class="anchor-heading" aria-labelledby="stability-region-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Region </h5> <p>Here, for \(\gamma=0,\, 0 \le \filter{\beta} &lt; 1\):</p> \[0 &lt; \gain{\alpha} {\eta} \lambda &lt; 2(1+\filter{\beta})\]<hr /> <h2 id="takeaways"> <a href="#takeaways" class="anchor-heading" aria-labelledby="takeaways"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Takeaways </h2> <p>The two pillars of momentum, Polyak’s Heavy-Ball (HB) and Nesterov Accelerated Gradient (NAG), are often viewed as distinct algorithms. Through our filter lens, however, they are simply different configurations of the same system. Polyak’s Heavy-Ball (HB) and Nesterov Accelerated Gradient (NAG) are specific choices of the zero location $\filter{\gamma}$ in a lowpass filter, while Plain SGM places both the pole and zero of this filter at the origin ($\filter{\gamma}=\filter{\beta}=0$).</p> <h4 id="acceleration-isnt-always-the-point"> <a href="#acceleration-isnt-always-the-point" class="anchor-heading" aria-labelledby="acceleration-isnt-always-the-point"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Acceleration Isn’t Always the Point </h4> <p>Due to roots in classical mechanics, we often think that the momentum here exists to <em>accelerate</em> optimization. As observed in this setup, using momentum does not lead to a faster mean convergence than the plain stochastic gradient method. The fastest possible mean convergence can be achieved without momentum.</p> <p>So why use momentum? Trivally, because stochastic gradients imply a rough, noisy error surface. Momentum is a <strong>lowpass filter</strong>, attenuating high-frequency noise.</p> <blockquote> <p>Contrary to popular belief, the principal benefit of momentum is not in acceleration alone, but in dynamical regularization of the parameter update steps. Our position here is that momentum’s primary benefit is <strong>dynamic regularization</strong>.</p> </blockquote> <p>In general, we see that by regularizing the gradient via the lowpass filter, we get the following properties:</p> <ol> <li><strong>Noise Attenuation (Spectral Smoothing)</strong> preserving the low-frequency structure in the data process while reducing high-frequency noise variance in the gradient</li> <li><strong>Energy Non-Expansiveness</strong> ensuring the update rule never amplifies noise in the gradient. <!-- 3. **Trust-Region Compliance** keeping updates within a safe radius $$\mu$$, preventing unstable jumps in parameter space. --></li> <li><strong>Expanded Stability Region</strong> increases the allowable range of \(\alpha\) before divergence.</li> </ol><hr /> <h4 id="open-question"> <a href="#open-question" class="anchor-heading" aria-labelledby="open-question"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Open Question </h4> <p>If momentum is just a linear first-order filter, what unexplored data efficient, nonlinear filter designs could unlock unseen optimization gains for AI?</p><hr /> <h4 id="reality-check"> <a href="#reality-check" class="anchor-heading" aria-labelledby="reality-check"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Reality Check </h4> <p>These insights are derived under simplifying assumptions. Real deep learning systems are:</p> <ul> <li>High-dimensional</li> <li>Non-stationary</li> <li>Heavy-tailed</li> </ul> <p>Therefore, note that in real settings, the:</p> <ul> <li>Structural roles (filtering structure + learning-rate form) <strong>generalize</strong></li> <li>Optimal parameter values <strong>do not</strong>.</li> </ul><hr /> <p><strong>Conclusion</strong></p> <blockquote> <p>By understanding <em>momentum</em> as a signal processing <em>filter</em>, we replace the concept of momentum with <strong>interpretable</strong> pole-zero placements that dynamically <em>regularize</em> gradient information entering our stochastic gradient optimization algorithms.</p> </blockquote><hr /> <ol class="bibliography"><li><span id="polyakConjugateGradientMethod1969">Polyak, B. T. (1969). The Conjugate Gradient Method in Extremal Problems. <i>USSR Computational Mathematics and Mathematical Physics</i>, <i>9</i>(4), 94–112. https://doi.org/10.1016/0041-5553(69)90035-4</span></li> <li><span id="rughLinearSystemTheory1996">Rugh, W. J. (1996). <i>Linear System Theory</i> (2nd ed.). Prentice-Hall.</span></li></ol><hr /> </main> <hr> <footer> <p><a href="#top" id="back-to-top">Back to top</a></p> <div class="d-flex mt-2"> <p class="text-small text-grey-dk-000 mb-0 mr-2"> Page last modified: <span class="d-inline-block">May 22 2026</span>. </p> </div> </footer> </div> </div> <div class="search-overlay"></div> </div> </body> </html>
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(4)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(4) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(4) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(4) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Momentum as Lowpass Filter Design | Research Notes</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Momentum as Lowpass Filter Design" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum." />
+<meta property="og:description" content="Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum." />
+<link rel="canonical" href="http://localhost:4000/sglp_mean" />
+<meta property="og:url" content="http://localhost:4000/sglp_mean" />
+<meta property="og:site_name" content="Research Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-09-11T00:00:00-07:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Momentum as Lowpass Filter Design" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-11T00:00:00-07:00","datePublished":"2025-09-11T00:00:00-07:00","description":"Momentum as Lowpass Filter Design Fastest mean convergence can be achieved without Momentum.","headline":"Momentum as Lowpass Filter Design","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sglp_mean"},"url":"http://localhost:4000/sglp_mean"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+
+    <!-- <script>
+  window.MathJax = {
+    tex: {          
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'ams' 
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>  -->
+
+<!--Macros-->
+<script>
+window.MathJax = {
+  loader: {load: ['[tex]/color']},
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],        
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    packages: { '[+]': ['color']},
+    processEscapes: true,
+    tags: 'ams',
+    macros: {
+      absv : ["\\lvert #1 \\rvert", 1],
+      newterm: ["\\mathbf{#1}", 1],
+      eps: "\\epsilon",
+      ceil: ["\\lceil #1 \\rceil", 1],
+      floor: ["\\lfloor #1 \\rfloor", 1],
+      one: "\\bm{1}",
+      train: "\\mathcal{D}",
+      valid: "\\mathcal{D_{\\mathrm{valid}}}",
+      test: "\\mathcal{D_{\\mathrm{test}}}",
+      reta: "\\textnormal{\\eta}",
+      ra: "\\textnormal{a}", rb: "\\textnormal{b}", rc: "\\textnormal{c}",
+      rd: "\\textnormal{d}", re: "\\textnormal{e}", rf: "\\textnormal{f}",
+      rg: "\\textnormal{g}", rh: "\\textnormal{h}", ri: "\\textnormal{i}",
+      rj: "\\textnormal{j}", rk: "\\textnormal{k}", rl: "\\textnormal{l}",
+      rn: "\\textnormal{n}", ro: "\\textnormal{o}", rp: "\\textnormal{p}",
+      rq: "\\textnormal{q}", rr: "\\textnormal{r}", rs: "\\textnormal{s}",
+      rt: "\\textnormal{t}", ru: "\\textnormal{u}", rv: "\\textnormal{v}",
+      rw: "\\textnormal{w}", rx: "\\textnormal{x}", ry: "\\textnormal{y}",
+      rz: "\\textnormal{z}",
+      rvepsilon: "\\mathbf{\\epsilon}",
+      rvtheta: "\\mathbf{\\theta}",
+      rva: "\\mathbf{a}", rvb: "\\mathbf{b}", rvc: "\\mathbf{c}",
+      rvd: "\\mathbf{d}", rve: "\\mathbf{e}", rvf: "\\mathbf{f}",
+      rvg: "\\mathbf{g}", rvh: "\\mathbf{h}", rvi: "\\mathbf{i}",
+      rvj: "\\mathbf{j}", rvk: "\\mathbf{k}", rvl: "\\mathbf{l}",
+      rvm: "\\mathbf{m}", rvn: "\\mathbf{n}", rvo: "\\mathbf{o}",
+      rvp: "\\mathbf{p}", rvq: "\\mathbf{q}", rvr: "\\mathbf{r}",
+      rvs: "\\mathbf{s}", rvt: "\\mathbf{t}", rvu: "\\mathbf{u}",
+      rvv: "\\mathbf{v}", rvw: "\\mathbf{w}", rvx: "\\mathbf{x}",
+      rvy: "\\mathbf{y}", rvz: "\\mathbf{z}",
+      erva: "\\textnormal{a}", ervb: "\\textnormal{b}", ervc: "\\textnormal{c}",
+      ervd: "\\textnormal{d}", erve: "\\textnormal{e}", ervf: "\\textnormal{f}",
+      ervg: "\\textnormal{g}", ervh: "\\textnormal{h}", ervi: "\\textnormal{i}",
+      ervj: "\\textnormal{j}", ervk: "\\textnormal{k}", ervl: "\\textnormal{l}",
+      ervm: "\\textnormal{m}", ervn: "\\textnormal{n}", ervo: "\\textnormal{o}",
+      ervp: "\\textnormal{p}", ervq: "\\textnormal{q}", ervr: "\\textnormal{r}",
+      ervs: "\\textnormal{s}", ervt: "\\textnormal{t}", ervu: "\\textnormal{u}",
+      ervv: "\\textnormal{v}", ervw: "\\textnormal{w}", ervx: "\\textnormal{x}",
+      ervy: "\\textnormal{y}", ervz: "\\textnormal{z}",
+      rmA: "\\mathbf{A}", rmB: "\\mathbf{B}", rmC: "\\mathbf{C}",
+      rmD: "\\mathbf{D}", rmE: "\\mathbf{E}", rmF: "\\mathbf{F}",
+      rmG: "\\mathbf{G}", rmH: "\\mathbf{H}", rmI: "\\mathbf{I}",
+      rmJ: "\\mathbf{J}", rmK: "\\mathbf{K}", rmL: "\\mathbf{L}",
+      rmM: "\\mathbf{M}", rmN: "\\mathbf{N}", rmO: "\\mathbf{O}",
+      rmP: "\\mathbf{P}", rmQ: "\\mathbf{Q}", rmR: "\\mathbf{R}",
+      rmS: "\\mathbf{S}", rmT: "\\mathbf{T}", rmU: "\\mathbf{U}",
+      rmV: "\\mathbf{V}", rmW: "\\mathbf{W}", rmX: "\\mathbf{X}",
+      rmY: "\\mathbf{Y}", rmZ: "\\mathbf{Z}",
+      vzero: "\\bm{0}", vone: "\\bm{1}",
+      vmu: "\\bm{\\mu}", vtheta: "\\bm{\\theta}",
+      va: "\\bm{a}", vb: "\\bm{b}", vc: "\\bm{c}", vd: "\\bm{d}",
+      ve: "\\bm{e}", vf: "\\bm{f}", vg: "\\bm{g}", vh: "\\bm{h}",
+      vi: "\\bm{i}", vj: "\\bm{j}", vk: "\\bm{k}", vl: "\\bm{l}",
+      vm: "\\bm{m}", vn: "\\bm{n}", vo: "\\bm{o}", vp: "\\bm{p}",
+      vq: "\\bm{q}", vr: "\\bm{r}", vs: "\\bm{s}", vt: "\\bm{t}",
+      vu: "\\bm{u}", vv: "\\bm{v}", vw: "\\bm{w}", vx: "\\bm{x}",
+      vy: "\\bm{y}", vz: "\\bm{z}",
+      mA: "\\bm{A}", mB: "\\bm{B}", mC: "\\bm{C}",
+      mD: "\\bm{D}", mE: "\\bm{E}", mF: "\\bm{F}",
+      mG: "\\bm{G}", mH: "\\bm{H}", mI: "\\bm{I}",
+      mJ: "\\bm{J}", mK: "\\bm{K}", mL: "\\bm{L}",
+      mM: "\\bm{M}", mN: "\\bm{N}", mO: "\\bm{O}",
+      mP: "\\bm{P}", mQ: "\\bm{Q}", mR: "\\bm{R}",
+      mS: "\\bm{S}", mT: "\\bm{T}", mU: "\\bm{U}",
+      mV: "\\bm{V}", mW: "\\bm{W}", mX: "\\bm{X}",
+      mY: "\\bm{Y}", mZ: "\\bm{Z}",
+      mBeta: "\\bm{\\beta}", mPhi: "\\bm{\\Phi}",
+      mLambda: "\\bm{\\Lambda}", mSigma: "\\bm{\\Sigma}",
+      tens: ["\\bm{\\mathsfit{#1}}", 1],
+      tA: "\\tens{A}", tB: "\\tens{B}", tC: "\\tens{C}",
+      tD: "\\tens{D}", tE: "\\tens{E}", tF: "\\tens{F}",
+      tG: "\\tens{G}", tH: "\\tens{H}", tI: "\\tens{I}",
+      tJ: "\\tens{J}", tK: "\\tens{K}", tL: "\\tens{L}",
+      tM: "\\tens{M}", tN: "\\tens{N}", tO: "\\tens{O}",
+      tP: "\\tens{P}", tQ: "\\tens{Q}", tR: "\\tens{R}",
+      tS: "\\tens{S}", tT: "\\tens{T}", tU: "\\tens{U}",
+      tV: "\\tens{V}", tW: "\\tens{W}", tX: "\\tens{X}",
+      tY: "\\tens{Y}", tZ: "\\tens{Z}",
+      gA: "\\mathcal{A}", gB: "\\mathcal{B}", gC: "\\mathcal{C}",
+      gD: "\\mathcal{D}", gE: "\\mathcal{E}", gF: "\\mathcal{F}",
+      gG: "\\mathcal{G}", gH: "\\mathcal{H}", gI: "\\mathcal{I}",
+      gJ: "\\mathcal{J}", gK: "\\mathcal{K}", gL: "\\mathcal{L}",
+      gM: "\\mathcal{M}", gN: "\\mathcal{N}", gO: "\\mathcal{O}",
+      gP: "\\mathcal{P}", gQ: "\\mathcal{Q}", gR: "\\mathcal{R}",
+      gS: "\\mathcal{S}", gT: "\\mathcal{T}", gU: "\\mathcal{U}",
+      gV: "\\mathcal{V}", gW: "\\mathcal{W}", gX: "\\mathcal{X}",
+      gY: "\\mathcal{Y}", gZ: "\\mathcal{Z}",
+      sA: "\\mathbb{A}", sB: "\\mathbb{B}", sC: "\\mathbb{C}",
+      sD: "\\mathbb{D}", sF: "\\mathbb{F}", sG: "\\mathbb{G}",
+      sH: "\\mathbb{H}", sI: "\\mathbb{I}", sJ: "\\mathbb{J}",
+      sK: "\\mathbb{K}", sL: "\\mathbb{L}", sM: "\\mathbb{M}",
+      sN: "\\mathbb{N}", sO: "\\mathbb{O}", sP: "\\mathbb{P}",
+      sQ: "\\mathbb{Q}", sR: "\\mathbb{R}", sS: "\\mathbb{S}",
+      sT: "\\mathbb{T}", sU: "\\mathbb{U}", sV: "\\mathbb{V}",
+      sW: "\\mathbb{W}", sX: "\\mathbb{X}", sY: "\\mathbb{Y}",
+      sZ: "\\mathbb{Z}",
+
+      pdata: "p_{\\rm{data}}", ptrain: "\\hat{p}_{\\rm{data}}", Ptrain: "\\hat{P}_{\\rm{data}}",
+
+      pmodel: "p_{\\rm{model}}", Pmodel: "P_{\\rm{model}}",
+      ptildemodel: "\\tilde{p}_{\\rm{model}}",
+      pencode: "p_{\\rm{encoder}}",
+      pdecode: "p_{\\rm{decoder}}",
+      precons: "p_{\\rm{reconstruct}}",
+
+      E: "\\mathbb{E}",
+      Ls: "\\mathcal{L}",
+      R: "\\mathbb{R}",
+      emp: "\\tilde{p}",
+      lr: "\\alpha",
+      reg: "\\lambda",
+
+      rect: "\\mathrm{rectifier}",
+      softmax: "\\mathrm{softmax}",
+      sigmoid: "\\sigma",
+      softplus: "\\zeta",
+
+      KL: "D_{\\mathrm{KL}}",
+      Var: "\\mathrm{Var}",
+      standarderror: "\\mathrm{SE}",
+      Cov: "\\mathrm{Cov}",
+
+      normlzero: "L^0",
+      normlone: "L^1",
+      normltwo: "L^2",
+      normlp: "L^p",
+      normmax: "L^\\infty",
+
+      argmax: "\\operatorname*{arg\\,max}",
+      argmin: "\\operatorname*{arg\\,min}",
+      sign: "\\operatorname{sign}",
+      Tr: "\\operatorname{Tr}",
+
+
+      ab: "\\allowbreak",
+
+      sca: ["\\langle #1 \\rangle", 1],
+      scalong: ["(#1_1,\\dots,#1_k)", 1],
+
+      red: ["\\textcolor{OrangeRed}{#1}", 1],
+      blue: ["\\textcolor{blue}{#1}", 1],
+      green: ["\\textcolor{Green}{#1}", 1],
+      orange: ["\\textcolor{orange}{#1}", 1],
+      purple: ["\\textcolor{purple}{#1}", 1],
+      gray: ["\\textcolor{gray}{#1}", 1],
+      teal: ["\\textcolor{teal}{#1}", 1],
+      gold: ["\\textcolor{gold}{#1}", 1],
+
+      bluea: ["\\textcolor{RoyalBlue}{#1}", 1],
+      reda: ["\\textcolor{Red}{#1}", 1],
+      redb: ["\\textcolor{RubineRed}{#1}", 1],
+      greena: ["\\textcolor{LimeGreen}{#1}", 1],
+      golden: ["\\textcolor{GoldenRod}{#1}", 1],
+
+      filter: ["\\green{#1}", 1],
+      param: ["\\textcolor{purple}{#1}", 1],
+      state: ["\\textcolor{blue}{#1}", 1],
+      statex: ["\\textcolor{RoyalBlue}{#1}", 1],
+      stateu: ["\\textcolor{LimeGreen}{#1}", 1],
+      statez: ["\\textcolor{GoldenRod}{#1}", 1],
+      input: ["\\textcolor{gray}{#1}", 1],
+      gain: ["\\textcolor{OrangeRed}{#1}", 1],
+      gainx: ["\\textcolor{Red}{#1}", 1],
+      trust: ["\\textcolor{teal}{#1}", 1],
+      schedule: ["\\textcolor{gold}{#1}", 1],
+    }
+  },
+  options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },      
+};
+</script>
+
+
+<div style="display: none">
+
+<!-- TROLRS -->
+  $$
+  \newcommand{\trobjsca}{\mathcal{D}[t,i]}
+  \newcommand{\trobjmat}{\mathcal{D}[t]}
+  \newcommand{\Tr}{\mathrm{Tr}}
+  \newcommand{\step}{\Delta[t+1, i] = -\alpha[t,i]\,\mathbf{g}[t,i]}
+  \newcommand{\stepv}{\Delta[t+1, i] = -\alpha[t,i]\,\mathbf{v}[t,i]}
+  \newcommand{\matstep}{\Delta[t+1] = -\alpha[t]\,\mathbf{g}[t]}
+  \newcommand{\matstepv}{\Delta[t+1] = -\alpha[t]\,\mathbf{v}[t]}
+  \newcommand{\ngrad}{\bar{\mathbf{g}}[t,i]}
+  \newcommand{\ngradv}{\bar{\mathbf{v}}[t,i]}
+  \newcommand{\ngradsq}{\bar{\mathbf{g}}^2[t,i]}
+  \newcommand{\ngradvsq}{\bar{\mathbf{v}}^2[t,i]}
+  \newcommand{\nmatgrad}{\bar{\mathbf{g}}[t]}
+  \newcommand{\nmatgradv}{\bar{\mathbf{v}}[t]}
+  \newcommand{\fof}{\mathbb{H}_{\beta,\,\gamma}}
+  \newcommand{\expg}{\mathbb{E}\big[\mathbf{g}[t,i]\big]}
+  \newcommand{\expv}{\mathbb{E}\big[\mathbf{v}[t,i]\big]}
+ $$
+
+ $$
+  \newcommand{\stepmom}{\mathbb{E}\big[{\Delta}^2[t+1, i]\big]}
+  \newcommand{\matstepmom}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\Delta[t+1]\big]}
+  \newcommand{\gmatstepmom}{\mathbb{E}\big[\Tr\big(\left<{\Delta[t+1],\Delta[t+1]}\right>\big)\big]}
+ $$
+
+ $$
+  \newcommand{\stepcorrng}{\mathbb{E}\big[\Delta[t+1, i]\,\ngrad\big]}
+  \newcommand{\stepcorrngv}{\mathbb{E}\big[\Delta[t+1, i]\,\ngradv\big]}
+  \newcommand{\matstepcorrng}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\nmatgrad \big) \big]}
+  \newcommand{\matstepcorrngv}{\mathbb{E}\big[\Tr\big(\Delta^\intercal[t+1]\,\nmatgradv \big) \big]}
+  \newcommand{\gmatstepcorrng}{\mathbb{E}\big[\Tr\big(\left\langle{\Delta[t+1],\nmatgrad}\right\rangle \big)\big]}
+  \newcommand{\gmatstepcorrngv}{\mathbb{E}\big[\Tr\big(\left\langle{\Delta[t+1],\nmatgradv}\right\rangle \big)\big]}
+$$
+
+ $$
+  \newcommand{\stepcorru}{\mathbb{E}\big[\Delta[t+1, i]\,\mathbf{u}[t,i]\big]}
+  \newcommand{\matstepcorru}{\mathbb{E}\big[\Delta^\intercal[t+1]\,\mathbf{u}[t]\big]}
+ $$
+
+ $$
+  \newcommand{\numngradcorr}{\mathbb{E}\big[\ngradsq\big]}
+  \newcommand{\numwgcorr}{\mathbb{E}\big[\mathbf{w}[t,i]\,\ngrad\big]}
+  \newcommand{\numngradvcorr}{\mathbb{E}\big[\ngradvsq\big]}
+  \newcommand{\numwvcorr}{\mathbb{E}\big[\mathbf{w}[t,i]\,\ngradv\big]}
+  \newcommand{\dengmom}{\mathbb{E}\big[\mathbf{g}^2[t,i]\big]}
+  \newcommand{\dengmomv}{\mathbb{E}\big[\mathbf{v}^2[t,i]\big]}
+  \newcommand{\matdengmom}{\mathbb{E}\big[\mathbf{g}[t]\mathbf{g}^\intercal[t]\big]}
+  \newcommand{\matdengmomv}{\mathbb{E}\big[\mathbf{v}[t]\mathbf{v}^\intercal[t]\big]}
+  \newcommand{\dengmomsqrt}{\sqrt{\mathbb{E}\big[\mathbf{g}^2[t,i]\big]}}
+  \newcommand{\matdengmomsqrt}{\mathbb{E}\big[\mathbf{g}[t]\mathbf{g}^\intercal[t]\big]^{\text{-}\frac{1}{2}}}
+  \newcommand{\matdenvmomsqrt}{\mathbb{E}\big[\mathbf{v}[t]\mathbf{v}^\intercal[t]\big]^{\text{-}\frac{1}{2}}}
+  \newcommand{\matngradcorr}{\mathbb{E}\big[\nmatgrad\nmatgrad^{\intercal}\big]}
+  \newcommand{\matngradvcorr}{\mathbb{E}\big[\nmatgradv\nmatgradv^{\intercal}\big]}
+  \newcommand{\matwngradcorr}{\mathbb{E}\big[\mathbf{w}[t]\nmatgrad^{\intercal}\big]}
+  \newcommand{\matwngradvcorr}{\mathbb{E}\big[\mathbf{w}[t]\nmatgradv^{\intercal}\big]}
+ $$
+
+</div>
+  
+<!-- Load Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+
+<!-- Copied from https://docs.mathjax.org/en/latest/web/components/combined.html -->
+<script type="text/javascript" id="MathJax-script" defer
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<!-- Automatically display code inside script tags with type=math/tex using MathJax -->    
+<!-- <script type="text/javascript" defer
+src="/assets/js/mathjax-script-type.js">
+</script> -->
+
+
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <div class="side-bar">
+  <div class="site-header" role="banner">
+    <a href="/" class="site-title lh-tight"><div class="site-branding">
+    <span class="site-title ">Research Notes</span>
+    <span class="site-description">Learning Algorithms in AI.</span>
+</div>
+  </a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in AutoSGM: Unifying Momentum Methods category" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/asgm.html" class="nav-list-link">AutoSGM: Unifying Momentum Methods</a><ul class="nav-list"><li class="nav-list-item"><a href="/learning_dynamics" class="nav-list-link">Smooth Learning Dynamics</a></li><li class="nav-list-item"><a href="/asgm_trolrs" class="nav-list-link">Trust-region Optimal Learning rates</a></li><li class="nav-list-item"><a href="/lpf_not_ema" class="nav-list-link">Momentum is not an EMA</a></li><li class="nav-list-item"><a href="/asgm_lrwinds" class="nav-list-link">Learning-Rate Annealing</a></li></ul></li><li class="nav-list-item"><a href="/sglp_vlra" class="nav-list-link">A Variational Trust-Region Foundation for Learning Rate Annealing</a></li><li class="nav-list-item"><a href="/sglp_trolr" class="nav-list-link">Trust-Region Optimal Learning Rate Principle</a></li><li class="nav-list-item"><a href="/sglp_mean" class="nav-list-link">Momentum as Lowpass Filter Design</a></li><li class="nav-list-item"><a href="/sglp_mse" class="nav-list-link">Momentum is Lowpass Regularization</a></li><li class="nav-list-item"><a href="/sglp_trolr" class="nav-list-link">Trust-Region Optimal Learning Rate Principle</a></li><li class="nav-list-item"><a href="/sglp_cjg" class="nav-list-link">A True AutoSGM: Conjugate Gradient Method</a></li><li class="nav-list-item"><a href="/about" class="nav-list-link">About Me</a></li></ul>
+  
+</nav>
+
+
+
+
+  
+  
+    <footer class="site-footer"> 
+    © 2026. <a href="/about">Oluwasegun Somefun</a> 
+</footer>
+  
+</div>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search Research Notes" aria-label="Search Research Notes" autocomplete="off">
+    <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 class="fs-9" id="momentum-as-lowpass-filter-design">
+  
+  
+    <a href="#momentum-as-lowpass-filter-design" class="anchor-heading" aria-labelledby="momentum-as-lowpass-filter-design"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Momentum as Lowpass Filter Design
+  
+  
+</h1>
+    
+<p class="fs-6 fw-300">Fastest mean convergence can be achieved without Momentum.</p>
+
+<div class="d-flex mt-2">
+<p class="text-small text-grey-dk-000 mb-0 mr-2">Sep 11 2025 </p>
+</div>
+<p><strong>Please cite this page</strong> if you use information from these notes for your work, research, or anything that requires academic or formal citation. <em>Oluwasegun Somefun</em>. “<a href="https://somefunagba.github.io/sglp_mean.html">Momentum as Lowpass Filter Design</a>.”  2025.</p><hr />
+
+<details>
+  <summary class="text-delta">
+    Table of contents
+  </summary>
+<ol id="markdown-toc">
+  <li><a href="#momentum-as-lowpass-filter-design" id="markdown-toc-momentum-as-lowpass-filter-design">Momentum as Lowpass Filter Design</a>    <ol>
+      <li><a href="#understanding-momentum-as-lowpass-regularization" id="markdown-toc-understanding-momentum-as-lowpass-regularization">Understanding Momentum as Lowpass Regularization</a></li>
+      <li><a href="#setup-a-minimalist-stochastic-error-model" id="markdown-toc-setup-a-minimalist-stochastic-error-model">Setup: A Minimalist Stochastic Error Model</a>        <ol>
+          <li><a href="#baseline-plain-stochastic-gradient-method" id="markdown-toc-baseline-plain-stochastic-gradient-method">Baseline: <strong>Plain Stochastic Gradient Method</strong></a></li>
+        </ol>
+      </li>
+      <li><a href="#expected-error-dynamics" id="markdown-toc-expected-error-dynamics">Expected Error Dynamics</a>        <ol>
+          <li><a href="#structural-insight" id="markdown-toc-structural-insight"><strong>Structural</strong> Insight</a></li>
+        </ol>
+      </li>
+      <li><a href="#the-first-order-lowpass-filter" id="markdown-toc-the-first-order-lowpass-filter">The First-order Lowpass Filter</a>        <ol>
+          <li><a href="#transfer-function" id="markdown-toc-transfer-function">Transfer Function</a></li>
+          <li><a href="#lowpass-configuration" id="markdown-toc-lowpass-configuration">Lowpass Configuration</a></li>
+          <li><a href="#direct-realization" id="markdown-toc-direct-realization">Direct Realization</a></li>
+          <li><a href="#direct-canonical-realization" id="markdown-toc-direct-canonical-realization">Direct Canonical Realization</a></li>
+          <li><a href="#regularized-form" id="markdown-toc-regularized-form">Regularized Form</a></li>
+          <li><a href="#non-expansive-power-gain-property" id="markdown-toc-non-expansive-power-gain-property">Non-Expansive Power Gain Property</a></li>
+        </ol>
+      </li>
+      <li><a href="#full-rank-regularization-of-the-expected-error-dynamics" id="markdown-toc-full-rank-regularization-of-the-expected-error-dynamics">Full-Rank Regularization of the Expected Error Dynamics</a>        <ol>
+          <li><a href="#stability-certificate" id="markdown-toc-stability-certificate">Stability Certificate</a></li>
+          <li><a href="#fastest-convergence" id="markdown-toc-fastest-convergence">Fastest Convergence</a></li>
+          <li><a href="#result-nesterov-momentum-nag" id="markdown-toc-result-nesterov-momentum-nag">Result: <strong>Nesterov Momentum (NAG)</strong></a>            <ol>
+              <li><a href="#stability-region" id="markdown-toc-stability-region">Stability Region</a></li>
+            </ol>
+          </li>
+          <li><a href="#compare-heavy-ball-momentum-hb" id="markdown-toc-compare-heavy-ball-momentum-hb">Compare: <strong>Heavy-Ball Momentum (HB)</strong></a>            <ol>
+              <li><a href="#stability-region-1" id="markdown-toc-stability-region-1">Stability Region</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li><a href="#takeaways" id="markdown-toc-takeaways">Takeaways</a>        <ol>
+          <li><a href="#acceleration-isnt-always-the-point" id="markdown-toc-acceleration-isnt-always-the-point">Acceleration Isn’t Always the Point</a></li>
+          <li><a href="#open-question" id="markdown-toc-open-question">Open Question</a></li>
+          <li><a href="#reality-check" id="markdown-toc-reality-check">Reality Check</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+</details><hr />
+
+<p>Here we introduce the concept of <em>momentum</em> <a class="citation" href="#polyakConjugateGradientMethod1969">(Polyak, 1969)</a> as a <em>lowpass regularized</em> stochastic gradient algorithm. One that applies a <strong>first-order lowpass filter</strong> to its stochastic gradient, before multiplying by a possibly <strong>optimal</strong> iteration-dependent <strong>learning rate</strong>. For analytic purpose, we will study a minimal stochastic system, for which the algorithm’s hyperparameters are assumed time-invariant. More specifically, we show how <strong>Nesterov’s momentum</strong> arise as the solution to the fastest mean error convergence of this problem. More importantly, we show that structurally, the <strong>Plain</strong> stochastic gradient method, <strong>Heavy-Ball momentum</strong>, and <strong>Nesterov’s momentum</strong> correspond fundamentally to <strong>different filter designs</strong> of the same algorithm.</p><hr />
+<h2 id="understanding-momentum-as-lowpass-regularization">
+  
+  
+    <a href="#understanding-momentum-as-lowpass-regularization" class="anchor-heading" aria-labelledby="understanding-momentum-as-lowpass-regularization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Understanding Momentum as Lowpass Regularization
+  
+  
+</h2>
+    
+<p>Traditionally, the way we talk about training neural networks is often rooted in classical mechanics. We describe <em>momentum</em> as a ball rolling down a hilly landscape, gaining <em>inertia</em> to carry it over local bumps. Alternatively, another popular interpretation is that momentum estimates the <em>first moment</em> of a gradient. While these physical analogies are often intuitive, they obscure the underlying discrete, iteration-level mechanics of the learning algorithm.</p>
+
+<p><strong>Our central claim is that a literal mathematical interpretation already exists via classical signal processing tools related to first-order lowpass filters.</strong> Momentum is mathematically equivalent to passing stochastic gradients through a first-order linear lowpass filter.</p>
+
+<p>The filter, denoted \(\filter{\sH_{\beta,\gamma}}\) is configured via two variables, its pole \(\filter{\beta}\) and zero \(\filter{\gamma}\). By shifting the pole and zero locations of the filter, <strong>we can create different flavors of momentum</strong>.</p>
+<blockquote>
+  <p>We will soon see that this filter design interpretation provides a principled dynamical regularization perspective into the behavior of classic momentum variants, and can improve the way we design stochastic gradient learning algorithms for training AI models.</p>
+</blockquote><hr />
+<h2 id="setup-a-minimalist-stochastic-error-model">
+  
+  
+    <a href="#setup-a-minimalist-stochastic-error-model" class="anchor-heading" aria-labelledby="setup-a-minimalist-stochastic-error-model"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Setup: A Minimalist Stochastic Error Model
+  
+  
+</h2>
+    
+<p>To understand what fundamentally drives learning dynamics, it helps to strip the system down to its bare essentials. To make our position concrete and analytically transparent, we deliberately adopt a minimalist setting. By stripping away the tensor algebra of high-dimensional neural networks, we expose the error dynamics and underlying structure of stochastic gradient learning in its simplest form.</p>
+
+<p>Consider a single parameter model defined by the twice-differentiable weighted quadratic function</p>
+
+\[f(\rw[t]) = \tfrac{1}{2}\,\psi^2[t]\,\varepsilon^2[t],\]
+
+<p>where</p>
+
+<ul>
+  <li>\(\rw[t] \in \sR^{1}\) (<strong>Parameter</strong>) denotes the model parameter at a current iteration \(t\).</li>
+  <li>\(\varepsilon[t]\) (<strong>Error</strong>) defined as \(\varepsilon[t]=\rw[t] - \rw^\star\) represents distance of the current parameter value from its optimum value, \(\rw^\star\). The current error change due to a parameter update is defined as \(\Delta[t+1]=\varepsilon[t+1]- \varepsilon[t]\).</li>
+  <li>\(\psi[t] \in \sR^{1}\) (<strong>Data Process</strong>) is a realization of a zero-mean, wide-sense stationary stochastic data process for which its kurtosis, \(\kappa\ge1\) exists. We also assume that \(\psi[t]\) is statistically independent of both \(\varepsilon[t]\) and \(\psi[l]\), $l \neq t$.</li>
+  <li>\(\lambda\) (<strong>Scale</strong>) denotes the second moment of the stochastic process, defined by \(\mathbb{E}[\psi^2[t]]=\lambda\), and \(\mathbb{E}[\psi^4[t]]=\kappa\,\lambda^2\), \(\lambda&gt;0\).
+<!-- The assumption that the kurtosis exists ensures the finiteness of fourth-order moments of the driving process, which is necessary for the variance of the gradient to be well-defined, rendering second-order stability analysis of the learning dynamics to be well-posed. --></li>
+</ul>
+
+<p>Differentiating \(f(\rw[t])\) with respect to \(\rw[t]\) reveals a key structural insight. The gradient and Hessian take the form</p>
+
+\[\rg[t] = \psi^2[t]\,\varepsilon[t], \qquad 
+\rmH[t] = \psi^2[t].\]
+
+<p>In expectation,</p>
+
+\[\E[\rg[t]] = \lambda\,\E[\varepsilon[t]], 
+\qquad 
+\E[\rmH[t]] = \lambda.\]
+
+<p>Our primary objective in this analysis, is to drive the expected error \(\E[\varepsilon[t]]\) to converge the fastest to its optimum value of zero, starting from any initial non-zero value.</p>
+
+<blockquote>
+  <p>Now that the environment is set, we start with the classic algorithm, the plain stochastic gradient method.</p>
+</blockquote>
+<h4 id="baseline-plain-stochastic-gradient-method">
+  
+  
+    <a href="#baseline-plain-stochastic-gradient-method" class="anchor-heading" aria-labelledby="baseline-plain-stochastic-gradient-method"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Baseline: <strong>Plain Stochastic Gradient Method</strong>
+  
+  
+</h4>
+    
+
+<p>At iteration $t$, this update rule</p>
+
+\[\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha[t]}\,\rg[t]\]
+
+<p>receives a learning-rate estimate $\gain{\alpha[t]}$ from a learning-rate oracle and a gradient estimate $\rg[t]$ from a gradient-generating oracle. We will further assume that $\gain{\alpha[t]}=\gain{\alpha} &gt; 0, \forall\, t$. Therefore</p>
+
+\[\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha}\,\rg[t].\]
+
+<blockquote>
+  <p>Next, we will see that ensuring mean convergence in this problem setup is equivalent to certifying
+the stability conditions of a linear iteration-invariant system.</p>
+</blockquote>
+<h2 id="expected-error-dynamics">
+  
+  
+    <a href="#expected-error-dynamics" class="anchor-heading" aria-labelledby="expected-error-dynamics"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Expected Error Dynamics
+  
+  
+</h2>
+    
+
+<p>The expected error and expected error change for the plain SGM, forms a two-state dynamical system</p>
+
+\[\underbrace{
+\begin{bmatrix}
+\E[\varepsilon[t]]\\ 
+\E[\Delta[t+1]]
+\end{bmatrix}}_{\rvx[t]}
+=
+\underbrace{
+\begin{bmatrix}
+1 &amp; 1 \\
+k_p &amp; a_p
+\end{bmatrix}
+}_{\rmA}
+\,
+\underbrace{
+\begin{bmatrix}
+\E[\varepsilon[t-1]]\\ 
+\E[\Delta[t]]
+\end{bmatrix}}_{\rvx[t-1]}\]
+
+<p>where
+\(a_p = -\gain{\alpha}\,\lambda\), and 
+\(k_p = -\gain{\alpha}\,\lambda\).  Reasons for separately naming the coefficients will soon become clear. 
+The system can also be compactly written as</p>
+
+\[\rvx[t] = \rmA^t\,\rvx[0],\quad t \ge 0,\]
+
+<p>and is a rank-1 system because 
+\(a_p = k_p\,\). 
+The exponential stability and asymptotic decay to zero of the mean error variable and mean error change variable requires that the two eigenvalues of \(\rmA\) given by $z_1 = 0$, and \({z_2 =1-\gain{\alpha}\,\lambda}\) (which can be obtained via \(\det(z\mathbf{I}-\mathbf{A}) = z(z-(1-\gain{\alpha}\,\lambda)) = 0\)) to 
+have a magnitude strictly less than 1 <a class="citation" href="#rughLinearSystemTheory1996">(Rugh, 1996)</a>. 
+This stability condition is satisfied if and only if</p>
+
+\[0 &lt; \gain{\alpha}\,\lambda &lt; 2.\]
+
+<p>By taking any standard norm $\|\cdot\|$ (1-norm, 2-norm, $\infty$-norm) of $\rx[t]$, with the corresponding induced matrix norm, and then exploiting the rank-1 non-symmetric structure of \(\rmA\), a certificate on the exponential convergence of the expected error states, for \(t\ge 0\), can be obtained as</p>
+
+\[\begin{align}
+{\| \rvx[t+1] \| \le c \cdot |{z_2}|^{t}\, \|\rvx[0]\|},
+\end{align}\]
+
+<p>where $c\ge 1$ is a positive constant determined by the left and right eigenvectors corresponding to the dominant (nonzero) eigenvalue \(z_2\), as well as on the chosen induced matrix norm of \(\rmA\).</p>
+<h4 id="structural-insight">
+  
+  
+    <a href="#structural-insight" class="anchor-heading" aria-labelledby="structural-insight"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Structural</strong> Insight
+  
+  
+</h4>
+    
+
+<p>The fastest possible mode of convergence, $z_2 = 0$, is achieved by choosing</p>
+
+\[\gain{\alpha} = \tfrac{1}{\lambda}.\]
+
+<p>This yields <em>deadbeat</em> behavior (the expected error converges in a single iteration). However, deadbeat behavior of the expected error dynamics is generally undesirable in practice, and not ideal due to its high sensitivity to variability of the stochastic gradient.</p>
+
+<p>Instead, directly minimizing the mean-squared error at the cost of a slower mean error contraction per iteration would result in</p>
+
+\[\gain{\alpha} = \mu\,\tfrac{1}{\lambda}, 
+\qquad 
+\mu = \tfrac{1}{\kappa}.\]
+
+<blockquote>
+  <p>The <strong>fundamental limitation</strong> here is structural. The mean error dynamics is inherently rank-1 for any choice of learning rate. To remove this limitation, we now regularize the gradient using a lowpass filter. By treating the gradient as a signal, we can transition to a much general algorithmic framework.</p>
+</blockquote>
+
+<blockquote>
+  <p>In signal processing, a lowpass filter attenuates high-frequency components of its input signal while preserving its low-frequency behavior. We will refer to this spectral shaping of the gradient as <em>lowpass regularization</em>.</p>
+</blockquote>
+<h2 id="the-first-order-lowpass-filter">
+  
+  
+    <a href="#the-first-order-lowpass-filter" class="anchor-heading" aria-labelledby="the-first-order-lowpass-filter"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> The First-order Lowpass Filter
+  
+  
+</h2>
+    
+
+<p>Now, instead of using gradient \(\rg[t]\), we replace it with a filtered version $\rv[t] = \filter{\sH_{\beta,\gamma}}\{\rg[t]\}$.</p>
+<h4 id="transfer-function">
+  
+  
+    <a href="#transfer-function" class="anchor-heading" aria-labelledby="transfer-function"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Transfer Function
+  
+  
+</h4>
+    
+<p>The behavior of the filtered gradient is governed by the transfer-function</p>
+
+\[\filter{\sH_{\beta,\gamma}}(z) = \eta \frac{1-\filter{\gamma}\,z^{-1}}{1-\filter{\beta}\,z^{-1}}.\]
+
+<p>where \(z^{-1}\) denotes a one-step delay operator.</p>
+<h4 id="lowpass-configuration">
+  
+  
+    <a href="#lowpass-configuration" class="anchor-heading" aria-labelledby="lowpass-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Lowpass Configuration
+  
+  
+</h4>
+    
+<p>The filter has a single pole location $\beta$, zero location $\gamma$, and positive gain constant $\eta$ satisfying</p>
+
+\[\absv{\filter{\beta}} &lt; 1, \quad  \filter{\gamma} &lt; \filter{\beta}, \quad \eta = \tfrac{1-\filter{\beta}}{1-\filter{\gamma}}\]
+
+<p>ensuring bounded-input, bounded-output (BIBO) stability, and a unit steady-state (or zero-frequency) gain.</p>
+<h4 id="direct-realization">
+  
+  
+    <a href="#direct-realization" class="anchor-heading" aria-labelledby="direct-realization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Direct Realization
+  
+  
+</h4>
+    
+
+<p>A direct difference equation realization of the first-order filter with input \(\rg[t]\) is</p>
+
+\[\begin{align*}
+\begin{aligned}
+  \rv[t] &amp;= \filter{\beta} \, \rv[t-1] + \eta\,\big(\rg[t] - \filter{\gamma} \, \rg[t-1] \big).
+\end{aligned}
+\end{align*}\]
+
+<p>The update rule in terms of the parameter error is now</p>
+
+\[\begin{align*}
+\begin{aligned}
+  \varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\rv[t].
+\end{aligned}
+\end{align*}\]
+
+<p>However, note that this is an inefficient realization, since there are two states kept.</p>
+<h4 id="direct-canonical-realization">
+  
+  
+    <a href="#direct-canonical-realization" class="anchor-heading" aria-labelledby="direct-canonical-realization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Direct Canonical Realization
+  
+  
+</h4>
+    
+
+<p>For any choice of \((\filter{\beta}, \filter{\gamma})\), the direct minimal state canonical realization of the filter, where \(\rq[t]\) is the filter’s state is</p>
+
+\[\begin{align*}
+\begin{aligned}
+\rq[t] &amp;= \filter{\beta}\,\rq[t-1] + \rg[t]\\
+\rv[t] &amp;= \filter{\eta}\bigl(\rq[t] - \filter{\gamma}\,q[t-1]\bigr)\\
+\varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\rv[t].
+\end{aligned}
+\end{align*}\]
+
+<p>Note that $\eta$ can also be absorbed into the learning-rate.</p>
+<h4 id="regularized-form">
+  
+  
+    <a href="#regularized-form" class="anchor-heading" aria-labelledby="regularized-form"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Regularized Form
+  
+  
+</h4>
+    
+
+<p>Compactly, for any appropriate initialization of \(\rq[-1]\), and denoting \(\delta=\filter{\beta}-\filter{\gamma}\), we have</p>
+
+\[\begin{align*}
+\begin{aligned}
+\varepsilon[t+1] &amp;= \varepsilon[t] - \gain{\alpha}\,\filter{\eta}\,\Bigl(\rg[t] + \delta\,\filter{\beta}^{t}\rq[-1] + \delta\sum_{i=0}^{t-1}\filter{\beta}^{i}\,\rg[t-1-i]\Bigr),\quad t \ge 0.
+\end{aligned}
+\end{align*}\]
+<h4 id="non-expansive-power-gain-property">
+  
+  
+    <a href="#non-expansive-power-gain-property" class="anchor-heading" aria-labelledby="non-expansive-power-gain-property"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Non-Expansive Power Gain Property
+  
+  
+</h4>
+    
+<p>Mathematically, this lowpass filter’s energy is <strong>non-expansive</strong> because its power gain</p>
+
+\[|\filter{\sH_{\beta,\gamma}}(e^{j\,\omega})|^2 \le 1,\]
+
+<p>for all frequencies \(\omega=[-\pi, \pi]\). This ensures that the filter’s output never contains more energy or variance than its input. Therefore</p>
+
+\[\E[\rv^2[t]] \le \E[\rg^2[t]].\]
+
+<blockquote>
+  <p>The gradient filter spectrally regulates how gradient information is attenuated or amplified over iterations. With the filter smoothing the gradient input, we must now peek into how it reshapes the mean-error dynamics.</p>
+</blockquote>
+<h2 id="full-rank-regularization-of-the-expected-error-dynamics">
+  
+  
+    <a href="#full-rank-regularization-of-the-expected-error-dynamics" class="anchor-heading" aria-labelledby="full-rank-regularization-of-the-expected-error-dynamics"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Full-Rank Regularization of the Expected Error Dynamics
+  
+  
+</h2>
+    
+<p>With the lowpass filter, the system matrix  \(\rmA\) still retains its two-state form,
+\(\rmA =
+\begin{bmatrix}
+1 &amp; 1 \\
+k_p &amp; a_p
+\end{bmatrix}.\)</p>
+
+<p>However, the constants \(k_p\neq a_p\), indicating that the introduction of gradient filtering transforms \(\rmA\) into a full-rank system, where</p>
+
+\[a_p = \filter{\beta}-\gain{\alpha}\eta\lambda, \quad k_p = -\gain{\alpha}\eta\lambda(1-\filter{\gamma}).\]
+
+<p>The characteristic polynomial is
+\(z^2 - (1+a_p)z + (a_p - k_p) = 0.\)
+The stability of this system is determined by the eigenvalues or roots
+\((z_1, z_2)\)
+of \(\rmA\). Since this is a quadratic equation, the discriminant:
+\(D = (1 + a_p)^2 - 4(a_p - k_p)\)
+can either be:</p>
+<ul>
+  <li><strong>$D = 0$: (two real, repeated roots)</strong>,</li>
+  <li><strong>$D &gt; 0$: (two real, distinct roots)</strong>, or</li>
+  <li><strong>$D &lt; 0$: (two complex, conjugate roots)</strong>.</li>
+</ul>
+<h4 id="stability-certificate">
+  
+  
+    <a href="#stability-certificate" class="anchor-heading" aria-labelledby="stability-certificate"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Certificate
+  
+  
+</h4>
+    
+<p>For stability, the eigenvalues must remain within the unit circle:
+\(|z_1| \le |z_2| &lt; 1.\)</p>
+<h4 id="fastest-convergence">
+  
+  
+    <a href="#fastest-convergence" class="anchor-heading" aria-labelledby="fastest-convergence"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fastest Convergence
+  
+  
+</h4>
+    
+
+<p>The fastest mode of convergence 
+(\(z_1 = z_2 = 0\)) of the expected error dynamics occurs if and only if both
+\(1+a_p =0\)
+and 
+\(a_p-k_p=0.\)
+This leads to the following configuration.</p>
+
+<p>Choose the of the zero location of the filter as</p>
+
+\[\filter{\gamma} = \frac{\filter{\beta}}{1+\filter{\beta}}\]
+
+<p>and the learning rate such that:</p>
+
+\[\gain{\alpha} \eta \lambda = 1 + \filter{\beta}\]
+
+<p>for any choice of the filter pole $\absv{\filter{\beta}} &lt; 1$.</p>
+
+<blockquote>
+  <p>To see the realization of this mean-error optimal filter zero configuration in action</p>
+</blockquote><hr />
+<h4 id="result-nesterov-momentum-nag">
+  
+  
+    <a href="#result-nesterov-momentum-nag" class="anchor-heading" aria-labelledby="result-nesterov-momentum-nag"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Result: <strong>Nesterov Momentum (NAG)</strong>
+  
+  
+</h4>
+    
+
+<p>Plugging \(\filter{\gamma}=\frac{\filter{\beta}}{1+\filter{\beta}}\) into the canonical filter realization yields</p>
+
+\[\begin{aligned}
+  &amp;\rq[t] = \filter{\beta} \, \rq[t-1] +  (1-\filter{\beta})\,\rg[t]\\
+  &amp;\rv[t] = \filter{\beta}\,\rq[t] + (1-\filter{\beta})\,\rg[t]\\
+  &amp;\varepsilon[t+1]  = \varepsilon[t]  - \gain{\alpha} \, \rv[t].
+\end{aligned}\]
+
+<p>Equivalently, the \(1-\filter{\beta}\) factor can be absorbed into the learning-rate yielding \(\bar{\gain{\alpha}}=\gain{\alpha}(1-\filter{\beta})\) for any choice of $\gain{\alpha}$. The canonical realization then becomes</p>
+
+\[\begin{aligned}
+  &amp;\rq[t] = \filter{\beta} \, \rq[t-1] +  \rg[t]\\
+  &amp;\rv[t] = \filter{\beta}\,\rq[t] + \rg[t]\\
+  &amp;\varepsilon[t+1] = \varepsilon[t] - \bar{\gain{\alpha}} \, \rv[t],
+  \end{aligned}\]
+
+<p>These realizations of the first-order lowpass filter \(\sH_{\filter{\beta},\filter{\gamma}}\) acting on \(\rg[t]\) have been called Nesterov Accelerated Gradient (NAG).
+Therefore, the popular Nesterov momentum realization of the parameter update is exactly recovered when \(\filter{\gamma}=\frac{\filter{\beta}}{1+\filter{\beta}}\).</p>
+
+<p>Using the deadbeat learning-rate, \(\bar{\gain{\alpha}}\) simplifies to \(\bar{\gain{\alpha}} = \frac{1}{\lambda}\).</p>
+<h5 id="stability-region">
+  
+  
+    <a href="#stability-region" class="anchor-heading" aria-labelledby="stability-region"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Region
+  
+  
+</h5>
+    
+
+<p>We can analyze the characteristic polynomial using Jury stability conditions, to get that for \(0 \le \filter{\beta} &lt; 1\):</p>
+
+\[0 &lt; \gain{\alpha} \eta \lambda &lt; \frac{2(1+\filter{\beta})^2}{1+2\filter{\beta}}\]
+
+<blockquote>
+  <p>We now compare a trivial configuration of the zero location of the filter, $\filter{\gamma} = 0$.</p>
+</blockquote>
+<h4 id="compare-heavy-ball-momentum-hb">
+  
+  
+    <a href="#compare-heavy-ball-momentum-hb" class="anchor-heading" aria-labelledby="compare-heavy-ball-momentum-hb"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Compare: <strong>Heavy-Ball Momentum (HB)</strong>
+  
+  
+</h4>
+    
+
+<p>Now consider the filter design corresponding to $\filter{\gamma}=0$ and $0\le\filter{\beta}&lt;1$. This leads to $a_p-k_p=\filter{\beta}$, and the characteristic polynomial $z^2 -(1+a_p)\,z + (a_p-k_p) = 0 $ simplifies to $z^2  - (1+a_p)\,z + \filter{\beta} = 0 $ with discriminant $D = (1+a_p)^2 - 4\,\filter{\beta}$.
+Setting $1+a_p =1+\filter{\beta}-\gain{\alpha}\eta\lambda=0$ gives $\gain{\alpha}\eta\lambda={1+\filter{\beta}}$, the characteristic polynomial becomes $z^2  + \filter{\beta} = 0 $ and the discriminant is minimized as $D =-4\filter{\beta}$.</p>
+
+<p>With this choice, the two system eigenvalues of \(\rmA\) satisfy a common magnitude
+\(\lvert z_1 \rvert = \lvert z_2 \rvert = \sqrt{\absv{\filter{\beta}}}&lt; 1,\)
+which ensures exponential stability with decay rate $\sqrt{\absv{\filter{\beta}}}&lt;1$.</p>
+
+<p>For the lowpass filter case $0&lt;\filter{\beta}&lt;1$, the eigenvalues form a complex‑conjugate pair $z_{1,2}=\pm\,j\sqrt{\filter{\beta}}$, corresponding to $D=-4\filter{\beta}&lt;0$.</p>
+
+<p>For the no filtering case $\filter{\beta}=0$, the eigenvalues degenerate to repeated values $\lvert z_1 \rvert = \lvert z_2 \rvert= 0$ yielding the fastest possible expected error decay and so $D=-4\filter{\beta}=0$.</p>
+
+<p>Generally, the characteristic polynomial $z^2  - (1+a_p)\,z + \beta=0$ satisfies $z_1+z_2 = 1+a_p$ and $z_1\,z_2=\filter{\beta}$. 
+Solving the discriminant $D\le 0$ for $\gain{\alpha}$ 
+leads to the learning-rate interval</p>
+
+\[\tfrac{(1-\sqrt{\absv{\filter{\beta}}})^2}{\eta}\, \tfrac{1}{\lambda} \le \gain{\alpha} \le \tfrac{(1+\sqrt{\absv{\filter{\beta}}})^2}{\eta}\, \tfrac{1}{\lambda}.\]
+
+<p>The midpoint of this interval $\gain{\alpha} = \frac{1+\filter{\beta}}{\eta}\, \frac{1}{\lambda}= \frac{1+\filter{\beta}}{1-\filter{\beta}}\,\frac{1}{\lambda}$ corresponds to $1+a_p=0$.</p>
+
+<p>Consequently, as $\filter{\beta} \to 0$, and $\gain{\alpha} \to \frac{1}{\lambda}$ then both the plain SGM update form and the fastest possible mean convergence mode is recovered in the limit.</p>
+
+<p>In summary, the filter design choice $\filter{\gamma}=0$ and $0\le\filter{\beta}&lt;1$ induces a mean error dynamics whose exponential stability or decay rate depends solely on the pole location ${\filter{\beta}}$.</p>
+
+<p>To implement this filter design of the parameter update, the canonical realization yields</p>
+
+\[\begin{aligned}
+  &amp;\rv[t] = \filter{\beta}\,\rv[t-1] + (1-\filter{\beta})\,\rg[t]\\
+  &amp;\varepsilon[t+1] = \varepsilon[t] - \gain{\alpha} \, \rv[t],
+  \end{aligned}\]
+
+<p>which recovers the Heavy-Ball (HB) momentum form of the parameter update. Equivalently</p>
+
+\[\begin{aligned}
+  &amp;\rv[t] = \filter{\beta}\,\rv[t-1] + \rg[t]\\
+  &amp;\varepsilon[t+1] = \varepsilon[t] - \bar{\gain{\alpha}} \, \rv[t],
+  \end{aligned}\]
+
+<p>where $\bar{\gain{\alpha}}=\gain{\alpha}(1-\filter{\beta})$.</p>
+
+<blockquote>
+  <p>Recall that here, the first moment of the gradient is $\E[\rg[t]] = \lambda\,\E[\varepsilon[t]]$.</p>
+</blockquote>
+
+<blockquote>
+  <p>The output of momentum, being the result of a lowpass filter applied to the gradient sequence, is in general neither equal nor pointwise close to the gradient nor to its expectation at any iteration, except in the degenerate case of exact pole-zero cancellation: $\gamma=\beta$, under which $\filter{\sH_{\beta,\gamma}}(z)$ reduces to an effective all-pass filter response.</p>
+</blockquote>
+
+<blockquote>
+  <p>The <strong>statistical interpretation</strong> of the filter as a first-moment estimator arises only by replacing the exponentially weighted convolution in the iteration-domain with an ensemble expectation. This action explicitly requires an <strong>ergodicity assumption</strong> so that a weighted time-average along a single realization of the stochastic process can be identified with an ensemble mean.</p>
+</blockquote>
+
+<blockquote>
+  <p>Therefore, in general and especially in non-stationary stochastic gradient regimes, ergodic assumptions are not valid. Consequently, the first moment estimation interpretation breaks down mathematically, while the lowpass filtering characterization of momentum always remains exact and assumption-free.</p>
+</blockquote>
+<h5 id="stability-region-1">
+  
+  
+    <a href="#stability-region-1" class="anchor-heading" aria-labelledby="stability-region-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stability Region
+  
+  
+</h5>
+    
+<p>Here, for
+\(\gamma=0,\, 0 \le \filter{\beta} &lt; 1\):</p>
+
+\[0 &lt; \gain{\alpha} {\eta} \lambda &lt; 2(1+\filter{\beta})\]<hr />
+<h2 id="takeaways">
+  
+  
+    <a href="#takeaways" class="anchor-heading" aria-labelledby="takeaways"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Takeaways
+  
+  
+</h2>
+    
+
+<p>The two pillars of momentum, Polyak’s Heavy-Ball (HB) and Nesterov Accelerated Gradient (NAG), are often viewed as distinct algorithms. Through our filter lens, however, they are simply different configurations of the same system. Polyak’s Heavy-Ball (HB) and Nesterov Accelerated Gradient (NAG) are specific choices of the zero location $\filter{\gamma}$ in a lowpass filter, while Plain SGM places both the pole and zero of this filter at the origin ($\filter{\gamma}=\filter{\beta}=0$).</p>
+<h4 id="acceleration-isnt-always-the-point">
+  
+  
+    <a href="#acceleration-isnt-always-the-point" class="anchor-heading" aria-labelledby="acceleration-isnt-always-the-point"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Acceleration Isn’t Always the Point
+  
+  
+</h4>
+    
+
+<p>Due to roots in classical mechanics, we often think that the momentum here exists to <em>accelerate</em> optimization. As observed in this setup, using momentum does not lead to a faster mean convergence than the plain stochastic gradient method. The fastest possible mean convergence can be achieved without momentum.</p>
+
+<p>So why use momentum? Trivally, because stochastic gradients imply a rough, noisy error surface. Momentum is a <strong>lowpass filter</strong>, attenuating high-frequency noise.</p>
+
+<blockquote>
+  <p>Contrary to popular belief, the principal benefit of momentum is not in acceleration alone, but in dynamical regularization of the parameter update steps. Our position here is that momentum’s primary benefit is <strong>dynamic regularization</strong>.</p>
+</blockquote>
+
+<p>In general, we see that by regularizing the gradient via the lowpass filter, we get the following properties:</p>
+
+<ol>
+  <li><strong>Noise Attenuation (Spectral Smoothing)</strong> preserving the low-frequency structure in the data process while reducing high-frequency noise
+variance in the gradient</li>
+  <li><strong>Energy Non-Expansiveness</strong>  ensuring the update rule never amplifies noise in the gradient.
+<!-- 3. **Trust-Region Compliance** keeping updates within a safe radius $$\mu$$, preventing unstable jumps in parameter space. --></li>
+  <li><strong>Expanded Stability Region</strong> increases the allowable range of \(\alpha\) before divergence.</li>
+</ol><hr />
+<h4 id="open-question">
+  
+  
+    <a href="#open-question" class="anchor-heading" aria-labelledby="open-question"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Open Question
+  
+  
+</h4>
+    
+
+<p>If momentum is just a linear first-order filter, what unexplored data efficient, nonlinear filter designs could unlock unseen optimization gains for AI?</p><hr />
+<h4 id="reality-check">
+  
+  
+    <a href="#reality-check" class="anchor-heading" aria-labelledby="reality-check"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Reality Check
+  
+  
+</h4>
+    
+
+<p>These insights are derived under simplifying assumptions. Real deep learning systems are:</p>
+<ul>
+  <li>High-dimensional</li>
+  <li>Non-stationary</li>
+  <li>Heavy-tailed</li>
+</ul>
+
+<p>Therefore, note that in real settings, the:</p>
+<ul>
+  <li>Structural roles (filtering structure + learning-rate form) <strong>generalize</strong></li>
+  <li>Optimal parameter values <strong>do not</strong>.</li>
+</ul><hr />
+
+<p><strong>Conclusion</strong></p>
+<blockquote>
+  <p>By understanding <em>momentum</em> as a signal processing <em>filter</em>, we replace the concept of momentum with <strong>interpretable</strong> pole-zero placements that dynamically <em>regularize</em> gradient information entering our stochastic gradient optimization algorithms.</p>
+</blockquote><hr />
+
+<ol class="bibliography"><li><span id="polyakConjugateGradientMethod1969">Polyak, B. T. (1969). The Conjugate Gradient Method in Extremal Problems. <i>USSR Computational Mathematics and Mathematical Physics</i>, <i>9</i>(4), 94–112. https://doi.org/10.1016/0041-5553(69)90035-4</span></li>
+<li><span id="rughLinearSystemTheory1996">Rugh, W. J. (1996). <i>Linear System Theory</i> (2nd ed.). Prentice-Hall.</span></li></ol><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+
+  <hr>
+  <footer>
+    
+      <p><a href="#top" id="back-to-top">Back to top</a></p>
+    
+
+    
+
+    
+      <div class="d-flex mt-2">
+        
+          <p class="text-small text-grey-dk-000 mb-0 mr-2">
+            Page last modified: <span class="d-inline-block">May 22 2026</span>.
+          </p>
+        
+        
+      </div>
+    
+  </footer>
+
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+
+

@@ -7701,4 +7701,27 @@ mjx-container[jax=CHTML][display=true] {
   min-width: 0px !important;
 }
 
+/* code highlight*/
+.highlight .table-wrapper td, .highlight .table-wrapper pre {
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+div.highlight {
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+div.highlighter-rouge > button, div.listingblock > div.content > button, figure.highlight > button {
+  width: 0.75rem;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background-color: #f5f6fa;
+  color: #5c5962;
+  box-sizing: content-box;
+}
+
 /*# sourceMappingURL=just-the-docs-dark.css.map */
