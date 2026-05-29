@@ -758,6 +758,7 @@ t = t+1\\
 81
 82
 83
+84
 </pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 <span class="c1"># linear algebra: 
@@ -789,14 +790,15 @@ t = t+1\\
         Number of iterations.
     </span><span class="sh">"""</span>
 
-    <span class="c1"># init.
-</span>    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span> 
-    <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># w[0]              
+    <span class="c1"># initializations
+</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># w[0]              
 </span>    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>         <span class="c1"># g[0]      
 </span>    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># q[0]
 </span>    <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># v[0]
-</span>   
+</span>    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># partial Rv
+</span>    <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="c1"># loop
 </span>    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">max_iter</span><span class="p">:</span>
 
