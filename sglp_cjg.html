@@ -816,7 +816,7 @@ t = t+1\\
 
       <span class="n">gn</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="o">+</span><span class="n">u</span><span class="p">)</span>
       <span class="c1"># gradient generation (recursive form)
-</span>      <span class="n">g</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span>
+</span>      <span class="n">g</span> <span class="o">-=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span>
       <span class="c1"># alt: g = R @ w - b
 </span>      <span class="n">gnp</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="o">-</span><span class="n">u</span><span class="p">)</span>
 
