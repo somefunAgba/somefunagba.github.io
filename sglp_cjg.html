@@ -764,7 +764,7 @@ t = t+1\\
 # w = np.linalg.solve(A, b)
 </span><span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
     <span class="sh">"""</span><span class="s">
-    Implements the algorithm described in the LaTeX pseudocode.
+    Implements the stochastic gradient algorithm.
 
     Parameters
     ----------
