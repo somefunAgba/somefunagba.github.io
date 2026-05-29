@@ -750,9 +750,13 @@ t = t+1\\
 73
 74
 75
+76
+77
 </pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
-<span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
+<span class="c1"># linear algebra: 
+# w = np.linalg.solve(A, b)
+</span><span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
     <span class="sh">"""</span><span class="s">
     Implements the algorithm described in the LaTeX pseudocode.
 
@@ -762,8 +766,6 @@ t = t+1\\
         Symmetric positive-definite matrix.
     b : ndarray (d,)
         Linear vector.
-    n : sequence of ndarray (d,)
-        Noise sequence n[t].
     eps : float
         Stopping tolerance.
     max_iter : int
@@ -780,13 +782,13 @@ t = t+1\\
     </span><span class="sh">"""</span>
 
     <span class="c1"># init.
-</span>    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>                <span class="c1"># w[0]
-</span>    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span> <span class="o">+</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                <span class="c1"># g[0]
-</span>    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>                        <span class="c1"># q[0]
-</span>    <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>                        <span class="c1"># v[0]
-</span>    <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">v</span> 
-    
+</span>    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># w[0]              
+</span>    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>         <span class="c1"># g[0]      
+</span>    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># q[0]
+</span>    <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># v[0]
+</span>   
     <span class="c1"># loop
 </span>    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">max_iter</span><span class="p">:</span>
 
@@ -798,20 +800,22 @@ t = t+1\\
 </span>        <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rv</span><span class="p">)</span>
 
         <span class="c1"># parameter update
-</span>        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">v</span>
+</span>        <span class="n">w</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">v</span>
 
         <span class="n">gn</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">g</span>
         <span class="c1"># gradient generation (recursive form)
-</span>        <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span>
+</span>        <span class="n">g</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span>
         <span class="c1"># alt: g = R @ w - b
 </span>        <span class="n">gnp</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">g</span>
 
         <span class="c1"># stopping criterion
 </span>        <span class="k">if</span> <span class="n">gnp</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span> <span class="k">break</span>
 
-        <span class="c1"># filter coefficients
+        <span class="c1"># simplified filter coefficients
 </span>        <span class="n">beta</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span>
-        <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">gnp</span> <span class="o">/</span> <span class="n">gn</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">gnp</span> <span class="o">/</span> <span class="n">gn</span>
+        <span class="c1"># alt: delta = -(g.T @ Rv) / (q.T @ Rv)
+</span>        <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">delta</span>
 
         <span class="c1"># place-holders
 </span>        <span class="n">gmq</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">q</span>
