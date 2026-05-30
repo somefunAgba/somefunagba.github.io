@@ -642,7 +642,7 @@ re-write the stochastic objective as</p>
   <li>\(\mathbf{q}[t+1]^\intercal\mathbf{R}\mathbf{q}[t]=0\) is obtained to satisfy \(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+3]}}=0\).</li>
 </ul>
 
-<p>This means that we design the two filter parameters to enforce conjugacy on successive states and outputs of the first-order filter, ensuring that successive steps do not reintroduce previously eliminated components of the error (redundant information). 
+<p>This means that we design the two filter parameters to enforce conjugacy on the filter’s successive states and outputs, ensuring that successive steps do not reintroduce previously eliminated components of the error (redundant information). 
 Since the update direction \(\mathbf{v}[t]\) is constructed from the filter state \(\mathbf{q}[t]\), 
 these two <strong>filter design</strong> conditions ensures that successive filter outputs which form the update direction represent non-overlapping information in the \(\mathbf{R}\)-energy space.</p>
 
