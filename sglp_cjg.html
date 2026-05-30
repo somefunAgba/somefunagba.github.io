@@ -637,7 +637,7 @@ re-write the stochastic objective as</p>
 </div>
 
 <ul>
-  <li>\(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+1]}}=0\) is used to obtain the learning rate. This is a stationarity condition of the objective function, and is an \(\mathbf{R}\)-orthogonality condition (conjugacy condition) between the next parameter error and the current filter’s output. Then assuming a recursive mutual orthogonality of the gradients $\bar{\mathbf{g}}[t+1]^\intercal \bar{\mathbf{g}}[t-j]$ for $j&gt;0$,</li>
+  <li>\(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+1]}}=0\) is used to obtain the learning rate. This is a stationarity condition of the objective function $\bar{f}\big(\state{\mathbf{w}[t+1]}\big)$, and is an \(\mathbf{R}\)-orthogonality condition (conjugacy condition) between the next parameter error and the current filter’s output. Then assuming a recursive mutual orthogonality of the gradients $\bar{\mathbf{g}}[t+1]^\intercal \bar{\mathbf{g}}[t-j]$ for $j&gt;0$,</li>
   <li>\(\mathbf{v}[t+1]^\intercal \mathbf{R}\mathbf{v}[t]=0\) is obtained to satisfy \(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+2]}}=0\),</li>
   <li>\(\mathbf{q}[t+1]^\intercal\mathbf{R}\mathbf{q}[t]=0\) is obtained to satisfy \(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+3]}}=0\).</li>
 </ul>
