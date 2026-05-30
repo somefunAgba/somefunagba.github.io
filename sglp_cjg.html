@@ -824,8 +824,8 @@ t = t+1\\
     <span class="c1"># initializations
 </span>    <span class="c1"># w[0] g[0] q[0]
 </span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>               
-    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>               
-    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>         
+    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>  <span class="c1"># note: this is \bar{g} in the analysis.             
+</span>    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>         
     <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span> 
 
     <span class="c1"># init. iteration, noise, partial value of R @ v
