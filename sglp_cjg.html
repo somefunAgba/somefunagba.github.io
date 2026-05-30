@@ -567,83 +567,115 @@ src="/assets/js/mathjax-script-type.js">
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
-\input{\mathbf{g}[t+1]} = \mathbf{R} \state{\mathbf{\varepsilon}[t+1]} = \input{\mathbf{g}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]} + \boldsymbol{\xi}[t]
+\input{\mathbf{g}[t+1]} = \mathbf{R} \state{\mathbf{\varepsilon}[t+1]} + \mathbf{n}[t+1]  = \input{\mathbf{g}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]} + \boldsymbol{\xi}[t]
 \end{aligned}.
 }\]
 </div>
 
 <p>The classic method assumes \(\sigma^2 = 0\), and solves \(\mathbf{R} \state{\mathbf{w}[t]} = \mathbf{b}\). In exact arithmetic, the algorithm converges in at most \(n\) iterations
-for the linear time-invariant system described by matrix \(\mathbf{R}\).</p><hr />
+for the linear time-invariant system described by matrix \(\mathbf{R}\).</p>
+
+<p>Denote $\bar{f}\big(\state{\mathbf{w}[t+1]}\big)=\state{\mathbf{\varepsilon}[t+1]}^\intercal \mathbf{R}\,\state{\mathbf{\varepsilon}[t+1]}$, and
+re-write the stochastic objective as</p>
+
+<div class="text-center">\[f\big(\state{\mathbf{w}[t+1]}\big) = f\big(\state{\mathbf{w}[t]}\big) + \bar{f}\big(\state{\mathbf{w}[t+1]}\big) + \mathbf{n}[t+1]^\intercal \state{\mathbf{\varepsilon}[t+1]}.\]
+</div>
+
+<p>Therefore, minimizing the stochastic objective is equivalent to minimizing $\bar{f}\big(\state{\mathbf{w}[t+1]}\big)$, whose gradient is</p>
+
+<p class="text-center">\(\bar{\mathbf{g}}[t+1] = \mathbf{R} \state{\mathbf{\varepsilon}[t+1]} = \mathbf{R} \state{\mathbf{w}[t+1]} - \mathbf{b}\).</p>
+
+<p>Therefore,</p>
+
+<div class="text-center">\[\boxed{
+\begin{aligned}
+\input{\mathbf{g}[t+1]} = \bar{\mathbf{g}}[t+1] + \mathbf{n}[t+1],
+\end{aligned}
+}\]
+</div>
+
+<p>and</p>
+
+\[\boxed{
+\begin{aligned}
+\input{\bar{\mathbf{g}}[t+1]} = \input{\bar{\mathbf{g}}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]}.
+\end{aligned}
+}\]<hr />
 
 <p>Using the matrix \(\mathbf{R}\)-orthogonality or conjugacy conditions:</p>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
--\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{v}[t]} = 0.\\
+-\input{\bar{\mathbf{g}}[t+1]}^\intercal \input{\mathbf{v}[t]} = 0.\\
 \statez{\mathbf{q}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]} = 0. \\
 \input{\mathbf{v}[t+1]}^\intercal \mathbf{R}\input{\mathbf{v}[t]} = 0.
 \end{aligned}
 }\]
 </div>
 
-<p>where \(\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{v}[t]} = \state{\mathbf{\varepsilon}[t+1]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}\)</p>
-
-<p>After removing any extraneous scaling constants, for the simplest case \(\sigma^2 = 0\), we will arive at</p>
+<p>where \(\input{\bar{\mathbf{g}}[t+1]}^\intercal \input{\mathbf{v}[t]} = \state{\mathbf{\varepsilon}[t+1]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}\), yields</p>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
-\gain{\alpha[t]} = \frac{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{v}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}} = \frac{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}
+\gain{\alpha[t]} = \frac{\input{\bar{\mathbf{g}}[t]}^\intercal \input{\mathbf{v}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}} = \frac{\input{\bar{\mathbf{g}}[t]}^\intercal \input{\bar{\mathbf{g}}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}
 \end{aligned},
 }\]
 </div>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
-\filter{\beta[t]} = \frac{-\input{\mathbf{g}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}
+\filter{\beta[t]} = \frac{-\input{\bar{\mathbf{g}}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}
 \end{aligned},
 }\]
 </div>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
-\filter{\gamma[t]} = \filter{\beta[t]} + \frac{\input{\mathbf{g}[t+1]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}} = \filter{\beta[t]} - \frac{\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]}}{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}}
+\filter{\gamma[t]} = \filter{\beta[t]} + \frac{\input{\bar{\mathbf{g}}[t+1]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}} = \filter{\beta[t]} - \frac{\input{\bar{\mathbf{g}}[t+1]}^\intercal \input{\bar{\mathbf{g}}[t+1]}}{\input{\bar{\mathbf{g}}[t]}^\intercal \input{\bar{\mathbf{g}}[t]}}
 \end{aligned}.
 }\]
 </div>
 
 <ul>
-  <li>The learning rate satisfies the stationarity condition of the objective function, which is an \(\mathbf{R}\)-orthogonality condition between the next parameter error and the current filter’s output.</li>
-  <li>The two filter parameters are designed to enforce \(\mathbf{R}\)-orthogonality conditions on successive states and outputs of the first-order filter. Since the update directions \(\mathbf{v}[t]\) are constructed from the filter states \(\mathbf{q}[t]\), imposing these two <strong>filter design</strong> conditions ensures that successive filter outputs represent non-overlapping information in the \(\mathbf{R}\)-energy space.
-First, \(\mathbf{q}[t+1]^\intercal\mathbf{R}\mathbf{q}[t]=0\) ensures that the internal 
-filter state does not accumulate redundant components.
-Second, \(\mathbf{v}[t+1]^\intercal \mathbf{R}\mathbf{v}[t]=0\) enforces conjugacy of the 
-update directions, ensuring that successive steps do not reintroduce previously 
-eliminated components of the error. Any nonzero \(\mathbf{R}\)-inner product between successive filter states and update directions implies residual overlap in the quadratic energy, leading to redundant updates.</li>
+  <li>\(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+1]}}=0\) is used to obtain the learning rate. This is a stationarity condition of the objective function, and is an \(\mathbf{R}\)-orthogonality condition (conjugacy condition) between the next parameter error and the current filter’s output. Then assuming a recursive mutual orthogonality of the gradients $\bar{\mathbf{g}}[t+1]^\intercal \bar{\mathbf{g}}[t-j]$ for $j&gt;0$.</li>
+  <li>\(\mathbf{v}[t+1]^\intercal \mathbf{R}\mathbf{v}[t]=0\) is obtained to satisfy \(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+2]}}=0\).</li>
+  <li>\(\mathbf{q}[t+1]^\intercal\mathbf{R}\mathbf{q}[t]=0\) is obtained to satisfy \(\input{\input{\mathbf{v}[t]^\intercal \bar{\mathbf{g}}[t+3]}}=0\).</li>
 </ul>
 
-<p>More generally,</p>
+<p>This means that we design the two filter parameters to enforce conjugacy on successive states and outputs of the first-order filter, ensuring that successive steps do not reintroduce previously eliminated components of the error (redundant information). 
+Since the update directions \(\mathbf{v}[t]\) are constructed from the filter states \(\mathbf{q}[t]\), 
+these two <strong>filter design</strong> conditions ensures that successive filter outputs which form the update direction represent non-overlapping information in the \(\mathbf{R}\)-energy space.</p>
 
-<div class="text-center">\[\boxed{
+<!-- 
+More generally,
+
+{: .text-center }
+$$
+\boxed{
 \begin{aligned}
 \gain{\alpha[t]} = \frac{\big(\input{\mathbf{g}[t]} + \boldsymbol{\xi}[t]\big)^\intercal \input{\mathbf{v}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}
 \end{aligned},
-}\]
-</div>
+}
+$$
 
-<div class="text-center">\[\boxed{
+{: .text-center }
+$$
+\boxed{
 \begin{aligned}
 \filter{\beta[t]} = \frac{-\input{\mathbf{g}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}
 \end{aligned},
-}\]
-</div>
+}
+$$
 
-<div class="text-center">\[\boxed{
+{: .text-center }
+$$
+\boxed{
 \begin{aligned}
 \filter{\gamma[t]} =  \filter{\beta[t]} - \frac{\input{\mathbf{g}[t+1]}^\intercal \big(\input{\mathbf{g}[t+1]} - \boldsymbol{\xi}[t]\big)}{\input{\mathbf{g}[t]}^\intercal \big(\input{\mathbf{g}[t]} + \boldsymbol{\xi}[t]\big)}
 \end{aligned}.
-}\]
-</div><hr />
-<p>For the simplest case, \(\sigma^2=0\), a possible pseudocode for this particular AutoSGM is:</p>
+}
+$$ --><hr />
+<p>For the simplest case, \(\sigma^2=0\), \(\mathbf{g}[t]=\bar{\mathbf{g}}[t]\). A possible pseudocode for this particular AutoSGM is:</p>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
@@ -759,11 +791,12 @@ t = t+1\\
 82
 83
 84
+85
 </pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 <span class="c1"># linear algebra: 
 # w = np.linalg.solve(A, b)
-</span><span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
+</span><span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
     <span class="sh">"""</span><span class="s">
     Implements the stochastic gradient algorithm.
 
@@ -774,9 +807,7 @@ t = t+1\\
     b : ndarray (d,)
         Linear vector.
     nvar : float
-        Noise variance.
-    eps : float
-        Stopping tolerance.
+        Noise variance, and stopping tolerance.
     max_iter : int
         Safety cap on iterations.
 
@@ -791,13 +822,14 @@ t = t+1\\
     </span><span class="sh">"""</span>
 
     <span class="c1"># initializations
-</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># w[0]              
-</span>    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>         <span class="c1"># g[0]      
-</span>    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># q[0]
-</span>    <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>          <span class="c1"># v[0]
-</span>    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># partial Rv
-</span>    <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span>
+</span>    <span class="c1"># w[0] g[0] q[0]
+</span>    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>               
+    <span class="n">g</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">w</span> <span class="o">-</span> <span class="n">b</span>               
+    <span class="n">q</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>         
+    <span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span> 
+
+    <span class="c1"># init. iteration, noise, partial value of R @ v
+</span>    <span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">Rv</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
 
     <span class="c1"># loop
 </span>    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">max_iter</span><span class="p">:</span>
@@ -805,25 +837,27 @@ t = t+1\\
       <span class="c1"># zero-mean noise process with variance `nvar`
 </span>      <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nvar</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
       <span class="c1"># alt: u = np.random.laplace(0, np.sqrt(0.5*var), size=b.shape)
-</span>
+</span>      <span class="n">n</span> <span class="o">+=</span> <span class="n">u</span>
+
+
       <span class="c1"># matrix-vector update
 </span>      <span class="n">Rq</span> <span class="o">=</span> <span class="n">R</span> <span class="o">@</span> <span class="n">q</span>
       <span class="n">Rv</span> <span class="o">+=</span> <span class="n">Rq</span> 
 
       <span class="c1"># learning rate
-</span>      <span class="n">alpha</span> <span class="o">=</span> <span class="p">((</span><span class="n">g</span><span class="o">+</span><span class="n">u</span><span class="p">).</span><span class="n">T</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rv</span><span class="p">)</span>
+</span>      <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rv</span><span class="p">)</span>
 
       <span class="c1"># parameter update
 </span>      <span class="n">w</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">v</span>
 
-      <span class="n">gn</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="o">+</span><span class="n">u</span><span class="p">)</span>
+      <span class="n">gn</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span>
       <span class="c1"># gradient generation (recursive form)
-</span>      <span class="n">g</span> <span class="o">-=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span><span class="p">)</span> <span class="o">-</span> <span class="n">u</span>
+</span>      <span class="n">g</span> <span class="o">-=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">Rv</span><span class="p">)</span>
       <span class="c1"># alt: g = R @ w - b
-</span>      <span class="n">gnp</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="o">-</span><span class="n">u</span><span class="p">)</span>
+</span>      <span class="n">gnp</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span>
 
       <span class="c1"># stopping criterion
-</span>      <span class="k">if</span> <span class="n">np</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">gnp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="p">:</span> <span class="k">break</span>
+</span>      <span class="k">if</span> <span class="n">np</span><span class="p">.</span><span class="nf">abs</span><span class="p">(</span><span class="n">gnp</span><span class="o">-</span><span class="n">gn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nvar</span><span class="p">:</span> <span class="k">break</span>
 
       <span class="c1"># simplified filter coefficients
 </span>      <span class="n">beta</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span>
@@ -832,7 +866,7 @@ t = t+1\\
 </span>      <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">delta</span>
 
       <span class="c1"># filter update
-</span>      <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span>
+</span>      <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">g</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
       <span class="n">v</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span>
       <span class="n">q</span> <span class="o">=</span> <span class="n">m</span>
 
