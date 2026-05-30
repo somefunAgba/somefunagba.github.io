@@ -646,6 +646,8 @@ re-write the stochastic objective as</p>
 Since the update direction \(\mathbf{v}[t]\) is constructed from the filter state \(\mathbf{q}[t]\), 
 these two <strong>filter design</strong> conditions ensures that successive filter outputs which form the update direction represent non-overlapping information in the \(\mathbf{R}\)-energy space.</p>
 
+<p>Note that in the simplest case, \(\sigma^2=0\), \(\mathbf{g}[t]=\bar{\mathbf{g}}[t]\). In general the error convergence is fundamentally limited by \(\sigma^2\).</p>
+
 <!-- 
 More generally,
 
@@ -675,29 +677,34 @@ $$
 \end{aligned}.
 }
 $$ --><hr />
-<p>For the simplest case, \(\sigma^2=0\), \(\mathbf{g}[t]=\bar{\mathbf{g}}[t]\). A possible pseudocode for this particular AutoSGM is:</p>
+
+<p>A possible pseudocode for this particular AutoSGM is:</p>
 
 <div class="text-center">\[\boxed{
 \begin{aligned}
+\input{\hbox{Input}:}\rmR, \mathbf{b}, \sigma^2\\
 \input{\hbox{INITIALIZE}}\\
-\epsilon \approx 0\\
 \state{\mathbf{w}[0]} = \mathbf{0}\\
-\input{\mathbf{g}[0]} = \mathbf{R} \state{\mathbf{w}[0]} - \mathbf{b} + \mathbf{n}[0]\\
-\statez{\mathbf{q}[0]} = \mathbf{0}  + \input{\mathbf{g}[0]}\\
+\input{\bar{\mathbf{g}}[0]} = \mathbf{R} \state{\mathbf{w}[0]} - \mathbf{b} + \mathbf{n}[0]\\
+\statez{\mathbf{q}[0]} = \mathbf{0}  + \input{\bar{\mathbf{g}}[0]}\\
 \input{\mathbf{v}[0]} = \statez{\mathbf{q}[0]}  - \mathbf{0} \\
 t = 0\\
+\\
 \input{\hbox{LOOP}}\\
-\gain{\alpha[t]} = \frac{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{v}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}\\
+\gain{\alpha[t]} = \frac{\input{\bar{\mathbf{g}}[t]}^\intercal \input{\mathbf{v}[t]}}{\input{\mathbf{v}[t]}^\intercal \mathbf{R}\input{\mathbf{v}[t]}}\\
 \state{\mathbf{w}[t+1]} = \state{\mathbf{w}[t]} - \gain{\alpha[t]} \cdot \input{\mathbf{v}[t]}\\
 \\
 \input{\hbox{Generate Gradient}}\\
-\input{\mathbf{g}[t+1]} = \input{\mathbf{g}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]}\\
-\input{\hbox{or}}\\
-\input{\mathbf{g}[t+1]} = \mathbf{R} \state{\mathbf{w}[t+1]} - \mathbf{b}\\
-\input{\hbox{STOP, if }} \absv{\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]} - \input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}} &lt; \epsilon^2 \\
+\input{\bar{\mathbf{g}}[t+1]} = \input{\bar{\mathbf{g}}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]}
+\input{\hbox{ or }}
+\input{\bar{\mathbf{g}}[t+1]} = \mathbf{R} \state{\mathbf{w}[t+1]} - \mathbf{b}\\
+\mathbf{n}[t+1] = \mathbf{n}[t] + \boldsymbol{\xi}[t]\\
+\input{\mathbf{g}[t+1]} = \input{\bar{\mathbf{g}}[t+1]} + \mathbf{n}[t+1]\\
 \\
-\filter{\beta[t]} = \frac{-\input{\mathbf{g}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}\\
-\filter{\gamma[t]} = \filter{\beta[t]} - \frac{\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]}}{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}}\\
+\input{\hbox{STOP, if }} \absv{\input{\bar{\mathbf{g}}[t+1]}^\intercal \input{\bar{\mathbf{g}}[t+1]} - \input{\bar{\mathbf{g}}[t]}^\intercal \input{\bar{\mathbf{g}}[t]}} &lt; \sigma \\
+\\
+\filter{\beta[t]} = \frac{-\input{\bar{\mathbf{g}}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}\\
+\filter{\gamma[t]} = \filter{\beta[t]} - \frac{\input{\bar{\mathbf{g}}[t+1]}^\intercal \input{\bar{\mathbf{g}}[t+1]}}{\input{\bar{\mathbf{g}}[t]}^\intercal \input{\bar{\mathbf{g}}[t]}}\\
 \\
 \statez{\mathbf{q}[t+1]} = \filter{\beta[t]}\,\cdot \statez{\mathbf{q}[t]} + \input{\mathbf{g}[t+1]}\\
 \input{\mathbf{v}[t+1]} = \statez{\mathbf{q}[t+1]}  - \filter{\gamma[t]}\,\cdot \statez{\mathbf{q}[t]} \\
@@ -857,7 +864,7 @@ t = t+1\\
 </span>      <span class="n">gnp</span> <span class="o">=</span> <span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span>
 
       <span class="c1"># stopping criterion
-</span>      <span class="k">if</span> <span class="n">np</span><span class="p">.</span><span class="nf">abs</span><span class="p">(</span><span class="n">gnp</span><span class="o">-</span><span class="n">gn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nvar</span><span class="p">:</span> <span class="k">break</span>
+</span>      <span class="k">if</span> <span class="n">np</span><span class="p">.</span><span class="nf">abs</span><span class="p">(</span><span class="n">gnp</span><span class="o">-</span><span class="n">gn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">nvar</span><span class="p">):</span> <span class="k">break</span>
 
       <span class="c1"># simplified filter coefficients
 </span>      <span class="n">beta</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">q</span><span class="p">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Rq</span><span class="p">)</span>
