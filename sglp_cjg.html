@@ -694,7 +694,7 @@ t = 0\\
 \input{\mathbf{g}[t+1]} = \input{\mathbf{g}[t]} - \gain{\alpha[t]}\cdot\mathbf{R}\input{\mathbf{v}[t]}\\
 \input{\hbox{or}}\\
 \input{\mathbf{g}[t+1]} = \mathbf{R} \state{\mathbf{w}[t+1]} - \mathbf{b}\\
-\input{\hbox{STOP, if }} \input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]} &lt; \epsilon^2 \\
+\input{\hbox{STOP, if }} \absv{\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]} - \input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}} &lt; \epsilon^2 \\
 \\
 \filter{\beta[t]} = \frac{-\input{\mathbf{g}[t+1]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}{\statez{\mathbf{q}[t]}^\intercal \mathbf{R}\statez{\mathbf{q}[t]}}\\
 \filter{\gamma[t]} = \filter{\beta[t]} - \frac{\input{\mathbf{g}[t+1]}^\intercal \input{\mathbf{g}[t+1]}}{\input{\mathbf{g}[t]}^\intercal \input{\mathbf{g}[t]}}\\
@@ -798,7 +798,7 @@ t = t+1\\
 # w = np.linalg.solve(A, b)
 </span><span class="k">def</span> <span class="nf">asgm_cjg</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
     <span class="sh">"""</span><span class="s">
-    Implements the stochastic gradient algorithm.
+    Implements the stochastic gradient algorithm under conjugacy conditions.
 
     Parameters
     ----------
