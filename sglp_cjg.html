@@ -54,8 +54,8 @@
 <meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="A True AutoSGM: Conjugate Gradient Method" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A True AutoSGM: Conjugate Gradient Method Solving a Linear System." />
-<meta property="og:description" content="A True AutoSGM: Conjugate Gradient Method Solving a Linear System." />
+<meta name="description" content="Lowpass Regularization: Conjugate Gradient Method Solving a Linear System." />
+<meta property="og:description" content="Lowpass Regularization: Conjugate Gradient Method Solving a Linear System." />
 <link rel="canonical" href="http://localhost:4000/sglp_cjg" />
 <meta property="og:url" content="http://localhost:4000/sglp_cjg" />
 <meta property="og:site_name" content="Research Notes" />
@@ -64,7 +64,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="A True AutoSGM: Conjugate Gradient Method" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-11T00:00:00-07:00","datePublished":"2025-09-11T00:00:00-07:00","description":"A True AutoSGM: Conjugate Gradient Method Solving a Linear System.","headline":"A True AutoSGM: Conjugate Gradient Method","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sglp_cjg"},"url":"http://localhost:4000/sglp_cjg"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-11T00:00:00-07:00","datePublished":"2025-09-11T00:00:00-07:00","description":"Lowpass Regularization: Conjugate Gradient Method Solving a Linear System.","headline":"A True AutoSGM: Conjugate Gradient Method","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sglp_cjg"},"url":"http://localhost:4000/sglp_cjg"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -480,10 +480,10 @@ src="/assets/js/mathjax-script-type.js">
       <div id="main-content" class="main-content">
         <main>
           
-            <h1 class="fs-9" id="a-true-autosgm-conjugate-gradient-method">
+            <h1 class="fs-9" id="lowpass-regularization-conjugate-gradient-method">
   
   
-    <a href="#a-true-autosgm-conjugate-gradient-method" class="anchor-heading" aria-labelledby="a-true-autosgm-conjugate-gradient-method"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> A True AutoSGM: Conjugate Gradient Method
+    <a href="#lowpass-regularization-conjugate-gradient-method" class="anchor-heading" aria-labelledby="lowpass-regularization-conjugate-gradient-method"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Lowpass Regularization: Conjugate Gradient Method
   
   
 </h1>
@@ -493,7 +493,7 @@ src="/assets/js/mathjax-script-type.js">
 <div class="d-flex mt-2">
 <p class="text-small text-grey-dk-000 mb-0 mr-2">Sep 11 2025 at 12:00 AM</p>
 </div>
-<p><strong>Please cite this page</strong> if you use information from these notes for your work, research, or anything that requires academic or formal citation. <em>Oluwasegun Somefun</em>. “<a href="https://somefunagba.github.io/sglp_cjg.html">A True AutoSGM: Conjugate Gradient Method</a>.”  2025.</p><hr />
+<p><strong>Please cite this page</strong> if you use information from these notes for your work, research, or anything that requires academic or formal citation. <em>Oluwasegun Somefun</em>. “<a href="https://somefunagba.github.io/sglp_cjg.html">Lowpass Regularization: Conjugate Gradient Method</a>.”  2025.</p><hr />
 
 <!-- <details markdown="block">
   <summary>
@@ -506,7 +506,7 @@ src="/assets/js/mathjax-script-type.js">
 
 <!-- --- -->
 
-<p>The <em>lowpass regularized</em> stochastic gradient algorithm applies a <strong>first-order lowpass filter</strong> to its stochastic gradient, before multiplying by a possibly <strong>optimal</strong> iteration-dependent <strong>learning rate</strong>. We show here that this modular principle is exactly found in the standard conjugate gradient method applied to a linear system <a class="citation" href="#hestenesMethodsConjugateGradients1952">(Hestenes &amp; Stiefel, 1952; Polyak, 1969; Shewchuk, 1994)</a>, and therefore the <strong>Conjugate Gradient Method</strong> represents an automatic stochastic gradient method (AutoSGM), where the algorithm’s hyperparameters are all iterative.</p><hr />
+<p>The <em>lowpass regularized</em> stochastic gradient algorithm applies a <strong>first-order lowpass filter</strong> to its stochastic gradient, before multiplying by a possibly <strong>optimal</strong> iteration-dependent <strong>learning rate</strong>. We show here that this modular principle is exactly found in the standard conjugate gradient method applied to a linear system <a class="citation" href="#hestenesMethodsConjugateGradients1952">(Hestenes &amp; Stiefel, 1952; Polyak, 1969; Shewchuk, 1994)</a>.In particular, the <strong>Conjugate Gradient Method</strong> represents an automatic stochastic gradient method (AutoSGM), where the algorithm’s hyperparameters are all iterative.</p><hr />
 
 <p>Formally, at each iteration \(t\), the parameter vector \(\mathbf{w}[t]\) is updated via the gradient \(\mathbf{g}[t]\) passed through a first-order lowpass filter</p>
 
