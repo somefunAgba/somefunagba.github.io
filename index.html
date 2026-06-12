@@ -497,11 +497,11 @@ src="/assets/js/mathjax-script-type.js">
 
 <p><a href="/sglp_trolr" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 2: Learning Rate Design as Trust-Region Normalization</a></p>
 
-<p><a href="/#sglp_mse" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 3: Momentum is Lowpass Regularization</a></p>
-
 <p><a href="/sglp_vlra" class="btn fs-5 mb-4 mb-md-0 mr-2">A Variational Trust-Region Foundation for Learning Rate Annealing</a></p>
 
-<p><a href="/sglp_cjg" class="btn fs-5 mb-4 mb-md-0 mr-2">A True AutoSGM: Conjugate Gradient Method</a></p>
+<p><a href="/#sglp_mse" class="btn fs-5 mb-4 mb-md-0 mr-2">Part 3: Lowpass Regularization</a></p>
+
+<p><a href="/sglp_cjg" class="btn fs-5 mb-4 mb-md-0 mr-2">Lowpass Regularization: Conjugate Gradient Method</a></p>
 
 <p><a href="https://ir.library.oregonstate.edu/concern/graduate_thesis_or_dissertations/bn999g58p" class="btn btn-primary fs-5 mb-4 mb-md-0" target="_blank">Dissertation: Fundamental Signal Processing Elements in Accelerated Learning</a></p><hr />
 <h2 id="in-progress">
@@ -541,6 +541,316 @@ How can we develop a unified framework that bridges optimization and control the
 <p><a href="/about" class="btn btn-primary fs-5 mb-4 mb-md-0 mr-2">About Me</a></p>
 
 <!-- [AutoSGM](/asgm){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } -->
+
+<!-- <div id="autosgm-dashboard" style="font-family: 'Inter', system-ui, -apple-system, sans-serif; max-width: 1000px; margin: 0 auto; background: #fff; color: #111827; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+    
+    <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
+<h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em;">
+  
+  
+    <a href="#masters-research-control-theory" class="anchor-heading" aria-labelledby="masters-research-control-theory"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Stochastic Variance Suppression: The AutoSGM Filter
+  
+  
+</h2>
+    
+        <div style="display: flex; gap: 24px; margin-top: 16px; font-size: 0.85rem; align-items: flex-end;">
+            <div style="display: flex; flex-direction: column; width: 140px;">
+                <label style="font-weight: 500; margin-bottom: 6px;">Shared Beta: <span id="val-beta">0.90</span></label>
+                <input type="range" id="slider-beta" min="0.5" max="0.99" step="0.01" value="0.90">
+            </div>
+            <div style="display: flex; flex-direction: column; width: 140px;">
+                <label style="font-weight: 500; margin-bottom: 6px;">LTI Fixed Brake: <span id="val-delta">0.40</span></label>
+                <input type="range" id="slider-delta" min="0.0" max="0.9" step="0.01" value="0.40">
+            </div>
+            <div style="display: flex; flex-direction: column; width: 140px;">
+                <label style="font-weight: 500; margin-bottom: 6px;">Noise Intensity: <span id="val-noise">5.0</span></label>
+                <input type="range" id="slider-noise" min="0.0" max="15.0" step="0.5" value="5.0">
+            </div>
+            <div style="display: flex; gap: 8px; margin-left: auto;">
+                <button id="btn-play" style="height: 32px; padding: 0 16px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background 0.2s;">Play</button>
+                <button id="btn-restart" style="height: 32px; padding: 0 16px; background: #111827; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s;">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; padding: 24px; gap: 24px; height: 420px; background: #ffffff;">
+        
+        <div style="flex: 1; position: relative; border: 1px solid #e5e7eb; border-radius: 6px; background: #fafafa; overflow: hidden;">
+            <div style="position: absolute; top: 12px; left: 12px; font-size: 0.7rem; font-weight: 700; color: #6b7280; z-index: 10; letter-spacing: 0.05em;">2D SPATIAL TRAJECTORY</div>
+            <canvas id="canvas-contour" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
+            <canvas id="canvas-spatial" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; z-index: 2;"></canvas>
+        </div>
+        
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+            <div style="flex: 1; position: relative; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; overflow: hidden;">
+                <div style="position: absolute; top: 12px; left: 12px; font-size: 0.7rem; font-weight: 700; color: #6b7280; z-index: 10; letter-spacing: 0.05em;">LOG(MSE) CONVERGENCE</div>
+                <canvas id="canvas-mse" style="width: 100%; height: 100%; display: block;"></canvas>
+            </div>
+            <div style="flex: 1; position: relative; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; overflow: hidden;">
+                <div style="position: absolute; top: 12px; left: 12px; font-size: 0.7rem; font-weight: 700; color: #6b7280; z-index: 10; letter-spacing: 0.05em;">AUTOSGM DYNAMIC BRAKE (δ)</div>
+                <canvas id="canvas-delta" style="width: 100%; height: 100%; display: block;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // Math & Physics Constants
+    const lr = 2.0;
+    const epsilon = 1e-8;
+    const betaEma = 0.99;
+    const kBound = 4.0;
+    
+    // State Arrays
+    let pathFloor = [], pathLti = [], pathAuto = [];
+    let histMSE = { floor: [], lti: [], auto: [] };
+    let histDelta = [];
+    let state = {};
+    let isPlaying = false;
+    let animationId = null;
+
+    // RGB Strings for Comet Tails
+    const rgbFloor = "156, 163, 175"; // #9ca3af
+    const rgbLti = "239, 68, 68";     // #ef4444
+    const rgbAuto = "16, 185, 129";   // #10b981
+
+    // Setup Canvas Contexts
+    const getCtx = (id) => {
+        let cvs = document.getElementById(id);
+        let dpr = window.devicePixelRatio || 1;
+        let rect = cvs.parentElement.getBoundingClientRect();
+        cvs.width = rect.width * dpr; cvs.height = rect.height * dpr;
+        let ctx = cvs.getContext('2d');
+        ctx.scale(dpr, dpr);
+        return { ctx, w: rect.width, h: rect.height };
+    };
+
+    const canvasC = getCtx('canvas-contour');
+    const canvasS = getCtx('canvas-spatial'); 
+    const canvasM = getCtx('canvas-mse'); 
+    const canvasD = getCtx('canvas-delta'); 
+
+    // Mappers for Spatial Coordinates
+    function mapX(x) { return (x + 100) / 200 * canvasS.w; }
+    function mapY(y) { return (100 - y) / 200 * canvasS.h; } 
+
+    // Draw Static Contour Map once
+    function drawContours() {
+        let ctx = canvasC.ctx;
+        ctx.clearRect(0, 0, canvasC.w, canvasC.h);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.05)';
+        
+        // Draw logarithmic concentric ellipses for 0.05x^2 + 5y^2 = C
+        for(let C = 50; C <= 80000; C *= 1.8) {
+            let rx = Math.sqrt(C / 0.05) * (canvasC.w / 200);
+            let ry = Math.sqrt(C / 5.0)  * (canvasC.h / 200);
+            ctx.beginPath();
+            ctx.ellipse(canvasC.w/2, canvasC.h/2, rx, ry, 0, 0, 2*Math.PI);
+            ctx.lineWidth = C < 1000 ? 0.5 : 1.0;
+            ctx.stroke();
+        }
+    }
+
+    function initSimulation() {
+        state = {
+            pFloor: [-80, 80], pLti: [-80, 80], pAuto: [-80, 80],
+            qLti: [0, 0], qAuto: [0, 0],
+            cEma: 0.0, wEma: epsilon, vEma: 1.0
+        };
+        pathFloor = [[-80, 80]]; pathLti = [[-80, 80]]; pathAuto = [[-80, 80]];
+        histMSE = { floor: [], lti: [], auto: [] };
+        histDelta = [];
+        
+        drawContours();
+        renderFrame();
+    }
+
+    function getNoise(intensity) {
+        let u1 = Math.random() + epsilon, u2 = Math.random();
+        let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+        let z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+        let tail = Math.random() * 0.5 + 0.5; 
+        return [(z0 * intensity) / tail, (z1 * intensity) / tail];
+    }
+
+    function calcGrad(p) { return [0.1 * p[0], 10.0 * p[1]]; }
+    function norm(v) { return Math.sqrt(v[0]*v[0] + v[1]*v[1]) + epsilon; }
+    function dot(v1, v2) { return v1[0]*v2[0] + v1[1]*v2[1]; }
+
+    function physicsTick() {
+        let beta = parseFloat(document.getElementById('slider-beta').value);
+        let ltiDelta = parseFloat(document.getElementById('slider-delta').value);
+        let noiseInt = parseFloat(document.getElementById('slider-noise').value);
+        let noise = getNoise(noiseInt);
+
+        // Floor
+        let gF = calcGrad(state.pFloor); gF[0] += noise[0]; gF[1] += noise[1];
+        let nF = norm(gF);
+        state.pFloor[0] -= lr * (gF[0]/nF); state.pFloor[1] -= lr * (gF[1]/nF);
+        pathFloor.push([...state.pFloor]);
+        histMSE.floor.push(Math.log10(state.pFloor[0]**2 + state.pFloor[1]**2 + epsilon));
+
+        // LTI
+        let gL = calcGrad(state.pLti); gL[0] += noise[0]; gL[1] += noise[1];
+        let vL = [gL[0] + (beta - ltiDelta)*state.qLti[0], gL[1] + (beta - ltiDelta)*state.qLti[1]];
+        let nVL = norm(vL);
+        state.pLti[0] -= lr * (vL[0]/nVL); state.pLti[1] -= lr * (vL[1]/nVL);
+        state.qLti[0] = beta*state.qLti[0] + gL[0]; state.qLti[1] = beta*state.qLti[1] + gL[1];
+        pathLti.push([...state.pLti]);
+        histMSE.lti.push(Math.log10(state.pLti[0]**2 + state.pLti[1]**2 + epsilon));
+
+        // AutoSGM
+        let gA = calcGrad(state.pAuto); gA[0] += noise[0]; gA[1] += noise[1];
+        let nGA = norm(gA), nQA = norm(state.qAuto);
+        let gNorm = [gA[0]/nGA, gA[1]/nGA], qNorm = [state.qAuto[0]/nQA, state.qAuto[1]/nQA];
+        
+        state.cEma = betaEma * state.cEma + (1 - betaEma) * dot(gNorm, qNorm);
+        state.wEma = betaEma * state.wEma + (1 - betaEma) * dot(qNorm, qNorm);
+        state.vEma = betaEma * state.vEma + (1 - betaEma) * dot(gNorm, gNorm);
+        
+        let b = 1.0 / (Math.sqrt(kBound) + epsilon);
+        let rhoSq = Math.min(Math.max((state.cEma**2) / (state.vEma * state.wEma + epsilon), 0), b - epsilon);
+        let mt = (1.0 - rhoSq * Math.sqrt(kBound)) / (1.0 - rhoSq);
+        let deltaT = ((Math.sqrt(kBound) / mt) - 1.0) * (state.cEma / state.wEma);
+        histDelta.push(deltaT);
+        
+        let vA = [gA[0] + (beta - deltaT)*state.qAuto[0], gA[1] + (beta - deltaT)*state.qAuto[1]];
+        let nVA = norm(vA);
+        state.pAuto[0] -= (lr*mt) * (vA[0]/nVA); state.pAuto[1] -= (lr*mt) * (vA[1]/nVA);
+        state.qAuto[0] = beta*state.qAuto[0] + gA[0]; state.qAuto[1] = beta*state.qAuto[1] + gA[1];
+        pathAuto.push([...state.pAuto]);
+        histMSE.auto.push(Math.log10(state.pAuto[0]**2 + state.pAuto[1]**2 + epsilon));
+
+        // Scrolling Array Bounds
+        if(histMSE.auto.length > 200) {
+            pathFloor.shift(); pathLti.shift(); pathAuto.shift();
+            histMSE.floor.shift(); histMSE.lti.shift(); histMSE.auto.shift(); 
+            histDelta.shift();
+        }
+    }
+
+    // Custom Typography Engine for Line Charts
+    function drawLineChart(ctx, w, h, data, rgbStr, yMin, yMax, yTicks) {
+        let leftMargin = 32;
+        
+        // Draw Axis Values & Gridlines
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        
+        yTicks.forEach(tick => {
+            let y = h - ((tick - yMin) / (yMax - yMin)) * h;
+            // Grid line
+            ctx.beginPath(); ctx.moveTo(leftMargin, y); ctx.lineTo(w, y);
+            ctx.strokeStyle = '#f3f4f6'; ctx.lineWidth = 1; ctx.stroke();
+            // Text value
+            ctx.fillText(tick.toFixed(1), leftMargin - 6, y);
+        });
+
+        if(data.length === 0) return;
+
+        // Draw Line Data
+        ctx.save();
+        ctx.beginPath(); ctx.rect(leftMargin, 0, w - leftMargin, h); ctx.clip();
+        
+        ctx.beginPath();
+        let dx = (w - leftMargin) / 200;
+        for(let i=0; i<data.length; i++) {
+            let x = leftMargin + i * dx;
+            let y = h - ((data[i] - yMin) / (yMax - yMin)) * h; 
+            if(i===0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `rgb(${rgbStr})`; 
+        ctx.lineWidth = 2; 
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // Manually render fading Comet Tails
+    function drawTrail(ctx, path, rgbStr) {
+        if(path.length < 2) return;
+        let maxTail = 40; // Length of the comet tail
+        let start = Math.max(0, path.length - maxTail);
+        
+        // Draw fading path segments
+        for(let i = start; i < path.length - 1; i++) {
+            let alpha = (i - start) / (path.length - start);
+            ctx.beginPath();
+            ctx.moveTo(mapX(path[i][0]), mapY(path[i][1]));
+            ctx.lineTo(mapX(path[i+1][0]), mapY(path[i+1][1]));
+            ctx.strokeStyle = `rgba(${rgbStr}, ${alpha})`;
+            ctx.lineWidth = 1.5 + (1.5 * alpha);
+            ctx.stroke();
+        }
+        // Draw solid head
+        let head = path[path.length-1];
+        ctx.beginPath(); ctx.arc(mapX(head[0]), mapY(head[1]), 4, 0, 2*Math.PI);
+        ctx.fillStyle = `rgb(${rgbStr})`; ctx.fill();
+    }
+
+    function renderFrame() {
+        // 1. Render Spatial (Clear fully, relying on static canvas underneath)
+        canvasS.ctx.clearRect(0, 0, canvasS.w, canvasS.h);
+        drawTrail(canvasS.ctx, pathFloor, rgbFloor);
+        drawTrail(canvasS.ctx, pathLti, rgbLti);
+        drawTrail(canvasS.ctx, pathAuto, rgbAuto);
+
+        // 2. Render MSE
+        canvasM.ctx.clearRect(0, 0, canvasM.w, canvasM.h);
+        drawLineChart(canvasM.ctx, canvasM.w, canvasM.h, histMSE.floor, rgbFloor, -1.0, 4.5, [0.0, 2.0, 4.0]);
+        drawLineChart(canvasM.ctx, canvasM.w, canvasM.h, histMSE.lti, rgbLti, -1.0, 4.5, []);
+        drawLineChart(canvasM.ctx, canvasM.w, canvasM.h, histMSE.auto, rgbAuto, -1.0, 4.5, []);
+
+        // 3. Render Telemetry (Delta)
+        canvasD.ctx.clearRect(0, 0, canvasD.w, canvasD.h);
+        drawLineChart(canvasD.ctx, canvasD.w, canvasD.h, histDelta, rgbAuto, -0.1, 1.1, [0.0, 0.5, 1.0]);
+    }
+
+    function animationLoop() {
+        if (!isPlaying) return;
+        physicsTick();
+        renderFrame();
+        animationId = requestAnimationFrame(animationLoop);
+    }
+
+    // Controls
+    const btnPlay = document.getElementById('btn-play');
+    btnPlay.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        btnPlay.innerText = isPlaying ? "Pause" : "Play";
+        btnPlay.style.background = isPlaying ? "#f59e0b" : "#10b981"; 
+        if (isPlaying) animationLoop();
+    });
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+        isPlaying = false;
+        btnPlay.innerText = "Play";
+        btnPlay.style.background = "#10b981";
+        if(animationId) cancelAnimationFrame(animationId);
+        initSimulation();
+    });
+
+    ['beta', 'delta', 'noise'].forEach(id => {
+        let slider = document.getElementById('slider-' + id);
+        let label = document.getElementById('val-' + id);
+        slider.addEventListener('input', e => {
+            label.innerText = parseFloat(e.target.value).toFixed(id==='noise'?1:2);
+        });
+    });
+
+    // Boot strictly to paused state
+    initSimulation();
+    
+    // Handle Window Resize properly
+    window.addEventListener('resize', () => {
+        drawContours();
+        renderFrame();
+    });
+})();
+</script> -->
 
 <!-- 
 <ul>
