@@ -365,14 +365,14 @@
   },"52": {
     "doc": "Home",
     "title": "A Peek into the Learning Algorithms Behind Artificial Intelligence",
-    "content": ". Hello! . In my research, I aim to unify fundamental tools from systems theory, control, signal processing, and optimization to better understand the behavior of key algorithms used in artificial intelligence, particularly those used to train deep neural networks. More broadly, my goal is to demystify the black-box, heuristic nature of modern learning algorithms by developing principled interpretations that improve transparency, stability, and interpretability. ",
+    "content": ". Hello! . In my research, I aim to unify fundamental tools from systems theory, control, signal processing, and optimization to better understand the behavior of key algorithms used in artificial intelligence, particularly those used to train deep neural networks. More broadly, my goal is to demystify the black-box, heuristic aspects of modern learning algorithms by developing principled interpretations that improve transparency, stability, and interpretability. ",
     "url": "/#a-peek-into-the-learning-algorithms-behind-artificial-intelligence",
     
     "relUrl": "/#a-peek-into-the-learning-algorithms-behind-artificial-intelligence"
   },"53": {
     "doc": "Home",
     "title": "Doctoral Research (Artificial Intelligence)",
-    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm design to a principled, unified algrorithimic framework that automatically adapts and optimizes learning dynamics? . Part 1: Momentum as Lowpass Filter Design . Part 2: Learning Rate Design as Trust-Region Normalization . A Variational Trust-Region Foundation for Learning Rate Annealing . Part 3: Lowpass Regularization . Lowpass Regularization: Conjugate Gradient Method . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
+    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm designs to a principled, unified algrorithmic framework that automatically adapts and optimizes learning dynamics? . Part 1: Momentum as Lowpass Filter Design . Part 2: Learning Rate Design as Trust-Region Normalization . A Variational Trust-Region Foundation for Learning Rate Annealing . Part 3: Lowpass Regularization . Lowpass Regularization: Conjugate Gradient Method . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . ",
     "url": "/#doctoral-research-artificial-intelligence",
     
     "relUrl": "/#doctoral-research-artificial-intelligence"
