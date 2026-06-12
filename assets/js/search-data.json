@@ -223,29 +223,29 @@
     
     "relUrl": "/sglp_mean#takeaways"
   },"32": {
-    "doc": "Momentum is Lowpass Regularization",
-    "title": "Momentum as Lowpass Regularization",
-    "content": "Fastest mean-square convergence can be achieved without Momentum. Sep 11 2025 . Please cite this page if you use information from these notes for your work, research, or anything that requires academic or formal citation. Oluwasegun Somefun. “Momentum as Lowpass Regularization.” 2025. | Momentum as Lowpass Regularization . | Understanding Momentum as Lowpass Regularization | Setup: A Minimalist Stochastic Error Model | . | . Momentum (Polyak, 1969) is a lowpass regularized stochastic gradient algorithm. One that applies a first-order lowpass filter to its stochastic gradient, before multiplying by a possibly optimal iteration-dependent learning rate. For analytic purpose, we study a minimal stochastic system, for which the algorithm’s hyperparameters are assumed time-invariant. More specifically, we show how momentum cannot improve over the fastest mean-square error convergence of the Plain stochastic gradient method in this setup. ",
-    "url": "/sglp_mse#momentum-as-lowpass-regularization",
+    "doc": "Lowpass Regularization",
+    "title": "Momentum is Lowpass Regularization",
+    "content": "The fastest mean-square convergence can be achieved without Momentum. Sep 11 2025 . Please cite this page if you use information from these notes for your work, research, or anything that requires academic or formal citation. Oluwasegun Somefun. “Lowpass Regularization.” 2025. | Momentum is Lowpass Regularization . | Understanding Momentum as Lowpass Regularization | Setup: A Minimalist Stochastic Error Model | . | . Momentum (Polyak, 1969) is a lowpass regularized stochastic gradient algorithm. One that applies a first-order lowpass filter to its stochastic gradient, before multiplying by a possibly optimal iteration-dependent learning rate. For analytic purpose, we study a minimal stochastic system, for which the algorithm’s hyperparameters are assumed time-invariant. More specifically, we show how momentum cannot improve over the fastest mean-square error convergence of the Plain stochastic gradient method in this setup. ",
+    "url": "/sglp_mse#momentum-is-lowpass-regularization",
     
-    "relUrl": "/sglp_mse#momentum-as-lowpass-regularization"
+    "relUrl": "/sglp_mse#momentum-is-lowpass-regularization"
   },"33": {
-    "doc": "Momentum is Lowpass Regularization",
+    "doc": "Lowpass Regularization",
     "title": "Understanding Momentum as Lowpass Regularization",
     "content": "Traditionally, the way we talk about training neural networks is often rooted in classical mechanics. We describe momentum as a ball rolling down a hilly landscape, gaining inertia to carry it over local bumps. Alternatively, another popular interpretation is that momentum estimates the first moment of a gradient. While these physical analogies are often intuitive, they obscure the underlying discrete, iteration-level mechanics of the learning algorithm. Our central claim is that a literal mathematical interpretation already exists via classical signal processing tools related to first-order lowpass filters. Momentum is mathematically equivalent to passing stochastic gradients through a first-order linear lowpass filter. The filter, denoted \\(\\filter{\\sH_{\\beta,\\gamma}}\\) is configured via two variables, its pole \\(\\filter{\\beta}\\) and zero \\(\\filter{\\gamma}\\). By shifting the pole and zero locations of the filter, we can create different flavors of momentum. We will soon see that this filter design interpretation provides a principled dynamical regularization perspective into the behavior of classic momentum variants, and can improve the way we design stochastic gradient learning algorithms for training AI models. ",
     "url": "/sglp_mse#understanding-momentum-as-lowpass-regularization",
     
     "relUrl": "/sglp_mse#understanding-momentum-as-lowpass-regularization"
   },"34": {
-    "doc": "Momentum is Lowpass Regularization",
+    "doc": "Lowpass Regularization",
     "title": "Setup: A Minimalist Stochastic Error Model",
     "content": "To understand what fundamentally drives learning dynamics, it helps to strip the system down to its bare essentials. To make our position concrete and analytically transparent, we deliberately adopt a minimalist setting. By stripping away the tensor algebra of high-dimensional neural networks, we expose the error dynamics and underlying structure of stochastic gradient learning in its simplest form. Consider a single parameter model defined by the twice-differentiable weighted quadratic function . \\[f(\\rw[t]) = \\tfrac{1}{2}\\,\\psi^2[t]\\,\\varepsilon^2[t],\\] where . | \\(\\rw[t] \\in \\sR^{1}\\) (Parameter) denotes the model parameter at a current iteration \\(t\\). | \\(\\varepsilon[t]\\) (Error) defined as \\(\\varepsilon[t]=\\rw[t] - \\rw^\\star\\) represents distance of the current parameter value from its optimum value, \\(\\rw^\\star\\). The current error change due to a parameter update is defined as \\(\\Delta[t+1]=\\varepsilon[t+1]- \\varepsilon[t]\\). | \\(\\psi[t] \\in \\sR^{1}\\) (Data Process) is a realization of a zero-mean, wide-sense stationary stochastic data process for which its kurtosis, \\(\\kappa\\ge1\\) exists. We also assume that \\(\\psi[t]\\) is statistically independent of both \\(\\varepsilon[t]\\) and \\(\\psi[l]\\), $l \\neq t$. | \\(\\lambda\\) (Scale) denotes the second moment of the stochastic process, defined by \\(\\mathbb{E}[\\psi^2[t]]=\\lambda\\), and \\(\\mathbb{E}[\\psi^4[t]]=\\kappa\\,\\lambda^2\\), \\(\\lambda&gt;0\\). | . Differentiating \\(f(\\rw[t])\\) with respect to \\(\\rw[t]\\) reveals a key structural insight. The gradient and Hessian take the form . \\[\\rg[t] = \\psi^2[t]\\,\\varepsilon[t], \\qquad \\rmH[t] = \\psi^2[t].\\] In expectation, . \\[\\E[\\rg[t]] = \\lambda\\,\\E[\\varepsilon[t]], \\qquad \\E[\\rmH[t]] = \\lambda.\\] Our primary objective in this analysis, is to drive the expected objective-function to converge the fastest to its optimum value of zero, starting from any initial non-zero value. | Polyak, B. T. (1969). The Conjugate Gradient Method in Extremal Problems. USSR Computational Mathematics and Mathematical Physics, 9(4), 94–112. https://doi.org/10.1016/0041-5553(69)90035-4 | . ",
     "url": "/sglp_mse#setup-a-minimalist-stochastic-error-model",
     
     "relUrl": "/sglp_mse#setup-a-minimalist-stochastic-error-model"
   },"35": {
-    "doc": "Momentum is Lowpass Regularization",
-    "title": "Momentum is Lowpass Regularization",
+    "doc": "Lowpass Regularization",
+    "title": "Lowpass Regularization",
     "content": " ",
     "url": "/sglp_mse",
     
