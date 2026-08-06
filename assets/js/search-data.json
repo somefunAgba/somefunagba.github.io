@@ -372,7 +372,7 @@
   },"53": {
     "doc": "Home",
     "title": "Doctoral Research (Artificial Intelligence)",
-    "content": "My work focuses on stochastic gradient-based learning for training deep neural networks. A central question is: . How can we move from heuristic algorithm designs to a principled, unified algrorithmic framework that automatically adapts and optimizes learning dynamics? . Understanding Momentum Through a First-order Filter Design Perspective archived note . A Variational Trust-Region Framework for Learning-Rate Annealing archived animated note . Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . On the Conjugate Gradient Method . ",
+    "content": "My work focused on the study of stochastic gradient-based learning for training deep neural networks. Dissertation: Fundamental Signal Processing Elements in Accelerated Learning . A central question is: How can we move from heuristic algorithm designs to a principled, unified algrorithmic framework that automatically adapts and optimizes learning dynamics? . Understanding Momentum Through a First-order Filter Design Perspective archived note . A Variational Trust-Region Framework for Learning-Rate Annealing archived animated note . A Trust-region Framework for Moment Estimation . On the Conjugate Gradient Method . ",
     "url": "/#doctoral-research-artificial-intelligence",
     
     "relUrl": "/#doctoral-research-artificial-intelligence"
